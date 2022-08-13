@@ -1,14 +1,25 @@
 [tool.poetry]
 name = "lucupy"
 version = "0.1.0"
-description = ""
-authors = ["Sergio <sergio.troncoso@noirlab.edu>"]
+description = "A striped down version of the lucuma core in Python for Schedule"
+authors = ["Sergio Troncoso <sergio.troncoso@noirlab.edu>", 
+           "Sebastian Raaphorst <sebastian.raaphorst@noirlab.edu>",
+           "Bryan Miller <bryan.miller@noirlab.edu"]
+readme = "README.rst"
+homepage = "https://github.com/stroncod/lucupy"
+repository = "https://github.com/stroncod/lucupy"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+astropy = "^5.1"
+pytz = "^2022.2"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^7.1.2"
+hypothesis = "^6.54.2"
+
+[tool.poetry.scripts]
+lucupy = 'lucupy:main'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
