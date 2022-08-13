@@ -5,9 +5,9 @@ from typing import FrozenSet, Optional
 import astropy.units as u
 from astropy.time import Time
 
-from app.api.observatory.abstract import ObservatoryProperties
-from common.minimodel.observationmode import ObservationMode
-from common.minimodel.resource import Resource
+from ..abstract import ObservatoryProperties
+from ...minimodel import ObservationMode
+from ...minimodel import Resource
 
 
 class GeminiProperties(ObservatoryProperties):

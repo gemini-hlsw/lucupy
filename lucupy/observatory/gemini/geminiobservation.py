@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from common.minimodel.observation import Observation
+from ...minimodel import Observation
 
 from .geminiproperties import GeminiProperties
 
