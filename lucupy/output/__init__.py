@@ -1,5 +1,5 @@
 
-from minimodel import Group, Observation, Program
+from ..minimodel import Group, Observation, Program
 from typing import NoReturn
 
 
