@@ -1,12 +1,16 @@
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
+import numpy.testing as nptest
 import pytest
+import pytz
 from astropy.time import Time
+
 from lucupy.sky.events import night_events
 from .fixtures import midnight, location
-import pytz
-import numpy.testing as nptest
 
 
-@pytest.mark.usefixtures("midnight", "location")
+@pytest.mark.usefixtures('midnight', 'location')
 def test_night_events(midnight, location):
     """
     Test that the night events are calculated correctly.
@@ -20,4 +24,3 @@ def test_night_events(midnight, location):
     nptest.assert_almost_equal(morn_12twi.jd, Time('2020-07-01 14:53:11.218').jd, decimal=2)
     nptest.assert_almost_equal(moonrise.jd, Time('2020-07-01 00:50:37.391').jd, decimal=2)
     nptest.assert_almost_equal(moonset.jd, Time('2020-07-01 12:51:54.812').jd, decimal=2)
- 

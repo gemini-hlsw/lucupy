@@ -1,3 +1,15 @@
+# All code in this package is a refactored, numpy-vectorized version of thorskyutil.py:
+#
+# https://github.com/jrthorstensen/thorsky/blob/master/thorskyutil.py
+#
+# utility and miscellaneous time and the sky routines built mostly on astropy.
+#
+# Copyright John Thorstensen, 2018; offered under the GNU Public License 3.0.
+#
+# Vectorized by Bryan Miller, Gemini Observatory.
+# Refactored and clarified by Sergio Troncoso, Gemini Observatory.
+# Modified by Sebastian Raaphorst, Gemini Observatory, to remove all deviations from Python 3.x PEP8 style guide.
+
 from datetime import datetime, timedelta
 from typing import Tuple
 
@@ -176,7 +188,7 @@ def local_midnight_time(time: Time, localtzone: timezone) -> Time:
         result = Time(datetmid)
     return result
 
- 
+
 def local_sidereal_time(time: Time, location: EarthLocation) -> Angle:
     """
     moderate-precision (1 sec) local sidereal time
@@ -205,7 +217,7 @@ def local_sidereal_time(time: Time, location: EarthLocation) -> Angle:
     if julian_int.ndim == 0:
         julian_int = julian_int[None]
         scalar_input = True
-    
+
     fraction = time.jd - julian_int
     mid = julian_int + 0.5
     ut = fraction - 0.5
@@ -213,16 +225,16 @@ def local_sidereal_time(time: Time, location: EarthLocation) -> Angle:
     if len(less_than_half) != 0:
         mid[less_than_half] = julian_int[less_than_half] - 0.5
         ut[less_than_half] = fraction[less_than_half] + 0.5  # as fraction of a day.
-    
+
     t = (mid - J2000) / 36525.
 
-    sidereal = (24110.54841 + 8640184.812866 * t + 0.093104 * t**2 - 6.2e-6 * t**3) / 86400.
+    sidereal = (24110.54841 + 8640184.812866 * t + 0.093104 * t ** 2 - 6.2e-6 * t ** 3) / 86400.
     # at Greenwich
     sid_int = sidereal.astype(np.int64)
     sidereal = sidereal - sid_int
     # longitude is measured east so add.
     sidereal = sidereal + 1.0027379093 * ut + location.lon.hour / 24.
-    
+
     sid_int = sidereal.astype(np.int64)
     sidereal = (sidereal - sid_int) * 24.
 

@@ -1,15 +1,11 @@
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
 from abc import ABC
 from datetime import timedelta
 from typing import FrozenSet, NoReturn, Optional
 
 from astropy.time import Time
-
-# TODO: No type information here because of circular dependencies between common.minimodel and this class.
-# TODO: Introduces circular dependencies
-# from common.minimodel import Resource, ObservationMode
-
-# TODO: module common has no attribute minimodel
-# import common.minimodel
 
 
 class ObservatoryProperties(ABC):
