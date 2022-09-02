@@ -1,10 +1,22 @@
+# All code in this package is a refactored, numpy-vectorized version of thorskyutil.py:
+#
+# https://github.com/jrthorstensen/thorsky/blob/master/thorskyutil.py
+#
+# utility and miscellaneous time and the sky routines built mostly on astropy.
+#
+# Copyright John Thorstensen, 2018; offered under the GNU Public License 3.0.
+#
+# Vectorized by Bryan Miller, Gemini Observatory.
+# Refactored and clarified by Sergio Troncoso, Gemini Observatory.
+# Modified by Sebastian Raaphorst, Gemini Observatory, to remove all deviations from Python 3.x PEP8 style guide.
+
 import numpy as np
 import numpy.typing as npt
 from astropy import units as u
 from astropy.coordinates import Angle, Distance
 from astropy.units import Quantity
 
-from ..minimodel import SkyBackground
+from lucupy.minimodel import SkyBackground
 from .constants import KZEN, EQUAT_RAD
 from .utils import xair, ztwilight
 
@@ -76,7 +88,7 @@ def calculate_sky_brightness(moon_phase_angle: Angle,
 
     # Sky brightness with no moon at target, scattering due to airmass
     b_sky = b_zen * xair(target_zenith_distang) * 10.0 ** (
-                -0.4 * KZEN * (xair(target_zenith_distang) - 1.0))
+            -0.4 * KZEN * (xair(target_zenith_distang) - 1.0))
 
     # Lunar sky brightness
     b_moon = np.zeros(n)
@@ -90,7 +102,7 @@ def calculate_sky_brightness(moon_phase_angle: Angle,
     # Correction for lunar distance.
     istar[im] = 10.0 ** (
             -0.4 * (3.84 + 0.026 * abs(moon_phase_angle[im].value) + 4.e-9 * moon_phase_angle[im].value ** 4.)
-    ) / norm_moondist[im]**2
+    ) / norm_moondist[im] ** 2
 
     # Rough correction for opposition effect
     # 35 per cent brighter at full, effect tapering linearly to
@@ -202,7 +214,7 @@ def calculate_sky_brightness_qpt(moon_phase_angle: Quantity,
     v_zen[ii] = v_zen[ii] - ztwilight(sun_alt[ii])
 
     # zenith sky brightness
-    b_zen = 0.263 * a**(q - v_zen)
+    b_zen = 0.263 * a ** (q - v_zen)
 
     # Sky brightness with no moon at target, scattering due to airmass
     b_sky = b_zen * xair(target_zenith_distang) * 10.0 ** (
@@ -213,7 +225,7 @@ def calculate_sky_brightness_qpt(moon_phase_angle: Quantity,
     n = len(b_sky)
     b_moon = np.zeros(n)
 
-    istar = 10.0 ** (-0.4 * (3.84 + 0.026 * abs(mpaa) + 4.e-9 * mpaa**4.))
+    istar = 10.0 ** (-0.4 * (3.84 + 0.026 * abs(mpaa) + 4.e-9 * mpaa ** 4.))
 
     ii = np.where(moon_zenith_distang < 90.8 * u.deg)[0][:]
 

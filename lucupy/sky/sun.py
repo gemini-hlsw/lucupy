@@ -1,3 +1,15 @@
+# All code in this package is a refactored, numpy-vectorized version of thorskyutil.py:
+#
+# https://github.com/jrthorstensen/thorsky/blob/master/thorskyutil.py
+#
+# utility and miscellaneous time and the sky routines built mostly on astropy.
+#
+# Copyright John Thorstensen, 2018; offered under the GNU Public License 3.0.
+#
+# Vectorized by Bryan Miller, Gemini Observatory.
+# Refactored and clarified by Sergio Troncoso, Gemini Observatory.
+# Modified by Sebastian Raaphorst, Gemini Observatory, to remove all deviations from Python 3.x PEP8 style guide.
+
 from typing import Tuple
 
 import astropy.units as u
@@ -109,7 +121,7 @@ class Sun:
         tolerance = Angle(1.0e-4, unit=u.rad)
 
         delta = TimeDelta(timestep, format='jd')
-   
+
         ha = local_sidereal_time(time_guess, location) - sun_pos.ra
         alt2, az, parang = Altitude.above(sun_pos.dec, Angle(ha, unit=u.hourangle), location.lat)
 
@@ -180,7 +192,7 @@ class Sun:
         timedelta_sunrise = TimeDelta(sunrise_guess.hour / 24., format='jd')
         timedelta_even_12twi = TimeDelta(even_12twi_guess.hour / 24., format='jd')
         timedelta_morn_12twi = TimeDelta(morn_12twi_guess.hour / 24., format='jd')
-        
+
         # form into times and iterate to accurate answer.
         times_sunset = midnight - timedelta_sunset  # first approx
         times_sunset = Sun.time_by_altitude(set_alt, times_sunset, location)
@@ -193,5 +205,5 @@ class Sun:
 
         times_morn_12twi = midnight + timedelta_morn_12twi
         times_morn_12twi = Sun.time_by_altitude(twelve_twilight_alt, times_morn_12twi, location)
-        
+
         return times_sunrise, times_sunset, times_even_12twi, times_morn_12twi

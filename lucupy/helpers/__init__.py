@@ -1,10 +1,13 @@
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
+import re
 from collections.abc import Iterable
 from typing import Optional
 
 import astropy.units as u
 import numpy as np
 from astropy.time import Time
-import re
 
 
 def flatten(lst):
@@ -108,7 +111,7 @@ def angular_distance(ra1: float, dec1: float, ra2: float, dec2: float) -> float:
     phi_2 = dec2
     delta_phi = dec2 - dec1
     delta_lambda = ra2 - ra1
-    a = np.sin(delta_phi / 2)**2 + np.cos(phi_1) * np.cos(phi_2) * np.sin(delta_lambda / 2)**2
+    a = np.sin(delta_phi / 2) ** 2 + np.cos(phi_1) * np.cos(phi_2) * np.sin(delta_lambda / 2) ** 2
     return 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
 
 
@@ -137,7 +140,6 @@ inst_decode = {'GMOS': '1', 'F2': '3'}
 sem_decode = {'A': '0', 'B': '1'}
 prog_decode = {'Q': '0', 'C': '1', 'L': '2', 'F': '3', 'S': '8', 'D': '9'}
 
-
 decoder = {'A': '0', 'B': '1', 'Q': '0',
            'C': '1', 'LP': '2', 'FT': '3',
            'SV': '8', 'DD': '9'}
@@ -161,7 +163,7 @@ def barcode_to_mask(barcode: str, rootname: Optional[str]) -> str:
     """
     Convert a barcode string to a mask string.
     """
-    
+
     if barcode in barcodes.values():
         return list(barcodes.keys())[list(barcodes.values()).index(barcode)]
     else:

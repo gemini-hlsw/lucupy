@@ -1,12 +1,16 @@
-import pytest
-from lucupy.sky.altitude import Altitude
-from astropy.coordinates import Angle, Longitude
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
 import astropy.units as u
-from .fixtures import coord, location
 import numpy.testing as nptest
+import pytest
+from astropy.coordinates import Angle, Longitude
+
+from lucupy.sky.altitude import Altitude
+from .fixtures import coord, location
 
 
-@pytest.mark.usefixtures("coord", "location")
+@pytest.mark.usefixtures('coord', 'location')
 def test_altitude_above_zero(coord, location):
     """
     Test that altitude is 0 at the equator.

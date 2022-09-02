@@ -1,3 +1,6 @@
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
 from datetime import timedelta
 from enum import Enum, EnumMeta
 from typing import FrozenSet, Optional
@@ -5,15 +8,16 @@ from typing import FrozenSet, Optional
 import astropy.units as u
 from astropy.time import Time
 
-from ..abstract import ObservatoryProperties
-from ...minimodel import ObservationMode
-from ...minimodel import Resource
+from lucupy.minimodel import ObservationMode
+from lucupy.minimodel import Resource
+from lucupy.observatory.abstract import ObservatoryProperties
 
 
 class GeminiProperties(ObservatoryProperties):
     """
     Implementation of ObservatoryCalculations specific to Gemini.
     """
+
     class _InstrumentsMeta(EnumMeta):
         def __contains__(cls, r: Resource) -> bool:
             return any(inst.value.id in r.id for inst in cls.__members__.values())

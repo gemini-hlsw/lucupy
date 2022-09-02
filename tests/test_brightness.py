@@ -1,10 +1,5 @@
-import pytest
-from lucupy.sky.brightness import calculate_sky_brightness, calculate_sky_brightness_qpt
-from lucupy.sky.brightness import convert_to_sky_background
-from lucupy.sky.constants import KZEN
-from astropy.coordinates import SkyCoord, Angle
-from astropy.time import Time
-import astropy.units as u
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 
 def test_sky_brigthness_qpt():

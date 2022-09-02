@@ -1,3 +1,6 @@
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
 from abc import abstractmethod, ABC
 from dataclasses import dataclass
 from datetime import timedelta
@@ -9,7 +12,7 @@ from .observation import Observation
 from .resource import Resource
 from .site import Site
 
-from ..helpers import flatten
+from lucupy.helpers import flatten
 
 GroupID = str
 

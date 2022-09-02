@@ -1,6 +1,9 @@
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from ..minimodel import Group, Observation, Program
 from typing import NoReturn
+
+from lucupy.minimodel import Group, Observation, Program
 
 
 def print_program(program: Program) -> NoReturn:
