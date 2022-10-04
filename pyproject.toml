@@ -19,6 +19,16 @@ classifiers = [
    "Topic :: Utilities",
 ]
 
+[tool.poetry.group.docs]
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.4.0"
+mkdocs-material = "^8.5.6"
+mkdocs-minify-plugin = "^0.5.0"
+mkdocs-enumerate-headings-plugin = "^0.5.0"
+mkdocs-awesome-pages-plugin = "^2.8.0"
+mkdocs-img2fig-plugin = "^0.9.3"
+mkdocstrings = "^0.19.0"
 
 [tool.poetry.dependencies]
 python = "^3.10"

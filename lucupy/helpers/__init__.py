@@ -11,10 +11,17 @@ from astropy.time import Time
 
 
 def flatten(lst):
-    """
-    Flattens any iterable, no matter how irregular.
-    Example: flatten([1, 2, [3, 4, 5], [[6, 7], 8, [9, 10]]])
-    Deliberately left untyped to allow for maximum type usage.
+    """Flattens any iterable, no matter how irregular.
+       Deliberately left untyped to allow for maximum type usage.
+    
+    Example:
+        flatten([1, 2, [3, 4, 5], [[6, 7], 8, [9, 10]]])
+    
+    Args:
+        lst: n-dimensional array
+
+    Returns:
+        1-dimensional array
     """
     for el in lst:
         if isinstance(el, Iterable) and not isinstance(el, (str, bytes)):
@@ -24,10 +31,14 @@ def flatten(lst):
 
 
 def round_minute(time: Time, up: bool = False) -> Time:
-    """
-    Round a time down (truncate) or up to the nearest minute
-    time: an astropy.Time
-    up: bool indicating whether to round up
+    """Round a time down (truncate) or up to the nearest minute time: an astropy.Time
+
+    Args:
+        time: times value(s) to round down/up
+        up: bool indicating whether to round up
+    
+    Returns:
+        Round up/down value(s) on Astropy Time object
     """
     t = time.copy()
     t.format = 'iso'
@@ -40,8 +51,13 @@ def round_minute(time: Time, up: bool = False) -> Time:
 
 
 def str_to_bool(s: Optional[str]) -> bool:
-    """
-    Returns true if and only if s is defined and some variant capitalization of 'yes' or 'true'.
+    """Conversion from string to bolean
+
+    Arg:
+        s: parameter to convert
+
+    Returns:
+        true if and only if s is defined and some variant capitalization of 'yes' or 'true'.
     """
     return s is not None and s.strip().upper() in ['YES', 'TRUE']
 
@@ -51,6 +67,18 @@ SIGNS = {'': 1, '+': 1, '-': -1}
 
 
 def dmsstr2deg(s: str) -> float:
+    """Degrees, minutes, seconds (in string form) to decimal degrees
+    
+    Args:
+        s: string to convert
+
+    Raises:
+        ValueError: wrong format
+
+    Returns:
+        float: value in decimal degress
+
+    """
     if not s:
         raise ValueError(f'Illegal DMS string: {s}')
 
@@ -72,6 +100,20 @@ def dmsstr2deg(s: str) -> float:
 
 
 def dms2deg(d: int, m: int, s: float, sign: str) -> float:
+    """Degrees, minutes, seconds to decimal degrees
+
+    Args:
+        d (int): Degree
+        m (int): Minute
+        s (float): Seconds
+        sign (str): Mathematical sign
+
+    Raises:
+        ValueError: If signs is not in the SIGN dictionary
+
+    Returns:
+        float: Decimal degrees value
+    """
     if sign not in SIGNS:
         raise ValueError(f'Illegal sign "{sign}" in DMS: {sign}{d}:{m}:{s}')
     dec = SIGNS[sign] * (d + m / 60.0 + s / 3600.0)
@@ -79,10 +121,35 @@ def dms2deg(d: int, m: int, s: float, sign: str) -> float:
 
 
 def dms2rad(d: int, m: int, s: float, sign: str) -> float:
+    """Degrees, minutes, seconds to radians
+
+    Args:
+        d (int): Degree
+        m (int): Minute
+        s (float): Seconds
+        sign (str): Mathematical sign
+
+    Raises:
+        ValueError: If signs is not in the SIGN dictionary
+
+    Returns:
+        float: Radian value
+    """
     return dms2deg(d, m, s, sign) * np.pi / 180.0
 
 
 def hmsstr2deg(s: str) -> float:
+    """HH:mm:ss in string to degrees
+
+    Args:
+        s (str): String to be transform
+
+    Raises:
+        ValueError: Wrong format
+
+    Returns:
+        float: Value in degrees
+    """
     if not s:
         raise ValueError(f'Illegal HMS string: {s}')
 
@@ -94,18 +161,46 @@ def hmsstr2deg(s: str) -> float:
 
 
 def hms2deg(h: int, m: int, s: float) -> float:
+    """HH:mm:ss to degrees
+
+    Args:
+        h (int): Hour
+        m (int): Minute
+        s (float): Second
+
+    Returns:
+        float: Value in degrees
+    """
     return h + m / 60.0 + s / 3600.0
 
 
 def hms2rad(h: int, m: int, s: float) -> float:
+    """HH:mm:ss to radians
+
+    Args:
+        h (int): Hour
+        m (int): Minute
+        s (float): Second
+
+    Returns:
+        float: Value in degrees
+    """
     return hms2deg(h, m, s) * np.pi / 12.
 
 
 def angular_distance(ra1: float, dec1: float, ra2: float, dec2: float) -> float:
-    """
-    Calculate the angular distance between two points on the sky.
+    """Calculate the angular distance between two points on the sky.
     based on
     https://github.com/gemini-hlsw/lucuma-core/blob/master/modules/core/shared/src/main/scala/lucuma/core/math/Coordinates.scala#L52
+
+    Args:
+        ra1 (float): Right Ascension for point 1
+        dec1 (float): Declination for point 1
+        ra2 (float): Right Ascension for point 2
+        dec2 (float): Declination for point 2
+
+    Returns:
+        float: Angular Distance 
     """
     phi_1 = dec1
     phi_2 = dec2
@@ -149,8 +244,14 @@ sem_code = {value: key for key, value in sem_decode.items()}
 
 
 def mask_to_barcode(mask: str, inst: Optional[str]) -> str:
-    """
-    Convert a mask string to a barcode string.
+    """Convert a mask string to a barcode string.
+
+    Args:
+        mask (str): GMOS Mask
+        inst (Optional[str]): Instrument 
+
+    Returns:
+        str: Mask Barcode
     """
     if mask in barcodes:
         return barcodes[mask]
@@ -160,6 +261,14 @@ def mask_to_barcode(mask: str, inst: Optional[str]) -> str:
 
 
 def barcode_to_mask(barcode: str, rootname: Optional[str]) -> str:
+    """Convert a barcode string to a mask string.
+
+    Args:
+        barcode (str): Mask Barcode 
+        rootname (Optional[str]): Keyword that allows the decoding 
+
+    Returns:
+        str: _description_
     """
     Convert a barcode string to a mask string.
     """

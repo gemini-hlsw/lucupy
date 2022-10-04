@@ -77,7 +77,12 @@ class ElevationType(IntEnum):
     """
     NONE = auto()
     HOUR_ANGLE = auto()
-    AIRMASS = auto()
+    AIRMASS = auto()#
+# Created on Fri Sep 30 2022
+#
+# Copyright (c) 2022 Your Company
+#
+
 
 
 @dataclass(order=True, frozen=True)

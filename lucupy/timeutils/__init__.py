@@ -9,9 +9,18 @@ from typing import Tuple
 def sex2dec(stime: str,
             todegree: bool = False,
             sep: str = ':') -> float:
-    """
-    stime is a string of format "HR:MIN:SEC"
-    Returns the decimal equivalent.
+    """"Sexadecimal to decimal
+
+    Args:
+        stime (str): A string of format "HR:MIN:SEC
+        todegree (bool, optional): Option to convert to degree. Defaults to False.
+        sep (str, optional): Separator. Defaults to ':'.
+
+    Raises:
+        ValueError: _description_
+
+    Returns:
+        float: The decimal equivalent
     """
     l_stime = str(stime).replace("+", "")
     if sep not in l_stime:
@@ -35,6 +44,12 @@ def sex2dec(stime: str,
 
 def dtsex2dec(dt: datetime,
               todegree: bool = False) -> float:
+
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
     f = 1.0
     if todegree:
         f = 15.0
@@ -46,6 +61,14 @@ def dtsex2dec(dt: datetime,
 
 
 def sixty(dd: float) -> Tuple[int, int, int]:
+    """_summary_
+
+    Args:
+        dd (float): _description_
+
+    Returns:
+        Tuple[int, int, int]: _description_
+    """
     is_positive = dd >= 0
     l_dd = abs(dd)
     minutes, seconds = divmod(l_dd * 3600, 60)
