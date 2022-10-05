@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lucupy"
-version = "0.1.1"
+version = "0.1.2"
 description = "A striped down version of the lucuma core in Python for Schedule"
 authors = ["Sergio Troncoso <sergio.troncoso@noirlab.edu>", 
            "Sebastian Raaphorst <sebastian.raaphorst@noirlab.edu>",
