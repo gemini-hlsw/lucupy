@@ -1,17 +1,20 @@
-import pytest
-from astropy.time import Time
-from astropy.coordinates import SkyCoord, EarthLocation
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
 import astropy.units as u
+import pytest
+from astropy.coordinates import SkyCoord, EarthLocation
+from astropy.time import Time
 
 
 @pytest.fixture
 def midnight():
-    return Time("2020-07-01 9:25:00", format='iso', scale='utc')
+    return Time('2020-07-01 9:25:00', format='iso', scale='utc')
 
 
 @pytest.fixture
 def coord():
-    coords = ["1:12:43.2 +31:12:43", "1 12 43.2 +31 12 43"]
+    coords = ['1:12:43.2 +31:12:43', '1 12 43.2 +31 12 43']
     return SkyCoord(coords, unit=(u.hourangle, u.deg), frame='icrs')
 
 

@@ -1,3 +1,6 @@
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
 from dataclasses import dataclass
 from datetime import datetime
 from enum import auto, Enum, IntEnum
@@ -8,9 +11,8 @@ import numpy.typing as npt
 from astropy.coordinates import Angle
 from astropy.units import Quantity
 
-
-from ..helpers import flatten
-from ..types import ScalarOrNDArray
+from lucupy.helpers import flatten
+from lucupy.types import ScalarOrNDArray
 from .timingwindow import TimingWindow
 
 

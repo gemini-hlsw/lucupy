@@ -1,3 +1,6 @@
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
 import numpy as np
 
 
@@ -8,11 +11,11 @@ def scalar_input(func):
     """
 
     def wrapper(*args, **kwargs):
-
         # transform the input to numpy
         np_args = [np.asarray(arg) for arg in args]
         if any(arg.ndim == 0 for arg in np_args):
             args = [arg[np.newaxis] for arg in np_args]
-           
+
         return np.squeeze(func(*args, **kwargs))
+
     return wrapper

@@ -1,9 +1,13 @@
-import pytest
-from lucupy.sky.sun import Sun
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
 import astropy.units as u
-from astropy.time import Time
-from .fixtures import midnight, test_time, location
 import numpy.testing as nptest
+import pytest
+from astropy.time import Time
+
+from lucupy.sky.sun import Sun
+from .fixtures import midnight, test_time, location
 
 
 @pytest.mark.usefixtures("midnight")
@@ -14,6 +18,7 @@ def test_sun_location_at_midnight(midnight):
     pos = Sun.at(midnight)
     assert pos.ra.value == 100.88591931021546
     assert pos.dec.value == 23.058699652854724
+
 
 @pytest.mark.usefixtures("test_time", "location")
 def test_sun_time_by_altitude(test_time, location):

@@ -1,11 +1,16 @@
-import pytest
-from astropy.time import Time
-from astropy.coordinates import EarthLocation, Angle, PrecessedGeocentric, SkyCoord
+# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
 import astropy.units as u
 import numpy as np
-from lucupy.sky.utils import local_sidereal_time, current_geocent_frame, min_max_alt
+import pytest
+from astropy.coordinates import EarthLocation, Angle, PrecessedGeocentric
+from astropy.time import Time
+
 from lucupy.sky.utils import hour_angle_to_angle, true_airmass, ztwilight, xair
+from lucupy.sky.utils import local_sidereal_time, current_geocent_frame, min_max_alt
 from .fixtures import midnight, location, coord
+
 
 # All values are calculated using the following code:
 # https://github.com/jrthorstensen/thorsky
@@ -72,4 +77,4 @@ def test_ztwilight():
                                            (120, 10.)
                                            ])
 def test_xair(alt, expected):
-     np.testing.assert_almost_equal(xair(alt * u.deg), expected)
+    np.testing.assert_almost_equal(xair(alt * u.deg), expected)
