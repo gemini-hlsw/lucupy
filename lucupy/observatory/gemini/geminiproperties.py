@@ -8,8 +8,7 @@ from typing import FrozenSet, Optional
 import astropy.units as u
 from astropy.time import Time
 
-from lucupy.minimodel import ObservationMode
-from lucupy.minimodel import Resource
+from lucupy.minimodel import ObservationMode, Resource, Site
 from lucupy.observatory.abstract import ObservatoryProperties
 
 
@@ -24,12 +23,15 @@ class GeminiProperties(ObservatoryProperties):
 
     # Gemini-specific instruments.
     class Instruments(Enum, metaclass=_InstrumentsMeta):
-        FLAMINGOS2 = Resource('Flamingos2')
-        GNIRS = Resource('GNIRS')
-        NIFS = Resource('NIFS')
-        IGRINS = Resource('IGRINS')
-        GMOS_S = Resource('GMOS-S')
-        GMOS_N = Resource('GMOS-N')
+        FLAMINGOS2 = Resource('Flamingos2', site=Site.GS)
+        NIFS = Resource('NIFS', site=Site.GN)
+        NIRI = Resource('NIRI', site=Site.GN)
+        IGRINS = Resource('IGRINS', site=Site.GS)
+        GMOS_S = Resource('GMOS-S', site=Site.GS)
+        GMOS_N = Resource('GMOS-N', site=Site.GN)
+        GNIRS = Resource('GNIRS', site=Site.GN)
+        GPI = Resource('GPI', site=Site.GS)
+        GSAOI = Resource('GSAOI', site=Site.GS)
 
     # Instruments for which there are set standards.
     _STANDARD_INSTRUMENTS = [Instruments.FLAMINGOS2,
