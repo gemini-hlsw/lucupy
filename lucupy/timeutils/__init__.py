@@ -45,10 +45,10 @@ def sex2dec(stime: str,
 def dtsex2dec(dt: datetime,
               todegree: bool = False) -> float:
 
-    """_summary_
+    """Datetime to decimals
 
     Returns:
-        _type_: _description_
+        float: The decimal equivalent
     """
     f = 1.0
     if todegree:
@@ -61,13 +61,13 @@ def dtsex2dec(dt: datetime,
 
 
 def sixty(dd: float) -> Tuple[int, int, int]:
-    """_summary_
+    """Sixty
 
     Args:
-        dd (float): _description_
+        dd (float): Days
 
     Returns:
-        Tuple[int, int, int]: _description_
+        Tuple[int, int, int]: Degrees, minutes and seconds
     """
     is_positive = dd >= 0
     l_dd = abs(dd)
@@ -90,19 +90,19 @@ def dec2sex(d: float,
             sep: str = ':',
             leadzero: int = 0,
             round_min: bool = False) -> str:
-    """
-    Convert decimal degrees/hours to a formatted sexigesimal string.
+    """Convert decimal degrees/hours to a formatted sexigesimal string.
 
-    Parameters
-    :param d: input in degrees
-    :param p: digits for seconds
-    :param cutsec: Cut seconds, just display, e.g. DD:MM
-    :param hour: d is decimal hours, so must be <=24
-    :param tohour: convert from degress to hours (divide by 15.)
-    :param sep: Separator string
-    :param leadzero: if >0 display leading 0's, e.g. -05:25. The value is the number of digits for the DD or HR field.
-    :param round_min: when cutsec, round to the nearest minute rather than truncate
-    :return: string
+    Args:
+        d: Input in degrees
+        p: Digits for seconds
+        cutsec: Cut seconds, just display, e.g. DD:MM
+        hour: d is decimal hours, so must be <=24
+        tohour: Convert from degress to hours (divide by 15.)
+        sep: Separator string
+        leadzero: If >0 display leading 0's, e.g. -05:25. The value is the number of digits for the DD or HR field.
+        round_min: When cutsec, round to the nearest minute rather than truncate
+    Returns:
+        str: That modify string
     """
     l_d = float(d)
     sign = ''

@@ -17,10 +17,16 @@ def with_igrins_cal(func):
 
 
 class GeminiObservation(Observation):
-    """
-    A Gemini-specific extension of the Observation class.
+    """A Gemini-specific extension of the Observation class.
     """
 
     @with_igrins_cal
     def total_used(self) -> timedelta:
+        """Override total_used method from Observation.
+
+           Adds IGRINS calibration time using a decorator.
+           
+        Returns:
+            timedelta: Total used time with 
+        """
         return super().total_used()

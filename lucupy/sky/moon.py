@@ -7,7 +7,7 @@
 # Copyright John Thorstensen, 2018, who graciously has allowed Gemini to use this code under the BSD-3 Clause license.
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from typing import NoReturn, Tuple
+from typing import NoReturn, Tuple, Optional
 
 import astropy.units as u
 import numpy as np
@@ -21,6 +21,21 @@ from .utils import local_sidereal_time, current_geocent_frame, geocentric_coors,
 
 
 class Moon:
+    """Interface for night events for the moon an other calculations.
+
+    To use this is required to chain the `at` method at the beginning. 
+    If not unhandled errors would happen.
+
+    Attributes:
+        time (Time): regular Time in UTC.
+        time_jd (Time): Time on Julian day.
+        time_ttjd (Time): Time on terrestrial time and Julian day.
+        scalar_input (bool): Check if input is an array or a scalar.
+        self.pie (float): Not a lemon one! Variable for location calculation.
+        self.lambd (float): Variable for location calculation.
+        self.beta (float): Variable for location calculation.
+
+    """
     def __init__(self):
         # TODO: skip constructor altogether and just use the at method?
         self.time = None
@@ -32,6 +47,19 @@ class Moon:
         self.beta = None
 
     def at(self, time: Time):
+        """Set time values for other calculations.
+           
+           This method is meant to be called with:
+            - location methods (either low or accurate).
+            - time_by_altitude
+            - rise_and_set
+
+        Args:
+            time (Time): Specific time.
+
+        Returns:
+            Self: Same object for method chaining.
+        """
         self.time = time
         self.time_jd = np.asarray(time.jd)
         self.time_ttjd = np.asarray(time.tt.jd)  # important to use correct time argument for this!!
@@ -43,8 +71,7 @@ class Moon:
         return self
 
     def _low_precision_calculations(self) -> NoReturn:
-        """
-        Compute low precision values for the moon location method calculations.
+        """Compute low precision values for the moon location method calculations.
         """
         t = (self.time_jd - J2000) / 36525.  # jul cent. since J2000.0
 
@@ -70,8 +97,7 @@ class Moon:
         self.pie = np.deg2rad(pie)
 
     def _high_precision_calculations(self) -> NoReturn:
-        """
-        Compute accurate precession values for the moon location method calculations.
+        """Compute accurate precession values for the moon location method calculations.
         """
         t = (self.time_ttjd - 2415020.) / 36525.  # this based around 1900 ... */
         t_2 = t * t
@@ -256,10 +282,15 @@ class Moon:
         self.lambd = Angle(np.deg2rad(lambd), unit=u.rad)
 
     def low_precision_location(self, obs: EarthLocation) -> Tuple[SkyCoord, float]:
-        """
-        This is the same as the high precision method, but with a different set of coefficients.  
+        """This is the same as the high precision method, but with a different set of coefficients.  
         The difference is small. Good to about 0.1 deg, from the 1992 Astronomical Almanac, p. D46.
         Note that input time is a float.
+
+        Args:
+            obs: Earth location of the observation.
+
+        Returns:
+            Tuple[SkyCoord, float]: Moon coordinates and topographic distance.
         """
         self._low_precision_calculations()
 
@@ -294,19 +325,15 @@ class Moon:
         return SkyCoord(alpha, delta, topo_dist * distancemultiplier, frame=fr), topo_dist
 
     def accurate_location(self, obs: EarthLocation) -> Tuple[SkyCoord, float]:
-        """  
-        Compute topocentric location and distance of moon to better accuracy.
+        """Compute topocentric location and distance of moon to better accuracy.
 
-        This is good to about 0.01 degrees
+        This is good to about 0.01 degrees.
 
-        Parameters
-        ----------
-        obs : EarthLocation
-            location on earth.
+        Args:
+            obs: location on earth.
 
-        Returns
-        -------
-        tuple of a SkyCoord and a distance.
+        Returns:
+            Tuple[SkyCoord, float]: Moon coordinates and topographic distance.
 
         """
         self._high_precision_calculations()
@@ -355,24 +382,19 @@ class Moon:
     @staticmethod
     def time_by_altitude(alt: Angle,
                          time_guess: Time,
-                         location: EarthLocation) -> Time:
-        """
-        Time at which moon passes a given altitude.
+                         location: EarthLocation) -> Optional[Time]:
+        """Time at which moon passes a given altitude.
 
         This really does have to be iterated since the moon moves fairly
         quickly.
 
-        Parameters
-        ----------
-        alt : Angle, single or array.  If array, then must be the same length as time_guess
-        desired altitude.
-        time_guess : Time, single or array
-        initial guess; this needs to be fairly close.
-        location : EarthLocation
+        Args:
+            alt: If array, then must be the same length as time_guess desired altitude.
+            time_guess : Initial guess; this needs to be fairly close.
+            location : EarthLocation
 
-        Returns
-        -------
-        a Time, or None if non-convergent.
+        Returns:
+            Optional[Time]: a Time, or None if non-convergent.
         """
 
         # time_guess is a Time, location is an EarthLocation
@@ -434,8 +456,16 @@ class Moon:
                      midnight: Time,
                      set_alt: Angle,
                      rise_alt: Angle) -> Tuple[Time, Time]:
-        """
-        Return times of moon rise and set.
+        """Calculates rise and set for the Moon
+
+        Args:
+            location (EarthLocation): Earth location of the observer
+            midnight (Time): Midnight of that day as a Time object 
+            set_alt (Angle): Altitude for the moonset 
+            rise_alt (Angle): Altitude for the moonrise
+
+        Returns:
+            Tuple[Time, Time]: Moonrise and Moonset values, in that order.
         """
         moon_at_midnight, _ = self.at(midnight).low_precision_location(location)
         lst_midnight = local_sidereal_time(midnight, location)

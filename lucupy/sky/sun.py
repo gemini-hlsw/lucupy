@@ -7,7 +7,7 @@
 # Copyright John Thorstensen, 2018, who graciously has allowed Gemini to use this code under the BSD-3 Clause license.
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from typing import Tuple
+from typing import Tuple, Optional
 
 import astropy.units as u
 import numpy as np
@@ -20,21 +20,23 @@ from .utils import current_geocent_frame, local_sidereal_time, hour_angle_to_ang
 
 
 class Sun:
+    """A interface to calculate different night events regarding the Sun.
+
+    To use this is required to chain the `at` method at the beginning. 
+    If not unhandled errors would happen.
+    """
     @staticmethod
     def at(time: Time) -> SkyCoord:
-        """
-        low-precision position of the sun.
+        """Low-precision position of the sun.
 
         Good to about 0.01 degree, from the 1990 Astronomical Almanac p. C24.
         At this level topocentric correction is not needed.
 
-        Paramters
-        ---------
-        time : astropy Time
+        Args:
+            time: of the position
 
-        Returns
-
-        a SkyCoord in the geocentric frame of epoch of date.
+        Returns:
+            SkyCoord: in the geocentric frame of epoch of date.
 
         """
 
@@ -71,31 +73,30 @@ class Sun:
     def time_by_altitude(alt: Angle,
                          time_guess: Time,
                          location: EarthLocation,
-                         timestep: float = 0.002) -> Time:
-        """
-        Time at which the sun crosses a particular altitude alt, which is an Angle,
-        for an EarthLocation location.
+                         timestep: float = 0.002) -> Optional[Time]:
+        """Time at which the sun crosses a particular altitude.
 
         This of course happens twice a day (or not at all);
-        time_guess is a Time approximating the answer.
         The usual use case will be to compute roughly when sunset or twilight occurs,
         and hand the result to this routine to get a more exact answer.
+
+        time_guess is the starting time for iteration. This must be fairly close so that
+        the iteration converges on the correct phenomenon (e.g., rise time, not set time).
 
         This uses the low-precision sun location, which is typically good to 0.01 degree.
         That's plenty good enough for computing rise, set, and twilight times.
 
-        Parameters:
+        Args:
+            alt: Desired altitude. If array, then must be the same length as time_guess.
+            time_guess: Is a Time approximating the answer.
+            location: EarthLocation
+        
+        Raises:
+            ValueError: Different lengths for Altitude and time_guess
+            ArithmeticError: Sunrise, set, or twilight calculation not converging
 
-        alt : Angle, single or array. If array, then must be the same length as time_guess
-        Desired altitude.
-        time_guess : Time, single or array
-        Starting time for iteration.  This must be fairly
-        close so that the iteration coverges on the correct
-        phenomenon (e.g., rise time, not set time).
-        location : EarthLocation
-
-        Returns: Time if convergent
-                None if non-convergent
+        Returns:
+            Time if convergent None if non-convergent
         """
         time_guess = Time(np.asarray(time_guess.jd), format='jd')
         alt = Angle(np.asarray(alt.to_value(u.rad)), unit=u.rad)
@@ -156,15 +157,19 @@ class Sun:
                      midnight: Time,
                      set_alt: Angle,
                      rise_alt) -> Tuple[Time, Time, Time, Time]:
-        """
-        Compute rise and set times for this Sun, for the current
-        ``location`` and ``time`` of the night.
+        """Compute rise and set times for this Sun. 
+        
+            For the current location and time of the night.
 
-        Returns
-        -------
-        `~astropy.time.Time`
-            The time of the event for the body in the
-            ``precision`` of this `Sun`.
+        Args:
+            location (EarthLocation): Earth location
+            time (Time): time of the night.
+            midnight (Time): Midnight time.
+            set_alt (Angle): sunset altitude.
+            rise_alt (_type_): sunrise altitude.
+
+        Returns:
+            The time of the event for the body in the precision of this Sun.
         """
 
         sun_at_midnight = Sun.at(midnight)

@@ -28,8 +28,7 @@ class Altitude:
     def above(dec: AngleParam,
               ha: AngleParam,
               lat: AngleParam) -> Tuple[Angle, Angle, Angle]:
-        """
-        Compute altitude above horizon, azimuth, and parallactic angle.
+        """Compute altitude above horizon, azimuth, and parallactic angle.
 
         The parallactic angle is the position angle of the arc between the
         object and the zenith, i.e. the position angle that points 'straight up'
@@ -49,19 +48,14 @@ class Altitude:
         the dec is assumed to be in equinox of date to avoid
         # We get the parallactic angle almost for since we have ha, colat, and altitude.
 
-        Parameters
-        ----------
+        Args:
+            dec: Declination
+            ha: Hour angle (spherical astronomy) of the position, positive westward
+            lat: Latitude of site.
 
-        dec : Angle, float or numpy array
-            Declination
-        ha : Angle, float or numpy array
-            Hour angle (spherical astronomy) of the position, positive westward
-        lat : Angle
-            Latitude of site.
+        Returns:
+            tuple of (altitude, azimuth, parallactic), all of which are Angles.
 
-        Returns
-        -------
-        tuple of (altitude, azimuth, parallactic), all of which are Angles.
         """
 
         dec = np.asarray(dec.to_value(u.rad).data) * u.rad

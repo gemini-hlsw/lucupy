@@ -1,0 +1,26 @@
+site_name: Lucupy Docs
+
+theme:
+  name: "material"
+
+nav:
+  - Lucupy Package: reference/
+
+plugins:
+  - search
+  - awesome-pages
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_source: false
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - section-index
+  - enumerate-headings
+  - minify
+  - img2fig
+  - gen-files:
+      scripts:
+      - docs/gen_ref_pages.py

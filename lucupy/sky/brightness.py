@@ -25,37 +25,22 @@ def calculate_sky_brightness(moon_phase_angle: Angle,
                              target_zenith_distang: Angle,
                              sun_zenith_distang: Angle,
                              verbose: bool = False) -> npt.NDArray[float]:
-    """
-    Calculate sky brightness based on formulas from Krisciunas & Schaefer 1991
+
+    """Calculate sky brightness based on formulas from Krisciunas & Schaefer 1991.
     Uses array processing
 
-    Parameters
-    ----------
-    moon_phase_angle : '~astropy.units.Quantity'
-        Moon phase angles in degrees
+    Args:
+        moon_phase_angle: Moon phase angles in degrees
+        target_moon_angdist: Angular distances between target and moon
+        earth_moon_dist: Distances from the Earth to the Moon
+        moon_zenith_distang: Moon zenith distance angles
+        target_zenith_distang: Target zenith distance angles
+        sun_zenith_distang: Sun zenith distance angles
+        verbose: Verbose output flag
 
-    target_moon_angdist : '~astropy.units.Quantity'
-        Angular distances between target and moon
+    Returns:
+        array of float:  Numpy array of sky background magnitudes at target location
 
-    earth_moon_dist : '~astropy.units.Quantity'
-        Distances from the Earth to the Moon
-
-    moon_zenith_distang : '~astropy.units.Quantity'
-        Moon zenith distance angles
-
-    target_zenith_distang : '~astropy.units.Quantity'
-        Target zenith distance angles
-
-    sun_zenith_distang : '~astropy.units.Quantity'
-        Sun zenith distance angles
-
-    verbose :
-        Verbose output flag
-
-    Returns
-    ---------
-    skybright : array of float
-        Numpy array of sky background magnitudes at target location
     """
 
     # Constants
@@ -159,37 +144,28 @@ def calculate_sky_brightness_qpt(moon_phase_angle: Quantity,
                                  verbose: bool = False) -> npt.NDArray[float]:
     """
     Calculate sky brightness based on formulas from Krisciunas & Schaefer 1991
-    Bryan Miller
-    November 5, 2004
-    June 1, 2015 - added cc parameter while testing cloud scattering corrections
 
-    Matt Bonnyman
-    converted from IDL to Python May 23, 2018
+    Changelog:
 
-    Parameters
-    ----------
-    moon_phase_angle : '~astropy.units.Quantity'
-        Moon phase angle at solar midnight in degrees
+        Bryan Miller
+        November 5, 2004
+        June 1, 2015 - added cc parameter while testing cloud scattering corrections
 
-    target_moon_angdist : '~astropy.units.Quantity'
-        Numpy array of angular distances between target and moon
+        Matt Bonnyman
+        May 23, 2018
+        converted from IDL to Python
 
-    moon_zenith_distang : '~astropy.units.Quantity'
-        Numpy array of Moon zenith distance angles
+    Args:
+        moon_phase_angle: Moon phase angle at solar midnight in degrees
+        target_moon_angdist: Numpy array of angular distances between target and moon
+        moon_zenith_distang: Numpy array of Moon zenith distance angles
+        target_zenith_distang: Numpy array of target zenith distance angles
+        sun_zenith_distang: Numpy array of Sun zenith distance angles
+        verbose: Verbose output flag
 
-    target_zenith_distang : '~astropy.units.Quantity'
-        Numpy array of target zenith distance angles
-
-    sun_zenith_distang : '~astropy.units.Quantity'
-        Numpy array of Sun zenith distance angles
-
-    verbose :
-        Verbose output flag
-
-    Returns
-    ---------
-    skybright : float
-        Numpy array of sky background magnitudes at target location
+    Returns:
+        float: Numpy array of sky background magnitudes at target location
+    
     """
 
     # Constants
@@ -262,25 +238,21 @@ def calculate_sky_brightness_qpt(moon_phase_angle: Quantity,
 
 
 def convert_to_sky_background(sb: npt.NDArray[float]) -> npt.NDArray[SkyBackground]:
-    """
-    Convert visible sky background magnitudes to decimal conditions.
+    """Convert visible sky background magnitudes to decimal conditions.
 
+    Args:
+        sb:  TargetInfo object with time dependent vsb quantities
+
+    Return:
+        npt.NDArray[SkyBackground]: Sky background condition values
+
+    Example:
         Conversion scheme:
             1.0 |          vsb <= 19.61
             0.8 | 19.61 < vsb <= 20.78
             0.5 | 20.78 < vsb <= 21.37
             0.2 | 21.37 < vsb
-
-
-    Input
-    -------
-    sb :  np.ndarray of floats
-        TargetInfo object with time dependent vsb quantities
-
-    Return
-    -------
-    cond : np.ndarray of SkyBackground
-        sky background condition values
+    
     """
 
     cond = np.full([len(sb)], SkyBackground.SBANY)

@@ -20,8 +20,8 @@ def flatten(lst):
     Args:
         lst: n-dimensional array
 
-    Returns:
-        1-dimensional array
+    Yields:
+        Value of the iterable.
     """
     for el in lst:
         if isinstance(el, Iterable) and not isinstance(el, (str, bytes)):
