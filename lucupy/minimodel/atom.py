@@ -15,6 +15,19 @@ class Atom:
     Atom information, where an atom is the smallest schedulable set of steps
     such that useful science can be obtained from performing them.
     Wavelengths must be specified in microns.
+
+    Attributes:
+
+        id (int): GPP atom `id`. In other case is given by the Provider
+        exec_time (timedelta): Total time of execution.
+        prog_time (timedelta): Program time.
+        part_time (timedelta): Partner time.
+        observed (bool): True if the STATUS is already observed.
+        qa_state (QAState):
+        guide_state (bool): True if a state exists.
+        resources (FrozenSet[Resource]): Resources needed (Instrument, FPU, etc).
+        wavelengths (FrozenSet[float]): Set of wavelengths.
+
     """
     id: int
     exec_time: timedelta

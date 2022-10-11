@@ -8,12 +8,13 @@ from typing import ClassVar, Optional
 
 @dataclass(frozen=True)
 class TimingWindow:
-    """
-    Representation of timing windows in the mini-model.
+    """Representation of timing windows in the mini-model.
 
-    For infinite duration, set duration to timedelta.max.
-    For repeat, -1 means forever repeating, 0 means non-repeating.
-    For period, None should be used if repeat < 1.
+    Attributes:
+        start (datetime):
+        duration (timedelta): For infinite duration, set duration to timedelta.max.
+        repeat (int):  -1 means forever repeating, 0 means non-repeating.
+        period (timedelta, optional): None should be used if repeat < 1.
     """
     start: datetime
     duration: timedelta

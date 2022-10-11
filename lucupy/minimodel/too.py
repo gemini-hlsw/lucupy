@@ -15,6 +15,12 @@ class TooType(IntEnum):
     but not INTERRUPT ones.
 
     The values and ordering on them should NOT be changed as this will break functionality.
+
+    Members:
+        - STANDARD
+        - RAPID
+        - INTERRUPT
+
     """
     STANDARD = auto()
     RAPID = auto()

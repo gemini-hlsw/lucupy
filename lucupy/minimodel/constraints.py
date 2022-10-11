@@ -19,6 +19,13 @@ from .timingwindow import TimingWindow
 class SkyBackground(float, Enum):
     """
     Bins for observation sky background requirements or current conditions.
+    
+    Members:
+        - SB20 = 0.2
+        - SB50 = 0.5
+        - SB80 = 0.8
+        - SBANY = 1.0
+
     """
     SB20 = 0.2
     SB50 = 0.5
@@ -29,6 +36,12 @@ class SkyBackground(float, Enum):
 class CloudCover(float, Enum):
     """
     Bins for observation cloud cover requirements or current conditions.
+
+    Members:
+        - CC50 = 0.5
+        - CC70 = 0.7
+        - CC80 = 0.8
+        - CCANY = 1.0
     """
     CC50 = 0.5
     CC70 = 0.7
@@ -39,6 +52,13 @@ class CloudCover(float, Enum):
 class ImageQuality(float, Enum):
     """
     Bins for observation image quality requirements or current conditions.
+    
+    Members:
+        - IQ20 = 0.2
+        - IQ70 = 0.7
+        - IQ85 = 0.85
+        - IQANY = 1.0
+
     """
     IQ20 = 0.2
     IQ70 = 0.7
@@ -49,6 +69,13 @@ class ImageQuality(float, Enum):
 class WaterVapor(float, Enum):
     """
     Bins for observation water vapor requirements or current conditions.
+
+    Members:
+        - WV20 = 0.2
+        - WV50 = 0.5
+        - WV80 = 0.8
+        - WVANY = 1.0
+
     """
     WV20 = 0.2
     WV50 = 0.5
@@ -62,6 +89,15 @@ class Strehl(float, Enum):
     Used variously in situations where optical resolution is compromised due to lens aberrations or due to imaging
     through the turbulent atmosphere, the Strehl ratio has a value between 0 and 1, with a hypothetical, perfectly
     unaberrated optical system having a Strehl ratio of 1. (Source: Wikipedia.)
+
+    Members:
+        - S00 = 0.0
+        - S02 = 0.2
+        - S04 = 0.4
+        - S06 = 0.6
+        - S08 = 0.8
+        - S10 = 1.0
+
     """
     S00 = 0.0
     S02 = 0.2
@@ -74,15 +110,15 @@ class Strehl(float, Enum):
 class ElevationType(IntEnum):
     """
     The type of elevation constraints in the observing conditions.
+
+    Members:
+       - NONE
+       - HOUR_ANGLE
+       - AIRMASS
     """
     NONE = auto()
     HOUR_ANGLE = auto()
-    AIRMASS = auto()#
-# Created on Fri Sep 30 2022
-#
-# Copyright (c) 2022 Your Company
-#
-
+    AIRMASS = auto()
 
 
 @dataclass(order=True, frozen=True)
@@ -95,6 +131,13 @@ class Conditions:
 
     This should be done via:
     current_conditions <= required_conditions.
+
+    Attributes:
+        cc (ScalarOrNDArray[CloudCover]): CloudCover
+        iq (ScalarOrNDArray[ImageQuality]): ImageQuality
+        sb (ScalarOrNDArray[SkyBackground]): SkyBackground
+        wv (ScalarOrNDArray[WaterVapor]): WaterVapor
+
     """
     cc: ScalarOrNDArray[CloudCover]
     iq: ScalarOrNDArray[ImageQuality]
@@ -150,8 +193,23 @@ class Conditions:
 
 @dataclass
 class Constraints:
-    """
-    The constraints required for an observation to be performed.
+    """The constraints required for an observation to be performed.
+    
+    Default airmass values to use for elevation constraints if:
+        1. The Constraints are not present in the Observation at all; or
+        2. The elevation_type is set to NONE.
+
+    Attributes:
+        conditions (Conditions): Collection of conditions.
+        elevation_type (ElevationType): Elevation type.
+        elevation_min (float): Max value of elevation.
+        elevation_max (float): Min value of elevation.
+        timing_windows (List[TimingWindow]): Time windows in the constraints are in effect.
+        strehl (Strehl:optional): None
+
+        DEFAULT_AIRMASS_ELEVATION_MIN (ClassVar[float]): 1.0
+        DEFAULT_AIRMASS_ELEVATION_MAX (ClassVar[float]): 2.3
+
     """
     conditions: Conditions
     # constrast: Constrast
@@ -171,12 +229,21 @@ class Constraints:
 
 @dataclass(order=True, eq=True, frozen=True)
 class Variant:
-    """
-    A weather variant.
+    """A weather variant.
     wind_speed should be in m / s.
-    TODO: No idea what time blocks are. Note this could be a list or a single value.
-    TODO: Because of this, we cannot hash Variants, which is problematic.
+
+    Attributes:
+
+        start_time (datetime): Time of the variant.
+        iq (Union[npt.NDArray[ImageQuality], ImageQuality]): Image quality.
+        cc (Union[npt.NDArray[CloudCover], CloudCover]): Cloud Cover.
+        wind_dir (Angle): Wind direction.
+        wind_spd (Quantity): Wind speed.
+
     """
+    # TODO: No idea what time blocks are. Note this could be a list or a single value.
+    # TODO: Because of this, we cannot hash Variants, which is problematic.
+
     start_time: datetime
     iq: Union[npt.NDArray[ImageQuality], ImageQuality]
     cc: Union[npt.NDArray[CloudCover], CloudCover]

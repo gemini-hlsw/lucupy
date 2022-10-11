@@ -46,7 +46,7 @@ class Moon:
         self.lambd = None
         self.beta = None
 
-    def at(self, time: Time):
+    def at(self, time: Time) -> "Moon":
         """Set time values for other calculations.
            
            This method is meant to be called with:
@@ -58,7 +58,7 @@ class Moon:
             time (Time): Specific time.
 
         Returns:
-            Self: Same object for method chaining.
+            Self (Moon)): Same object for method chaining.
         """
         self.time = time
         self.time_jd = np.asarray(time.jd)

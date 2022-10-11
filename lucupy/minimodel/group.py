@@ -19,18 +19,19 @@ GroupID = str
 
 @dataclass
 class Group(ABC):
-    """
-    This is the base implementation of AND / OR Groups.
+    """This is the base implementation of AND / OR Groups.
     Python does not allow classes to self-reference unless in static contexts,
     so we make a very simple base class to self-reference from subclasses since
     we need this functionality to allow for group nesting.
 
-    * id: the identification of the group
-    * group_name: a human-readable name of the group
-    * number_to_observe: the number of children in the group that must be observed for the
-      group to be considered complete
-    * delay_min: used in cadences
-    * delay_max: used in cadences
+
+    Attributes:
+        id (GroupID): the identification of the group.
+        group_name (str): a human-readable name of the group.
+        number_to_observe (int): the number of children in the group that must be observed for the group to be considered complete.
+        delay_min(timedelta): used in cadences.
+        delay_ma(timedelta): used in cadences.
+        children (Union[List['Group'], Observation]): member(s) of the group
     """
     id: GroupID
     group_name: str
@@ -45,36 +46,70 @@ class Group(ABC):
             raise ValueError(msg)
 
     def subgroup_ids(self) -> FrozenSet[GroupID]:
+        """Get the ids for all the sub-groups inside.
+
+        Returns:
+            FrozenSet[GroupID]: Set of GroupID values.
+        """
         if isinstance(self.children, Observation):
             return frozenset()
         else:
             return frozenset(subgroup.id for subgroup in self.children)
 
     def sites(self) -> FrozenSet[Site]:
+        """All belonging Sites.
+
+        Returns:
+            FrozenSet[Site]: Set of Sites for all observations. 
+        """
         if isinstance(self.children, Observation):
             return frozenset([self.children.site])
         else:
             return frozenset.union(*[s.sites() for s in self.children])
 
     def required_resources(self) -> FrozenSet[Resource]:
+        """
+        Returns:
+            FrozenSet[Resource]: A set of Resources.
+        """
         return frozenset(r for c in self.children for r in c.required_resources())
 
     def wavelengths(self) -> FrozenSet[float]:
+        """
+        Returns:
+            FrozenSet[float]: A set of wavelengths.
+        """
         return frozenset(w for c in self.children for w in c.wavelengths())
 
     def constraints(self) -> FrozenSet[Constraints]:
+        """
+        Returns:
+            FrozenSet[Constraints]: All set of Constraints in the group.
+        """
         return frozenset(cs for c in self.children for cs in c.constraints())
 
     def observations(self) -> List[Observation]:
+        """
+        Returns:
+            List[Observation]: A set of Observations.
+        """
         if isinstance(self.children, Observation):
             return [self.children]
         else:
             return [o for g in self.children for o in g.observations()]
 
     def is_observation_group(self) -> bool:
+        """
+        Returns:
+            bool: True if the group is just a single Observation, otherwise False.
+        """
         return issubclass(type(self.children), Observation)
 
     def is_scheduling_group(self) -> bool:
+        """
+        Returns:
+            bool: True if the group is an, otherwise False.
+        """
         return not (self.is_observation_group())
 
     @abstractmethod
@@ -93,6 +128,14 @@ class AndOption(Enum):
     """
     Different options available for ordering AND group children.
     CUSTOM is used for cadences.
+
+    Members:
+       - CONSEC_ORDERED
+       - CONSEC_ANYORDER
+       - NIGHT_ORDERED
+       - NIGHT_ANYORDER
+       - ANYORDER
+       - CUSTOM
     """
     CONSEC_ORDERED = auto()
     CONSEC_ANYORDER = auto()
@@ -104,12 +147,13 @@ class AndOption(Enum):
 
 @dataclass
 class AndGroup(Group):
-    """
-    The concrete implementation of an AND group.
-    It requires an AndOption to specify how its observations should be handled,
-    and a previous (which should be an index into the group's children to indicate
-    the previously observed child, or None if none of the children have yet been
-    observed).
+    """The concrete implementation of an AND group.
+
+    Attributes:
+        group_option (AndOption): Specify how its observations should be handled.
+        previous (int, optional): An index into the group's children to indicate the previously observed child,
+            or None if none of the children have yet been observed. Default to None.
+
     """
     group_option: AndOption
     previous: Optional[int] = None
@@ -132,8 +176,10 @@ class AndGroup(Group):
         return False
 
     def exec_time(self) -> timedelta:
-        """
-        Total execution time across the childrenn of this group.
+        """Total execution time across the children of this group.
+
+        Returns:
+            exec_time (timedelta): Sum of all the executions time.
         """
         if issubclass(type(self.children), Observation):
             return self.children.exec_time()
@@ -141,8 +187,10 @@ class AndGroup(Group):
             sum(child.exec_time() for child in self.children)
 
     def total_used(self) -> timedelta:
-        """
-        Total time used across the group: includes program time and partner time.
+        """Total time used across the group: includes program time and partner time.
+
+        Returns:
+            total_used (timedelta): Sum of all total used times.
         """
         if issubclass(type(self.children), Observation):
             return self.children.total_used()
@@ -151,7 +199,8 @@ class AndGroup(Group):
 
     def instruments(self) -> FrozenSet[Resource]:
         """
-        Return a set of all instruments used in this group.
+        Returns:
+            instruments (FrozenSet[Resource]): A set of all instruments used in this group.
         """
         if issubclass(type(self.children), Observation):
             instrument = self.children.instrument()

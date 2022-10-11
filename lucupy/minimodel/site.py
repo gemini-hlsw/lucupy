@@ -9,11 +9,11 @@ import pytz
 
 
 class Site(Enum):
-    """
-    The sites belonging to the observatory using the Scheduler.
+    """The sites belonging to the observatory using the Scheduler.
 
     This will have to be customized by a given observatory if used independently
     of Gemini.
+
     """
     GN = ('Gemini North', '568@399')
     GS = ('Gemini South', 'I11@399')
@@ -40,3 +40,5 @@ class Site(Enum):
 
 
 ALL_SITES = frozenset(s for s in Site)
+"""Frozenset[Site]: A variable to work with all the sites in scheduler components.
+"""
