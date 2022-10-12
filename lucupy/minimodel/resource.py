@@ -4,8 +4,6 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from .site import Site
-
 
 @dataclass(frozen=True)
 class Resource:
@@ -16,7 +14,6 @@ class Resource:
     performed at a given time based on the resource availability.
     """
     id: str
-    site: Optional[Site] = None
     description: Optional[str] = None
 
     def __post_init__(self):
@@ -24,7 +21,7 @@ class Resource:
             raise ValueError('Should not have any Resources equal to None or containing "None"')
 
     def __eq__(self, other):
-        return isinstance(other, Resource) and self.id == other.id and self.site == other.site
+        return isinstance(other, Resource) and self.id == other.id
 
     def __repr__(self):
-        return f'Resource(id=\'{self.id}\'{f", site={self.site.name}" if self.site is not None else ""})'
+        return f"Resource(id='{self.id}')"

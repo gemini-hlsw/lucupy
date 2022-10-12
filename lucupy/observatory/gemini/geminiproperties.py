@@ -23,15 +23,15 @@ class GeminiProperties(ObservatoryProperties):
 
     # Gemini-specific instruments.
     class Instruments(Enum, metaclass=_InstrumentsMeta):
-        FLAMINGOS2 = Resource('Flamingos2', site=Site.GS)
-        NIFS = Resource('NIFS', site=Site.GN)
-        NIRI = Resource('NIRI', site=Site.GN)
-        IGRINS = Resource('IGRINS', site=Site.GS)
-        GMOS_S = Resource('GMOS-S', site=Site.GS)
-        GMOS_N = Resource('GMOS-N', site=Site.GN)
-        GNIRS = Resource('GNIRS', site=Site.GN)
-        GPI = Resource('GPI', site=Site.GS)
-        GSAOI = Resource('GSAOI', site=Site.GS)
+        FLAMINGOS2 = Resource('Flamingos2')
+        NIFS = Resource('NIFS')
+        NIRI = Resource('NIRI')
+        IGRINS = Resource('IGRINS')
+        GMOS_S = Resource('GMOS-S')
+        GMOS_N = Resource('GMOS-N')
+        GNIRS = Resource('GNIRS')
+        GPI = Resource('GPI')
+        GSAOI = Resource('GSAOI')
 
     # Instruments for which there are set standards.
     _STANDARD_INSTRUMENTS = [Instruments.FLAMINGOS2,
