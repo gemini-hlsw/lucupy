@@ -270,9 +270,6 @@ def barcode_to_mask(barcode: str, rootname: Optional[str]) -> str:
     Returns:
         str: _description_
     """
-    Convert a barcode string to a mask string.
-    """
-
     if barcode in barcodes.values():
         return list(barcodes.keys())[list(barcodes.values()).index(barcode)]
     else:
