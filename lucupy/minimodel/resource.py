@@ -24,4 +24,4 @@ class Resource:
         return isinstance(other, Resource) and self.id == other.id
 
     def __repr__(self):
-        return f'Resource(id=\'{self.id}\')'
+        return f"Resource(id='{self.id}')"

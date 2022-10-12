@@ -4,7 +4,7 @@
 from abc import ABC
 from dataclasses import dataclass
 from enum import auto, Enum, IntEnum
-from typing import Set
+from typing import FrozenSet
 
 import numpy.typing as npt
 
@@ -50,7 +50,7 @@ class Target(ABC):
     Basic target information.
     """
     name: TargetName
-    magnitudes: Set[Magnitude]
+    magnitudes: FrozenSet[Magnitude]
     type: TargetType
 
     def guide_speed(self) -> GuideSpeed:
