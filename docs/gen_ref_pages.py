@@ -9,7 +9,7 @@ for path in sorted(Path("lucupy").rglob("*.py")):
 
     module_path = path.relative_to(".").with_suffix("")
     doc_path = path.relative_to(".").with_suffix(".md")
-    full_doc_path = Path("reference", doc_path)
+    full_doc_path = Path("docs", doc_path)
     parts = list(module_path.parts)
 
     if parts[-1] == "__init__":
@@ -27,5 +27,5 @@ for path in sorted(Path("lucupy").rglob("*.py")):
 
     mkdocs_gen_files.set_edit_path(full_doc_path, Path("../") / path)
 
-    with mkdocs_gen_files.open("reference/SUMMARY.md", "w") as nav_file:
+    with mkdocs_gen_files.open("docs/SUMMARY.md", "w") as nav_file:
         nav_file.writelines(nav.build_literate_nav())
