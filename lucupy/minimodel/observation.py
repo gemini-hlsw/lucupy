@@ -4,7 +4,7 @@
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import auto, IntEnum
-from typing import List, Mapping, Optional, Set
+from typing import FrozenSet, List, Mapping, Optional, Set
 
 from .atom import Atom
 from .constraints import Constraints
@@ -132,11 +132,13 @@ class Observation:
         """
         return self.program_used() + self.partner_used()
 
-    def required_resources(self) -> Set[Resource]:
+    def required_resources(self) -> FrozenSet[Resource]:
         """
         The required resources for an observation based on the sequence's needs.
         """
-        return self.guiding.keys() | {r for a in self.sequence for r in a.resources}
+        # TODO: For now, we do not return guiding keys amongst the resources.
+        # return self.guiding.keys() | {r for a in self.sequence for r in a.resources}
+        return FrozenSet({r for a in self.sequence for r in a.resources})
 
     def instrument(self) -> Optional[Resource]:
         """
