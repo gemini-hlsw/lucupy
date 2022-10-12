@@ -4,7 +4,7 @@
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import auto, IntEnum
-from typing import FrozenSet, List, Mapping, Optional, Set
+from typing import FrozenSet, List, Mapping, Optional
 
 from .atom import Atom
 from .constraints import Constraints
@@ -137,8 +137,8 @@ class Observation:
         The required resources for an observation based on the sequence's needs.
         """
         # TODO: For now, we do not return guiding keys amongst the resources.
-        # return self.guiding.keys() | {r for a in self.sequence for r in a.resources}
-        return FrozenSet({r for a in self.sequence for r in a.resources})
+        # return frozenset(self.guiding.keys() | {r for a in self.sequence for r in a.resources})
+        return frozenset((r for a in self.sequence for r in a.resources))
 
     def instrument(self) -> Optional[Resource]:
         """
@@ -148,18 +148,18 @@ class Observation:
         return next(filter(lambda r: ObservatoryProperties.is_instrument(r),
                            self.required_resources()), None)
 
-    def wavelengths(self) -> Set[float]:
+    def wavelengths(self) -> FrozenSet[float]:
         """
         The set of wavelengths included in the sequence.
         """
-        return {w for c in self.sequence for w in c.wavelengths}
+        return frozenset((w for c in self.sequence for w in c.wavelengths))
 
-    def constraints(self) -> Set[Constraints]:
+    def constraints(self) -> FrozenSet[Constraints]:
         """
         A set of the constraints required by the observation.
         In the case of an observation, this is just the (optional) constraints.
         """
-        return {self.constraints} if self.constraints is not None else {}
+        return frozenset([self.constraints] if self.constraints is not None else [])
 
     def program_used(self) -> timedelta:
         """
