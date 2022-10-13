@@ -11,7 +11,7 @@ class TimingWindow:
     """Representation of timing windows in the mini-model.
 
     Attributes:
-        start (datetime):
+        start (datetime): When a timing window begins.
         duration (timedelta): For infinite duration, set duration to timedelta.max.
         repeat (int):  -1 means forever repeating, 0 means non-repeating.
         period (timedelta, optional): None should be used if repeat < 1.

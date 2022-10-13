@@ -50,15 +50,15 @@ class GeminiProperties(ObservatoryProperties):
         """Determine the standard star time required for Gemini.
 
         Args:
-            resources (FrozenSet[Resource]): _description_
-            wavelengths (FrozenSet[float]): _description_
-            modes (FrozenSet[ObservationMode]): _description_
-            cal_length (int): _description_
+            resources (FrozenSet[Resource]): Instruments to be used.
+            wavelengths (FrozenSet[float]): Wavelengths to be observed.
+            modes (FrozenSet[ObservationMode]): Observation modes.
+            cal_length (int): The specific length of a calibration.
 
         Returns:
             Time: _description_
 
-        Todo: 
+        Todo:
             We may only want to include specific resources, in which case, modify
             Instruments above to be StandardInstruments.
 
@@ -79,10 +79,10 @@ class GeminiProperties(ObservatoryProperties):
         """Checks if the resource is a Gemini instrument.
 
         Args:
-            resource (Resource): A resource to be checked 
+            resource (Resource): A resource to be checked.
 
         Returns:
-            bool: True if resource belong to a Gemini instrument.
+            bool: True if resource is a Gemini instrument.
         """
         return resource in GeminiProperties.Instruments
 
@@ -91,8 +91,8 @@ class GeminiProperties(ObservatoryProperties):
         """_summary_
 
         Args:
-            resource (Resource): _description_
-            observation_mode (ObservationMode): _description_
+            resource (Resource): Instruments used.
+            observation_mode (ObservationMode): Observation mode.
 
         Returns:
             Optional[timedelta]: _description_

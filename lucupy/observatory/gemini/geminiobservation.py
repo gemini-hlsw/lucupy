@@ -27,6 +27,6 @@ class GeminiObservation(Observation):
            Adds IGRINS calibration time using a decorator.
            
         Returns:
-            timedelta: Total used time with 
+            timedelta: Total used time.
         """
         return super().total_used()

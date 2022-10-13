@@ -53,7 +53,7 @@ def geocentric_coors(geolong: Angle, geolat: float, height: float) -> Tuple[floa
         geolat:  Geographic latitude
         height: Height above sea level, which must be in meters.
 
-    Returns:        
+    Returns:  
         Triple of distances.
     """
 
@@ -88,11 +88,11 @@ def min_max_alt(lat: Angle, dec: AngleParam) -> Tuple[Angle, Angle]:
     """Finds the minimum and maximum altitudes of a celestial location.
 
     Args:
-        lat : Latitude of site.
-        dec : Declination of the object.
+        lat (Angle) : Latitude of site.
+        dec (AngleParam) : Declination of the object.
 
     Returns:
-        (minalt, maxalt): tuple of minimum and maximum altitudes.
+       minalt, maxalt (Tuple[Angle, Angle]): tuple of minimum and maximum altitudes.
     """
 
     # arguments are Angles; returns (minalt, maxalt) as Angles
@@ -131,8 +131,8 @@ def local_midnight_time(time: Time, localtzone: timezone) -> Time:
     if after noon, return next midnight.
 
     Args: 
-        time: astropy Time object
-        localtzone : Timezone object.
+        time (Time): astropy Time object
+        localtzone (timezone) : Timezone object.
 
     Returns:
         Time. This is not zone-aware, but should be correct.
@@ -173,11 +173,11 @@ def local_sidereal_time(time: Time, location: EarthLocation) -> Angle:
     rather slow.
 
     Args:
-        time: Time at which to compute the local sidereal time.
-        location: Location on Earth for which to compute the local sidereal time.
+        time (Time): Time at which to compute the local sidereal time.
+        location (Location): Location on Earth for which to compute the local sidereal time.
 
     Returns:
-        lst: Local sidereal time.
+        lst (Angle): Local sidereal time.
     """
     # julian date represented as integer values
     julian_int = np.asarray(time.jd, dtype=int)
@@ -228,7 +228,7 @@ def true_airmass(altit: Angle) -> npt.NDArray[float]:
 
     Takes an Angle and return the true airmass, based on a tabulation of the mean KPNO
     atmosphere given by C. M. Snell & A. M. Heiser, 1968, PASP, 80, 336.
-    They tabulated the airmass at 5 degr intervals from z = 60 to 85 degrees; I fit the data with
+    They tabulated the airmass at 5 degr intervals from z = 60 to 85 degrees; The data was fit  with
     a fourth order poly for (secz - airmass) as a function of (secz - 1) using
     the IRAF curfit routine, then adjusted the zeroth order term to force (secz - airmass) to zero at
     z = 0.  The poly fit is very close to the tabulated points (largest difference is 3.2e-4)
@@ -268,7 +268,7 @@ def true_airmass(altit: Angle) -> npt.NDArray[float]:
 def hour_angle_to_angle(dec: AngleParam,
                         lat: AngleParam,
                         alt: AngleParam) -> Angle:
-    """Transform the. Hour Angle in to an Angle.
+    """Transform the Hour Angle in to an Angle.
     
     The hour angle from spherical astronomy, eastor west of meridian, 
     not the u.hourangle from astropy.

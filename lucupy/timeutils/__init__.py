@@ -17,7 +17,7 @@ def sex2dec(stime: str,
         sep (str, optional): Separator. Defaults to ':'.
 
     Raises:
-        ValueError: _description_
+        ValueError: Wrong format for not following the separator convention.
 
     Returns:
         float: The decimal equivalent

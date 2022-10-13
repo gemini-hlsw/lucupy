@@ -94,9 +94,9 @@ class SiderealTarget(Target):
     Attributes:
         ra (float): Right Ascension
         dec (float): Declination
-        pm_ra (float): ???
-        pm_dec (float): ??
-        epoch (float): ??
+        pm_ra (float): Proper motion of the right ascension component.
+        pm_dec (float): Proper motion of the declination component.
+        epoch (float): The epoch in which the ra / dec were measured.
 
     """
     ra: float

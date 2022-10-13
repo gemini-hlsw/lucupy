@@ -46,13 +46,13 @@ class ObservatoryProperties(ABC):
                                 wavelengths: FrozenSet[float],
                                 modes: FrozenSet,
                                 cal_length: int) -> Time:
-        """Determine standard time for an specific Observatory
+        """Determine standard time for a specific Observatory
 
         Args:
             resources (FrozenSet): Set of Resources(instruments, mask, etc).
-            wavelengths (FrozenSet[float]): An array of Wavelengths used to observe
-            modes (FrozenSet): The different modes of observation
-            cal_length (int): The lenght (in seconds) of a calibration
+            wavelengths (FrozenSet[float]): An array of Wavelengths to be observed.
+            modes (FrozenSet): The different modes of observation.
+            cal_length (int): The length (in seconds) of a calibration.
 
         Returns:
             Time: Value(s) of standard time

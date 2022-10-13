@@ -145,16 +145,6 @@ def calculate_sky_brightness_qpt(moon_phase_angle: Quantity,
     """
     Calculate sky brightness based on formulas from Krisciunas & Schaefer 1991
 
-    Changelog:
-
-        Bryan Miller
-        November 5, 2004
-        June 1, 2015 - added cc parameter while testing cloud scattering corrections
-
-        Matt Bonnyman
-        May 23, 2018
-        converted from IDL to Python
-
     Args:
         moon_phase_angle: Moon phase angle at solar midnight in degrees
         target_moon_angdist: Numpy array of angular distances between target and moon

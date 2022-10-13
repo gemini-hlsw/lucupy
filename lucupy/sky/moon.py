@@ -58,7 +58,7 @@ class Moon:
             time (Time): Specific time.
 
         Returns:
-            Self (Moon)): Same object for method chaining.
+            Self (Moon): Same object for method chaining.
         """
         self.time = time
         self.time_jd = np.asarray(time.jd)

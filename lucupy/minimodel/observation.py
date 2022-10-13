@@ -112,11 +112,12 @@ class Observation:
         title (str):
         site (site): the Site in which the Observation has to be done.
         status (ObservationStatus):
-        activate (bool): ???
-        priority(Priority):
-        setuptime_type(SetupTimeType):
+        active (bool): Indicates if the Observation is active or not.
+        priority(Priority): Priority of the Observation. Affects the scoring.
+        setuptime_type(SetupTimeType): When doing / resuming an Observation,
+            indicates if a reacquisition, a full setup or just nothing has to be done.
         acq_overhead (timedelta): Time overhead for acquisition.
-        obs_class (ObservationClass):
+        obs_class (ObservationClass): Type of Observation.
         targets (List[Target]): should contain a complete list of all targets associated with the observation,
             with the base being in the first position
         guiding (Mapping[Resource, Target]): is a map between guide probe resources and their targets.
@@ -187,7 +188,7 @@ class Observation:
 
     def instrument(self) -> Optional[Resource]:
         """
-        Returns: 
+        Returns:
             A resource that is an instrument, if one exists. There should be only one.
         """
         return next(filter(lambda r: ObservatoryProperties.is_instrument(r),
@@ -210,7 +211,7 @@ class Observation:
 
     def program_used(self) -> timedelta:
         """We roll this information up from the atoms as it will be calculated
-            during the GreedyMax algorithm. Note that it is also available directly
+            during the Optimizer algorithm. Note that it is also available directly
             from the OCS, which is used to populate the time allocation.
         Returns:
             (timedelta): With the time program used.
@@ -219,7 +220,7 @@ class Observation:
 
     def partner_used(self) -> timedelta:
         """We roll this information up from the atoms as it will be calculated
-        during the GreedyMax algorithm. Note that it is also available directly
+        during the Optimizer algorithm. Note that it is also available directly
         from the OCS, which is used to populate the time allocation.
 
         Returns:
@@ -235,7 +236,7 @@ class Observation:
         This will be used when examining the sequence for atoms.
 
         Returns:
-            (ObservationClass): Lowest-index ObservationClasses
+            (ObservationClass): Lowest-index ObservationClasses or None if the list is empty.
         """
         # TODO: Move this to the ODB program extractor as the logic is used there.
         # TODO: Remove from Bryan's atomizer.
@@ -248,7 +249,7 @@ class Observation:
         highest precedence in the QAStates enum, i.e. has the lowest index.
 
         Returns:
-            (QAState): Lowest-index QAStates
+            (QAState): Lowest-index QAStates or None if the list is empty.
         """
         # TODO: Move this to the ODB program extractor as the logic is used there.
         # TODO: Remove from Bryan's atomizer.

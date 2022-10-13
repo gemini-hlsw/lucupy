@@ -108,7 +108,7 @@ class Group(ABC):
     def is_scheduling_group(self) -> bool:
         """
         Returns:
-            bool: True if the group is an, otherwise False.
+            bool: True if the group is a scheduling group, otherwise False.
         """
         return not (self.is_observation_group())
 

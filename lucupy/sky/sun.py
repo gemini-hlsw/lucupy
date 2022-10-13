@@ -156,8 +156,8 @@ class Sun:
                      time: Time,
                      midnight: Time,
                      set_alt: Angle,
-                     rise_alt) -> Tuple[Time, Time, Time, Time]:
-        """Compute rise and set times for this Sun. 
+                     rise_alt: Angle) -> Tuple[Time, Time, Time, Time]:
+        """Compute rise and set times for this Sun.
         
             For the current location and time of the night.
 
@@ -166,7 +166,7 @@ class Sun:
             time (Time): time of the night.
             midnight (Time): Midnight time.
             set_alt (Angle): sunset altitude.
-            rise_alt (_type_): sunrise altitude.
+            rise_alt (Angle): sunrise altitude.
 
         Returns:
             The time of the event for the body in the precision of this Sun.
