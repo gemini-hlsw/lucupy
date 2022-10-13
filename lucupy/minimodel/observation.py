@@ -22,6 +22,19 @@ ObservationID = str
 class ObservationStatus(IntEnum):
     """
     The status of an observation as indicated in the Observing Tool / ODB.
+
+    Members:
+        - NEW
+        - INCLUDED
+        - PROPOSED
+        - APPROVED
+        - FOR_REVIEW: Not in original mini-model description, but returned by OCS.
+        - ON_HOLD
+        - READY
+        - ONGOING
+        - OBSERVED
+        - INACTIVE
+        - PHASE2
     """
     NEW = auto()
     INCLUDED = auto()
@@ -38,9 +51,13 @@ class ObservationStatus(IntEnum):
 
 
 class Priority(IntEnum):
-    """
-    An observation's priority.
+    """An observation's priority.
     Note that these are ordered specifically so that we can compare them.
+
+    Members:
+        - LOW
+        - MEDIUM
+        - HIGH
     """
     LOW = auto()
     MEDIUM = auto()
@@ -48,8 +65,12 @@ class Priority(IntEnum):
 
 
 class SetupTimeType(IntEnum):
-    """
-    The setup time type for an observation.
+    """The setup time type for an observation.
+
+    Members:
+        - NONE
+        - REACQUISITION
+        - FULL
     """
     NONE = auto()
     REACQUISITION = auto()
@@ -57,12 +78,20 @@ class SetupTimeType(IntEnum):
 
 
 class ObservationClass(IntEnum):
-    """
-    The class of an observation.
+    """The class of an observation.
 
     Note that the order of these is specific and deliberate: they are listed in
     preference order for observation classes, and hence, should not be rearranged.
     These correspond to the values in the OCS when made uppercase.
+
+    Members:
+        - SCIENCE
+        - PROGCAL
+        - PARTNERCAL
+        - ACQ
+        - ACQCAL
+        - DAYCAL
+
     """
     SCIENCE = auto()
     PROGCAL = auto()
@@ -74,15 +103,28 @@ class ObservationClass(IntEnum):
 
 @dataclass
 class Observation:
-    """
-    Representation of an observation.
+    """Representation of an observation.
     Non-obvious fields are documented below.
-    * id should represent the observation's ID, e.g. GN-2018B-Q-101-123.
-    * internal_id is the key associated with the observation
-    * order refers to the order of the observation in either its group or the program
-    * targets should contain a complete list of all targets associated with the observation,
-      with the base being in the first position
-    * guiding is a map between guide probe resources and their targets
+    Attributes:
+        id (ObservationID): should represent the observation's ID, e.g. GN-2018B-Q-101-123.
+        internal_id (str): is the key associated with the observation
+        order (int): refers to the order of the observation in either its group or the program
+        title (str):
+        site (site): the Site in which the Observation has to be done.
+        status (ObservationStatus):
+        active (bool): Indicates if the Observation is active or not.
+        priority(Priority): Priority of the Observation. Affects the scoring.
+        setuptime_type(SetupTimeType): When doing / resuming an Observation,
+            indicates if a reacquisition, a full setup or just nothing has to be done.
+        acq_overhead (timedelta): Time overhead for acquisition.
+        obs_class (ObservationClass): Type of Observation.
+        targets (List[Target]): should contain a complete list of all targets associated with the observation,
+            with the base being in the first position
+        guiding (Mapping[Resource, Target]): is a map between guide probe resources and their targets.
+        sequence (List[Atom]): Sequence of Atoms that describe the observation.
+        constraints (Constraints, optional): Some observations do not have constraints, e.g. GN-208A-FT-103-6.
+        too_type (TooType, optional): Default to None.
+
     """
     id: ObservationID
     internal_id: str
@@ -116,25 +158,29 @@ class Observation:
 
     def base_target(self) -> Optional[Target]:
         """
-        Get the base target for this Observation if it has one, and None otherwise.
+        Returns:
+            Get the base target for this Observation if it has one, and None otherwise.
         """
         return next(filter(lambda t: t.type == TargetType.BASE, self.targets), None)
 
     def exec_time(self) -> timedelta:
         """
-        Total execution time for the program, which is the sum across atoms and the acquisition overhead.
+        Returns:
+            Total execution time for the program, which is the sum across atoms and the acquisition overhead.
         """
         return sum((atom.exec_time for atom in self.sequence), timedelta()) + self.acq_overhead
 
     def total_used(self) -> timedelta:
         """
-        Total program time used: includes program time and partner time.
+        Returns:
+            Total program time used: includes program time and partner time.
         """
         return self.program_used() + self.partner_used()
 
     def required_resources(self) -> FrozenSet[Resource]:
         """
-        The required resources for an observation based on the sequence's needs.
+        Returns:
+            The required resources for an observation based on the sequence's needs.
         """
         # TODO: For now, we do not return guiding keys amongst the resources.
         # return frozenset(self.guiding.keys() | {r for a in self.sequence for r in a.resources})
@@ -142,52 +188,58 @@ class Observation:
 
     def instrument(self) -> Optional[Resource]:
         """
-        Returns a resource that is an instrument, if one exists.
-        There should be only one.
+        Returns:
+            A resource that is an instrument, if one exists. There should be only one.
         """
         return next(filter(lambda r: ObservatoryProperties.is_instrument(r),
                            self.required_resources()), None)
 
     def wavelengths(self) -> FrozenSet[float]:
         """
-        The set of wavelengths included in the sequence.
+        Returns:
+            The set of wavelengths included in the sequence.
         """
         return frozenset((w for c in self.sequence for w in c.wavelengths))
 
     def constraints(self) -> FrozenSet[Constraints]:
         """
-        A set of the constraints required by the observation.
-        In the case of an observation, this is just the (optional) constraints.
+        Returns:
+            A set of the constraints required by the observation.
+            In the case of an observation, this is just the (optional) constraints.
         """
         return frozenset([self.constraints] if self.constraints is not None else [])
 
     def program_used(self) -> timedelta:
-        """
-        We roll this information up from the atoms as it will be calculated
-        during the GreedyMax algorithm. Note that it is also available directly
-        from the OCS, which is used to populate the time allocation.
+        """We roll this information up from the atoms as it will be calculated
+            during the Optimizer algorithm. Note that it is also available directly
+            from the OCS, which is used to populate the time allocation.
+        Returns:
+            (timedelta): With the time program used.
         """
         return sum((atom.prog_time for atom in self.sequence), start=timedelta())
 
     def partner_used(self) -> timedelta:
-        """
-        We roll this information up from the atoms as it will be calculated
-        during the GreedyMax algorithm. Note that it is also available directly
+        """We roll this information up from the atoms as it will be calculated
+        during the Optimizer algorithm. Note that it is also available directly
         from the OCS, which is used to populate the time allocation.
+
+        Returns:
+            (timedelta): With the time program used.
         """
         return sum((atom.part_time for atom in self.sequence), start=timedelta())
 
     @staticmethod
     def _select_obsclass(classes: List[ObservationClass]) -> Optional[ObservationClass]:
-        """
-        Given a list of non-empty ObservationClasses, determine which occurs with
+        """Given a list of non-empty ObservationClasses, determine which occurs with
         highest precedence in the ObservationClasses enum, i.e. has the lowest index.
 
         This will be used when examining the sequence for atoms.
 
-        TODO: Move this to the ODB program extractor as the logic is used there.
-        TODO: Remove from Bryan's atomizer.
+        Returns:
+            (ObservationClass): Lowest-index ObservationClasses or None if the list is empty.
         """
+        # TODO: Move this to the ODB program extractor as the logic is used there.
+        # TODO: Remove from Bryan's atomizer.
         return min(classes, default=None)
 
     @staticmethod
@@ -196,9 +248,12 @@ class Observation:
         Given a list of non-empty QAStates, determine which occurs with
         highest precedence in the QAStates enum, i.e. has the lowest index.
 
-        TODO: Move this to the ODB program extractor as the logic is used there.
-        TODO: Remove from Bryan's atomizer.
+        Returns:
+            (QAState): Lowest-index QAStates or None if the list is empty.
         """
+        # TODO: Move this to the ODB program extractor as the logic is used there.
+        # TODO: Remove from Bryan's atomizer.
+
         return min(qastates, default=None)
 
     def __len__(self):

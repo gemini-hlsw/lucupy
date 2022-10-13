@@ -6,9 +6,12 @@ from enum import Enum
 
 
 class SemesterHalf(str, Enum):
-    """
-    Gemini typically schedules programs for two semesters per year, namely A and B.
+    """Gemini typically schedules programs for two semesters per year, namely A and B.
     For other observatories, this logic might have to be substantially changed.
+
+    Members:
+        - A = 'A'
+        - B = 'B'
     """
     A = 'A'
     B = 'B'
@@ -16,10 +19,11 @@ class SemesterHalf(str, Enum):
 
 @dataclass(frozen=True, order=True)
 class Semester:
-    """
-    A semester is a period for which programs may be submitted to Gemini and consists of:
-    * A four digit year
-    * Two semesters during each year, indicated by the SemesterHalf
+    """ A semester is a period for which programs may be submitted to Gemini.
+    
+    Attributes:
+        year (int): A four digit year.
+        half (SemesterHalf): Two semesters during each year, indicated by the SemesterHalf.
     """
     year: int
     half: SemesterHalf

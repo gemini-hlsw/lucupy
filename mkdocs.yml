@@ -1,0 +1,32 @@
+site_name: Lucupy Docs
+repo_url: 'https://github.com/gemini-hlsw/lucupy'
+copyright: 'Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)'
+
+
+theme:
+  name: "material"
+  palette:
+        # scheme: preference uses dark or light mode based on user (OS) preference
+        scheme: preference
+
+#nav:
+#  - Lucupy Package: references/
+
+plugins:
+  - search
+  - awesome-pages
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_source: false
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - section-index
+#  - enumerate-headings
+  - minify
+  - img2fig
+  - gen-files:
+      scripts:
+      - docs/gen_ref_pages.py

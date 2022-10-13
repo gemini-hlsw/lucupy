@@ -24,17 +24,13 @@ from .constants import J2000, FLATTEN, EQUAT_RAD
 
 
 def current_geocent_frame(time: Time) -> BaseRADecFrame:
-    """ 
-    Returns a PrecessedGeocentric frame for the equinox
-    spcified by the time.
+    """Get current frame for the equinox specified by the time.
 
-    Parameters
-    ----------
-    time : astropy Time, if an array then the first entry is used
+    Args:
+        time: If an array then the first entry is used
 
-    Returns
-    -------
-    an astropy PrecessedGeocentric time.
+    Returns:
+        an astropy PrecessedGeocentric time.
     """
     # Generate a PrecessedGeocentric frame for the current equinox.
     time_ep = 2000. + (np.asarray(time.jd) - J2000) / 365.25
@@ -46,28 +42,19 @@ def current_geocent_frame(time: Time) -> BaseRADecFrame:
 
 
 def geocentric_coors(geolong: Angle, geolat: float, height: float) -> Tuple[float, float, float]:
-    """
-    
-    geocentric XYZ coordinates for a location at a longitude,
-    latitude and height above sea level.
+    """Geocentric XYZ coordinates for a location at a longitude, latitude and height above sea level.
 
     Retained because if one replaces the longitude input with the
     sidereal time, the return is the XYZ in the equatorial frame
     of date.  This is used in the lunar topocentric correction.
 
-    Parameters
-    ----------
+    Args:
+        geolong: Geographic longitude, or LST to get celestial-aligned result
+        geolat:  Geographic latitude
+        height: Height above sea level, which must be in meters.
 
-    geolong : Angle
-        Geographic longitude, or LST to get celestial-aligned result
-    geolat :  Angle
-        Geographic latitude
-    height :  float
-        Height above sea level, which must be in meters.
-
-    Returns
-    -------
-    Triple of distances.
+    Returns:  
+        Triple of distances.
     """
 
     # computes the geocentric coordinates from the geodetic
@@ -100,17 +87,12 @@ def geocentric_coors(geolong: Angle, geolat: float, height: float) -> Tuple[floa
 def min_max_alt(lat: Angle, dec: AngleParam) -> Tuple[Angle, Angle]:
     """Finds the minimum and maximum altitudes of a celestial location.
 
-    Parameters
-    ----------
-    lat : astropy Angle
-        Latitude of site.
-    dec : astropy Angle, float or array
-        declination of the object.
+    Args:
+        lat (Angle) : Latitude of site.
+        dec (AngleParam) : Declination of the object.
 
-    Returns
-    -------
-    (minalt, maxalt) : both Astropy Angle
-        tuple of minimum and maximum altitudes.
+    Returns:
+       minalt, maxalt (Tuple[Angle, Angle]): tuple of minimum and maximum altitudes.
     """
 
     # arguments are Angles; returns (minalt, maxalt) as Angles
@@ -143,20 +125,17 @@ def min_max_alt(lat: Angle, dec: AngleParam) -> Tuple[Angle, Angle]:
 
 
 def local_midnight_time(time: Time, localtzone: timezone) -> Time:
-    """find nearest local midnight (UT).
+    """Find nearest local midnight (UT).
 
     If it's before noon local time, returns previous midnight;
     if after noon, return next midnight.
 
-    Parameters :
+    Args: 
+        time (Time): astropy Time object
+        localtzone (timezone) : Timezone object.
 
-    time : astropy Time
-
-    localtzone : timezone object.
-
-    Returns
-    -------
-    Time. This is not zone-aware, but should be correct.
+    Returns:
+        Time. This is not zone-aware, but should be correct.
     """
 
     # takes an astropy Time and the local time zone and
@@ -187,24 +166,18 @@ def local_midnight_time(time: Time, localtzone: timezone) -> Time:
 
 
 def local_sidereal_time(time: Time, location: EarthLocation) -> Angle:
-    """
-    moderate-precision (1 sec) local sidereal time
+    """Moderate-precision (1 sec) local sidereal time.
 
     Adapted with minimal changes from skycalc routine. Native
     astropy routines are unnecessarily precise for our purposes and
     rather slow.
 
-    Parameters
-    ----------
-    time : `~astropy.time.Time`
-        Time at which to compute the local sidereal time.
-    location : `~astropy.coordinates.EarthLocation`
-        Location on Earth for which to compute the local sidereal time.
+    Args:
+        time (Time): Time at which to compute the local sidereal time.
+        location (Location): Location on Earth for which to compute the local sidereal time.
 
-    Returns
-    -------
-    lst : `~astropy.coordinates.Angle`
-        Local sidereal time.
+    Returns:
+        lst (Angle): Local sidereal time.
     """
     # julian date represented as integer values
     julian_int = np.asarray(time.jd, dtype=int)
@@ -245,7 +218,7 @@ def local_sidereal_time(time: Time, location: EarthLocation) -> Angle:
 
 
 def true_airmass(altit: Angle) -> npt.NDArray[float]:
-    """true airmass for an altitude.
+    """True airmass for an altitude.
     Equivalent of getAirmass in the QPT, based on vskyutil.true_airmass
     https://github.com/gemini-hlsw/ocs/blob/12a0999bc8bb598220ddbccbdbab5aa1e601ebdd/bundle/edu.gemini.qpt.client/src/main/java/edu/gemini/qpt/core/util/ImprovedSkyCalcMethods.java#L119
 
@@ -254,20 +227,20 @@ def true_airmass(altit: Angle) -> npt.NDArray[float]:
     secz minus 1.5, which won't be quite right.
 
     Takes an Angle and return the true airmass, based on a tabulation of the mean KPNO
-    atmosphere given by C. M. Snell & A. M. Heiser, 1968, PASP, 80, 336.  
-    They tabulated the airmass at 5 degr intervals from z = 60 to 85 degrees; I fit the data with
-    a fourth order poly for (secz - airmass) as a function of (secz - 1) using 
+    atmosphere given by C. M. Snell & A. M. Heiser, 1968, PASP, 80, 336.
+    They tabulated the airmass at 5 degr intervals from z = 60 to 85 degrees; The data was fit  with
+    a fourth order poly for (secz - airmass) as a function of (secz - 1) using
     the IRAF curfit routine, then adjusted the zeroth order term to force (secz - airmass) to zero at
-    z = 0.  The poly fit is very close to the tabulated points (largest difference is 3.2e-4) 
+    z = 0.  The poly fit is very close to the tabulated points (largest difference is 3.2e-4)
     and appears smooth. This 85-degree point is at secz = 11.47, so for secz > 12 just return secz
 
     coefs = [2.879465E-3,  3.033104E-3, 1.351167E-3, -4.716679E-5]
 
-    Parameters
-    ----------
+    Args:
+        altit: Altitude above horizon.
 
-    altit : Angle, float or numpy array
-        Altitude above horizon.
+    Returns:
+        True airmass value
     """
     altit = np.asarray(altit.to_value(u.rad).data)
     scalar_input = False
@@ -295,23 +268,24 @@ def true_airmass(altit: Angle) -> npt.NDArray[float]:
 def hour_angle_to_angle(dec: AngleParam,
                         lat: AngleParam,
                         alt: AngleParam) -> Angle:
-    """
-    Return an Angle giving the hour angle (from spherical astronomy, east
-    or west of meridian, not the u.hourangle from astropy) at which
-    the declination dec reaches altitude alt.
+    """Transform the Hour Angle in to an Angle.
+    
+    The hour angle from spherical astronomy, eastor west of meridian, 
+    not the u.hourangle from astropy.
+
+    dec and alt must have the same dimensions.
 
     If the object is always above alt, an Angle of +1000 radians is returned.
     If always below, -1000 radians.
 
-    Parameters :
-    dec : Angle, float or array
-       Declination of source.
-    lat : Angle
-       Latitude of site.
-    alt : Angle, float or array
-       Height above horizon for computation.
+    Args:
+        dec: Declination of source.
+        lat: Latitude of site.
+        alt: Height above horizon for computation.
 
-    dec and alt must have the same dimensions
+    Returns:
+        An Angle giving the hour angle at which the declination dec reaches altitude alt.
+
     """
 
     # Arguments are all angles.
@@ -365,15 +339,18 @@ def hour_angle_to_angle(dec: AngleParam,
 
 
 def xair(zd: Quantity) -> npt.NDArray[float]:
-    """
-    Evaluate true airmass, equation 3 from Krisciunas &  Schaefer 1991
-    zd is a Quantity
-
-    zd : '~astropy.units.Quantity'
-        Float or numpy array of zenith distance angles
-
+    """Evaluate true airmass. 
+    
+    Equation 3 from Krisciunas &  Schaefer 1991.
     Trick for handling arrays and scalars from
     https://stackoverflow.com/questions/29318459/python-function-that-handles-scalar-or-arrays
+
+    Args:
+        zd: Float or numpy array of zenith distance angles
+    
+    Returns:
+        npt.NDArray[float]: values converted.
+    
     """
 
     zd = np.asarray(zd.to_value(u.rad).data) * u.rad
@@ -406,8 +383,7 @@ def xair(zd: Quantity) -> npt.NDArray[float]:
 
 
 def ztwilight(alt: Angle) -> npt.NDArray[float]:
-    """Estimate twilight contribution to zenith sky brightness, in magnitudes
-    per square arcsecond.
+    """Estimate twilight contribution to zenith sky brightness, in magnitudes per square arcsecond.
 
     Evaluates a polynomial approximation to observational data (see source for
     reference) of zenith sky brightness (blue) as a function of the sun's elevation
@@ -415,14 +391,11 @@ def ztwilight(alt: Angle) -> npt.NDArray[float]:
     twilight and looks 'pretty dark'; something like 10 mag is about the maximum
     for broadband sky flats in many cases.
 
-    Parameters
-    ----------
-    alt : Angle
-        Sun's elevation.  Meaningful range is -0.9 to -18 degrees.
+    Args:
+        alt (Angle): Sun's elevation.  Meaningful range is -0.9 to -18 degrees.
 
-    Returns
-    -------
-        numpy array of float.  If the sun is up, returns 20; if the sun below -18, returns 0.
+    Returns:
+       An array but if the sun is up, returns 20; if the sun below -18, returns 0.
 
     """
     # Given an Angle alt in the range -0.9 to -18 degrees,

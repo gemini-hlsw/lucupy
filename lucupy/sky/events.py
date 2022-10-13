@@ -29,17 +29,17 @@ def night_events(time: Time, location: EarthLocation, localtzone: timezone) -> T
                                                                                      TimeScalarOrNDArray,
                                                                                      TimeScalarOrNDArray,
                                                                                      TimeScalarOrNDArray]:
-    """
-    Compute phenomena for a given night.
-
+    """Compute phenomena for a given night.
     This is mostly a testbed that prints results directly.
 
-    Parameters
-    ----------
-    time : astropy Time, single or array
-        input time; if before noon, events of previous night are computed.
-    location : EarthLocation
-    localtzone : timezone object.
+    Args:
+        time : If before noon, events of previous night are computed.
+        location: Earth Location
+        localtzone: Timezone object.
+    
+    Returns:
+        Tuple: A 7D tuple with either a ScalarOrNDArray (Check type for specific).
+
     """
     # prototype for the events of a single night -- sunset and rise,
     # twilights, and moonrise and set.

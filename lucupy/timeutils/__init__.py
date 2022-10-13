@@ -9,9 +9,18 @@ from typing import Tuple
 def sex2dec(stime: str,
             todegree: bool = False,
             sep: str = ':') -> float:
-    """
-    stime is a string of format "HR:MIN:SEC"
-    Returns the decimal equivalent.
+    """"Sexadecimal to decimal
+
+    Args:
+        stime (str): A string of format "HR:MIN:SEC
+        todegree (bool, optional): Option to convert to degree. Defaults to False.
+        sep (str, optional): Separator. Defaults to ':'.
+
+    Raises:
+        ValueError: Wrong format for not following the separator convention.
+
+    Returns:
+        float: The decimal equivalent
     """
     l_stime = str(stime).replace("+", "")
     if sep not in l_stime:
@@ -35,6 +44,12 @@ def sex2dec(stime: str,
 
 def dtsex2dec(dt: datetime,
               todegree: bool = False) -> float:
+
+    """Datetime to decimals
+
+    Returns:
+        float: The decimal equivalent
+    """
     f = 1.0
     if todegree:
         f = 15.0
@@ -46,6 +61,14 @@ def dtsex2dec(dt: datetime,
 
 
 def sixty(dd: float) -> Tuple[int, int, int]:
+    """Sixty
+
+    Args:
+        dd (float): Days
+
+    Returns:
+        Tuple[int, int, int]: Degrees, minutes and seconds
+    """
     is_positive = dd >= 0
     l_dd = abs(dd)
     minutes, seconds = divmod(l_dd * 3600, 60)
@@ -67,19 +90,19 @@ def dec2sex(d: float,
             sep: str = ':',
             leadzero: int = 0,
             round_min: bool = False) -> str:
-    """
-    Convert decimal degrees/hours to a formatted sexigesimal string.
+    """Convert decimal degrees/hours to a formatted sexigesimal string.
 
-    Parameters
-    :param d: input in degrees
-    :param p: digits for seconds
-    :param cutsec: Cut seconds, just display, e.g. DD:MM
-    :param hour: d is decimal hours, so must be <=24
-    :param tohour: convert from degress to hours (divide by 15.)
-    :param sep: Separator string
-    :param leadzero: if >0 display leading 0's, e.g. -05:25. The value is the number of digits for the DD or HR field.
-    :param round_min: when cutsec, round to the nearest minute rather than truncate
-    :return: string
+    Args:
+        d: Input in degrees
+        p: Digits for seconds
+        cutsec: Cut seconds, just display, e.g. DD:MM
+        hour: d is decimal hours, so must be <=24
+        tohour: Convert from degress to hours (divide by 15.)
+        sep: Separator string
+        leadzero: If >0 display leading 0's, e.g. -05:25. The value is the number of digits for the DD or HR field.
+        round_min: When cutsec, round to the nearest minute rather than truncate
+    Returns:
+        str: That modify string
     """
     l_d = float(d)
     sign = ''

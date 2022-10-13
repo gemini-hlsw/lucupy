@@ -44,6 +44,13 @@ class TimeAllocation:
     and the time that has been used, divided between program time and partner
     calibration time. The time used is calculated as a ratio of the awarded time
     for this category to the total time awarded to the program.
+
+    Attribute:
+        category (TimeAccountingCode):
+        program_awarded (timedelta):
+        partner_awarded (timedelta):
+        program_used (timedelta):
+        partner_used (timedelta):
     """
     category: TimeAccountingCode
     program_awarded: timedelta

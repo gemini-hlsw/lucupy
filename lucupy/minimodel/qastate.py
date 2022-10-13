@@ -9,6 +9,17 @@ class QAState(IntEnum):
     These correspond to the QA States in the OCS for Observations.
     Entries in the obs log should be made uppercase for lookups into
     this enum.
+
+    PASS is not in original mini-model description, but returned by OCS.
+    
+    Members:
+        - NONE
+        - UNDEFINED
+        - FAIL
+        - USABLE
+        - PASS
+        - CHECK
+
     """
     NONE = auto()
     UNDEFINED = auto()

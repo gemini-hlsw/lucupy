@@ -13,16 +13,18 @@ from lucupy.observatory.abstract import ObservatoryProperties
 
 
 class GeminiProperties(ObservatoryProperties):
-    """
-    Implementation of ObservatoryCalculations specific to Gemini.
+    """Implementation of ObservatoryCalculations specific to Gemini.
     """
 
     class _InstrumentsMeta(EnumMeta):
+        """Meta class for the Instruments Class below.
+        """
         def __contains__(cls, r: Resource) -> bool:
             return any(inst.value.id in r.id for inst in cls.__members__.values())
 
-    # Gemini-specific instruments.
     class Instruments(Enum, metaclass=_InstrumentsMeta):
+        """ Gemini-specific instruments.
+        """
         FLAMINGOS2 = Resource('Flamingos2')
         NIFS = Resource('NIFS')
         NIRI = Resource('NIRI')
@@ -33,24 +35,36 @@ class GeminiProperties(ObservatoryProperties):
         GPI = Resource('GPI')
         GSAOI = Resource('GSAOI')
 
-    # Instruments for which there are set standards.
     _STANDARD_INSTRUMENTS = [Instruments.FLAMINGOS2,
                              Instruments.GNIRS,
                              Instruments.NIFS,
                              Instruments.IGRINS]
+    """ List: Instruments for which there are set standards.
+    """
 
     @staticmethod
     def determine_standard_time(resources: FrozenSet[Resource],
                                 wavelengths: FrozenSet[float],
                                 modes: FrozenSet[ObservationMode],
                                 cal_length: int) -> Time:
-        """
-        Determine the standard star time required for Gemini.
+        """Determine the standard star time required for Gemini.
+
+        Args:
+            resources (FrozenSet[Resource]): Instruments to be used.
+            wavelengths (FrozenSet[float]): Wavelengths to be observed.
+            modes (FrozenSet[ObservationMode]): Observation modes.
+            cal_length (int): The specific length of a calibration.
+
+        Returns:
+            Time: _description_
+
+        Todo:
+            We may only want to include specific resources, in which case, modify
+            Instruments above to be StandardInstruments.
+
         """
         if cal_length > 1:
             # Check to see if any of the resources are instruments.
-            # TODO: We may only want to include specific resources, in which case, modify
-            # TODO: Instruments above to be StandardInstruments.
             if any(resource in GeminiProperties._STANDARD_INSTRUMENTS for resource in resources):
                 if all(wavelength <= 2.5 for wavelength in wavelengths):
                     return 1.5 * u.h
@@ -62,10 +76,27 @@ class GeminiProperties(ObservatoryProperties):
 
     @staticmethod
     def is_instrument(resource: Resource) -> bool:
+        """Checks if the resource is a Gemini instrument.
+
+        Args:
+            resource (Resource): A resource to be checked.
+
+        Returns:
+            bool: True if resource is a Gemini instrument.
+        """
         return resource in GeminiProperties.Instruments
 
     @staticmethod
     def acquisition_time(resource: Resource, observation_mode: ObservationMode) -> Optional[timedelta]:
+        """_summary_
+
+        Args:
+            resource (Resource): Instruments used.
+            observation_mode (ObservationMode): Observation mode.
+
+        Returns:
+            Optional[timedelta]: _description_
+        """
         if not GeminiProperties.is_instrument(resource):
             return None
         ...

@@ -9,6 +9,11 @@ from typing import Optional
 class MagnitudeSystem(Enum):
     """
     List of magnitude systems associated with magnitude bands.
+
+    Members:
+       - VEGA
+       - AB
+       - JY
     """
     VEGA = auto()
     AB = auto()
@@ -17,11 +22,18 @@ class MagnitudeSystem(Enum):
 
 @dataclass(frozen=True)
 class MagnitudeBand:
-    """
+    """They are fully enumerated in MagnitudeBands, so they should be looked up by name there.
     THIS CLASS SHOULD NOT BE INSTANTIATED.
-    They are fully enumerated in MagnitudeBands, so they should be looked up by name there.
 
     Values for center and width are specified in microns.
+
+    Attributes:
+        name (str):
+        center (float):
+        width (float):
+        system (MagnitudeSystem): Default to MagnitudeSystem.VEGA .
+        description (str, optional): Default to None.
+
     """
     name: str
     center: float
@@ -37,6 +49,7 @@ class MagnitudeBands(Enum):
 
     Look up the MagnitudeBand from this Enum as follows:
     MagnitudeBands[name]
+
     """
     u = MagnitudeBand('u', 0.356, 0.046, MagnitudeSystem.AB, 'UV')
     g = MagnitudeBand('g', 0.483, 0.099, MagnitudeSystem.AB, 'green')
@@ -62,8 +75,12 @@ class MagnitudeBands(Enum):
 
 @dataclass(frozen=True)
 class Magnitude:
-    """
-    A magnitude value in a particular band.
+    """A magnitude value in a particular band.
+
+    Attributes:
+        band (MagnitudeBands):
+        value (float):
+        error (float): Default to None.
     """
     band: MagnitudeBands
     value: float

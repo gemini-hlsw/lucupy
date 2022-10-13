@@ -14,8 +14,16 @@ TargetName = str
 
 
 class TargetType(Enum):
-    """
-    The type associated with a target in an observation.
+    """The type associated with a target in an observation.
+
+    Members:
+        - BASE
+        - USER
+        - BLIND_OFFSET
+        - OFF_AXIS
+        - TUNING_STAR
+        - GUIDESTAR
+        - OTHER
     """
     BASE = auto()
     USER = auto()
@@ -29,6 +37,12 @@ class TargetType(Enum):
 class GuideSpeed(IntEnum):
     """
     How quickly a guider can guide on a guide star.
+
+    Members:
+        - SLOW
+        - MEDIUM
+        - FAST
+
     """
     SLOW = auto()
     MEDIUM = auto()
@@ -48,6 +62,11 @@ class TargetTag(Enum):
 class Target(ABC):
     """
     Basic target information.
+
+    Attributes:
+        - name: TargetName
+        - magnitudes: Set[Magnitude]
+        - type: TargetType
     """
     name: TargetName
     magnitudes: FrozenSet[Magnitude]
@@ -71,6 +90,14 @@ class SiderealTarget(Target):
     Epoch must be the decimal year.
 
     NOTE: The proper motion adjusted coordinates can be found in the TargetInfo in coord.
+
+    Attributes:
+        ra (float): Right Ascension
+        dec (float): Declination
+        pm_ra (float): Proper motion of the right ascension component.
+        pm_dec (float): Proper motion of the declination component.
+        epoch (float): The epoch in which the ra / dec were measured.
+
     """
     ra: float
     dec: float
@@ -85,6 +112,13 @@ class NonsiderealTarget(Target):
     For a NonsiderealTarget, we have a HORIZONS designation to indicate the lookup
     information, a tag to determine the type of target, and arrays of ephemerides
     to specify the position.
+
+    Attributes:
+        des (str): Horizon designation
+        tag (TargetTag): TargetTag
+        ra (npt.NDArray[float]): Right Ascension
+        dec (npt.NDArray[float]): Declination
+
     """
     des: str
     tag: TargetTag
