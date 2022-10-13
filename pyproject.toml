@@ -44,6 +44,9 @@ mkdocstrings = {extras = ["python"], version = "^0.19.0"}
 pytest = "^7.1.2"
 hypothesis = "^6.54.2"
 
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^2.20.0"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
