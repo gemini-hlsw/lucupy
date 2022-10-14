@@ -36,7 +36,7 @@ def night_events(time: Time, location: EarthLocation, localtzone: timezone) -> T
         time : If before noon, events of previous night are computed.
         location: Earth Location
         localtzone: Timezone object.
-    
+
     Returns:
         Tuple: A 7D tuple with either a ScalarOrNDArray (Check type for specific).
 

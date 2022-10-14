@@ -23,7 +23,7 @@ from .utils import local_sidereal_time, current_geocent_frame, geocentric_coors,
 class Moon:
     """Interface for night events for the moon an other calculations.
 
-    To use this is required to chain the `at` method at the beginning. 
+    To use this is required to chain the `at` method at the beginning.
     If not unhandled errors would happen.
 
     Attributes:
@@ -48,7 +48,7 @@ class Moon:
 
     def at(self, time: Time) -> "Moon":
         """Set time values for other calculations.
-           
+
            This method is meant to be called with:
             - location methods (either low or accurate).
             - time_by_altitude
@@ -282,7 +282,7 @@ class Moon:
         self.lambd = Angle(np.deg2rad(lambd), unit=u.rad)
 
     def low_precision_location(self, obs: EarthLocation) -> Tuple[SkyCoord, float]:
-        """This is the same as the high precision method, but with a different set of coefficients.  
+        """This is the same as the high precision method, but with a different set of coefficients.
         The difference is small. Good to about 0.1 deg, from the 1992 Astronomical Almanac, p. D46.
         Note that input time is a float.
 
@@ -460,8 +460,8 @@ class Moon:
 
         Args:
             location (EarthLocation): Earth location of the observer
-            midnight (Time): Midnight of that day as a Time object 
-            set_alt (Angle): Altitude for the moonset 
+            midnight (Time): Midnight of that day as a Time object
+            set_alt (Angle): Altitude for the moonset
             rise_alt (Angle): Altitude for the moonrise
 
         Returns:

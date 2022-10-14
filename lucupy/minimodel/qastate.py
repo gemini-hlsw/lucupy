@@ -11,7 +11,7 @@ class QAState(IntEnum):
     this enum.
 
     PASS is not in original mini-model description, but returned by OCS.
-    
+
     Members:
         - NONE
         - UNDEFINED

@@ -60,7 +60,7 @@ class Group(ABC):
         """All belonging Sites.
 
         Returns:
-            FrozenSet[Site]: Set of Sites for all observations. 
+            FrozenSet[Site]: Set of Sites for all observations.
         """
         if isinstance(self.children, Observation):
             return frozenset([self.children.site])

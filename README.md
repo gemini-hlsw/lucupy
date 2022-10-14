@@ -1,9 +1,9 @@
 # Lucupy
 
-This package contains data structures and functions to support all the microservices that make up the Schedule app 
+This package contains data structures and functions to support all the microservices that make up the Schedule app
 for the Gemini Program Plataform (and other auxiliary services such as Env and Resource)
 
-## Installation  
+## Installation
 
 ```
 $ pip install lucupy
@@ -17,7 +17,7 @@ You can clone this repo and run:
 $ mkdocs serve
 ```
 
-## License 
+## License
 
 Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 

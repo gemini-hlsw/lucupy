@@ -25,7 +25,7 @@ class GeminiObservation(Observation):
         """Override total_used method from Observation.
 
            Adds IGRINS calibration time using a decorator.
-           
+
         Returns:
             timedelta: Total used time.
         """

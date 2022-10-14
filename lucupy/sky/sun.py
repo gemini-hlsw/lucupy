@@ -22,7 +22,7 @@ from .utils import current_geocent_frame, local_sidereal_time, hour_angle_to_ang
 class Sun:
     """A interface to calculate different night events regarding the Sun.
 
-    To use this is required to chain the `at` method at the beginning. 
+    To use this is required to chain the `at` method at the beginning.
     If not unhandled errors would happen.
     """
     @staticmethod
@@ -90,7 +90,7 @@ class Sun:
             alt: Desired altitude. If array, then must be the same length as time_guess.
             time_guess: Is a Time approximating the answer.
             location: EarthLocation
-        
+
         Raises:
             ValueError: Different lengths for Altitude and time_guess
             ArithmeticError: Sunrise, set, or twilight calculation not converging
@@ -158,7 +158,7 @@ class Sun:
                      set_alt: Angle,
                      rise_alt: Angle) -> Tuple[Time, Time, Time, Time]:
         """Compute rise and set times for this Sun.
-        
+
             For the current location and time of the night.
 
         Args:

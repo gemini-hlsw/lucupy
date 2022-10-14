@@ -20,7 +20,7 @@ class SemesterHalf(str, Enum):
 @dataclass(frozen=True, order=True)
 class Semester:
     """ A semester is a period for which programs may be submitted to Gemini.
-    
+
     Attributes:
         year (int): A four digit year.
         half (SemesterHalf): Two semesters during each year, indicated by the SemesterHalf.

@@ -1,6 +1,10 @@
 # Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
+"""This will have to be customized by a given observatory if used independently
+    of Gemini.
+"""
+
 from enum import Enum
 from typing import Optional
 
@@ -11,8 +15,9 @@ import pytz
 class Site(Enum):
     """The sites belonging to the observatory using the Scheduler.
 
-    This will have to be customized by a given observatory if used independently
-    of Gemini.
+    Attributes:
+        GN: Gemini North (568@399)
+        GS: Gemini South (I11@399)
 
     """
     GN = ('Gemini North', '568@399')
@@ -39,6 +44,4 @@ class Site(Enum):
             raise ValueError(e, msg)
 
 
-ALL_SITES = frozenset(s for s in Site)
-"""Frozenset[Site]: A variable to work with all the sites in scheduler components.
-"""
+ALL_SITES = frozenset(s for s in Site)  # A variable to work with all the sites in scheduler components.
