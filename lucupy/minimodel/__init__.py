@@ -19,6 +19,5 @@ from .timeallocation import *
 from .timingwindow import *
 from .too import *
 
-
 # Type alias for night indices.
 NightIndex = int

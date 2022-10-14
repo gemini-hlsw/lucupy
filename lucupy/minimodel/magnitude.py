@@ -2,7 +2,7 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass
-from enum import auto, Enum
+from enum import Enum, auto
 from typing import Optional
 
 

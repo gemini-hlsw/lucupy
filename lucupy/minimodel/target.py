@@ -3,7 +3,7 @@
 
 from abc import ABC
 from dataclasses import dataclass
-from enum import auto, Enum, IntEnum
+from enum import Enum, IntEnum, auto
 from typing import FrozenSet
 
 import numpy.typing as npt

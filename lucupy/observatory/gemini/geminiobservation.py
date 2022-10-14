@@ -4,6 +4,7 @@
 from datetime import timedelta
 
 from lucupy.minimodel import Observation
+
 from .geminiproperties import GeminiProperties
 
 

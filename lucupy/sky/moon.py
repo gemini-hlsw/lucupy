@@ -7,17 +7,18 @@
 # Copyright John Thorstensen, 2018, who graciously has allowed Gemini to use this code under the BSD-3 Clause license.
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from typing import NoReturn, Tuple, Optional
+from typing import NoReturn, Optional, Tuple
 
 import astropy.units as u
 import numpy as np
-from astropy.coordinates import SkyCoord, EarthLocation, Distance, GeocentricTrueEcliptic, Angle
-from astropy.time import Time
-from astropy.time import TimeDelta
+from astropy.coordinates import (Angle, Distance, EarthLocation,
+                                 GeocentricTrueEcliptic, SkyCoord)
+from astropy.time import Time, TimeDelta
 
 from .altitude import Altitude
-from .constants import J2000, EQUAT_RAD
-from .utils import local_sidereal_time, current_geocent_frame, geocentric_coors, hour_angle_to_angle
+from .constants import EQUAT_RAD, J2000
+from .utils import (current_geocent_frame, geocentric_coors,
+                    hour_angle_to_angle, local_sidereal_time)
 
 
 class Moon:

@@ -1,18 +1,18 @@
 # Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from abc import abstractmethod, ABC
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import timedelta
-from enum import auto, Enum
+from enum import Enum, auto
 from typing import FrozenSet, List, Optional, Union
+
+from lucupy.helpers import flatten
 
 from .constraints import Constraints
 from .observation import Observation
 from .resource import Resource
 from .site import Site
-
-from lucupy.helpers import flatten
 
 GroupID = str
 

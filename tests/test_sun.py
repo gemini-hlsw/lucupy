@@ -7,7 +7,8 @@ import pytest
 from astropy.time import Time
 
 from lucupy.sky.sun import Sun
-from .fixtures import midnight, test_time, location
+
+from .fixtures import location, midnight, test_time
 
 
 @pytest.mark.usefixtures("midnight")

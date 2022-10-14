@@ -7,7 +7,7 @@
 # Copyright John Thorstensen, 2018, who graciously has allowed Gemini to use this code under the BSD-3 Clause license.
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from typing import Tuple, Union, TypeVar
+from typing import Tuple, TypeVar, Union
 
 import astropy.units as u
 import numpy as np

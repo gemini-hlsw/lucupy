@@ -16,6 +16,7 @@ from astropy.time import Time
 from pytz import timezone
 
 from lucupy.types import TimeScalarOrNDArray
+
 from .constants import EQUAT_RAD
 from .moon import Moon
 from .sun import Sun

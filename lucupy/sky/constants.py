@@ -21,7 +21,6 @@ import astropy.units as u
 from astropy.coordinates.distances import Distance
 from astropy.time import Time
 
-
 PI: Final[float] = 3.14159265358979
 TWOPI: Final[float] = 6.28318530717959
 PI_OVER_2: Final[float] = 1.57079632679490

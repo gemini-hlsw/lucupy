@@ -3,7 +3,7 @@
 
 import astropy.units as u
 import pytest
-from astropy.coordinates import SkyCoord, EarthLocation
+from astropy.coordinates import EarthLocation, SkyCoord
 from astropy.time import Time
 
 

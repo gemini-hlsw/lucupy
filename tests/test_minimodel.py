@@ -3,7 +3,8 @@
 
 import numpy as np
 
-from lucupy.minimodel import CloudCover, Conditions, ImageQuality, SkyBackground, WaterVapor
+from lucupy.minimodel import (CloudCover, Conditions, ImageQuality,
+                              SkyBackground, WaterVapor)
 
 
 def test_most_restrictive_conditions1():

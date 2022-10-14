@@ -14,7 +14,8 @@ from astropy.coordinates import Angle, Distance
 from astropy.units import Quantity
 
 from lucupy.minimodel import SkyBackground
-from .constants import KZEN, EQUAT_RAD
+
+from .constants import EQUAT_RAD, KZEN
 from .utils import xair, ztwilight
 
 

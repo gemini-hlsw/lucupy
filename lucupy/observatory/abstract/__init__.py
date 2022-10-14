@@ -6,7 +6,8 @@ from datetime import timedelta
 from typing import FrozenSet, NoReturn, Optional
 
 from astropy.time import Time
-from lucupy.minimodel import Resource, ObservationMode
+
+from lucupy.minimodel import ObservationMode, Resource
 
 
 class ObservatoryProperties(ABC):

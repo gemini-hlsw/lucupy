@@ -7,16 +7,17 @@
 # Copyright John Thorstensen, 2018, who graciously has allowed Gemini to use this code under the BSD-3 Clause license.
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from typing import Tuple, Optional
+from typing import Optional, Tuple
 
 import astropy.units as u
 import numpy as np
-from astropy.coordinates import Angle, SkyCoord, EarthLocation
+from astropy.coordinates import Angle, EarthLocation, SkyCoord
 from astropy.time import Time, TimeDelta
 
 from .altitude import Altitude
 from .constants import J2000
-from .utils import current_geocent_frame, local_sidereal_time, hour_angle_to_angle
+from .utils import (current_geocent_frame, hour_angle_to_angle,
+                    local_sidereal_time)
 
 
 class Sun:

@@ -3,7 +3,7 @@
 
 from datetime import datetime
 
-from lucupy.minimodel import Program, AndGroup, Observation
+from lucupy.minimodel import AndGroup, Observation, Program
 from lucupy.output import print_program
 
 

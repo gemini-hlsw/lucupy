@@ -3,7 +3,7 @@
 
 from dataclasses import dataclass
 from datetime import datetime
-from enum import auto, Enum, IntEnum
+from enum import Enum, IntEnum, auto
 from typing import ClassVar, List, Optional, Sequence, Union
 
 import numpy as np
@@ -13,6 +13,7 @@ from astropy.units import Quantity
 
 from lucupy.helpers import flatten
 from lucupy.types import ScalarOrNDArray
+
 from .timingwindow import TimingWindow
 
 

@@ -13,14 +13,14 @@ from typing import Tuple
 import astropy.units as u
 import numpy as np
 import numpy.typing as npt
-from astropy.coordinates import BaseRADecFrame
-from astropy.coordinates import PrecessedGeocentric, Angle, EarthLocation
+from astropy.coordinates import (Angle, BaseRADecFrame, EarthLocation,
+                                 PrecessedGeocentric)
 from astropy.time import Time
 from astropy.units import Quantity
 from pytz import timezone
 
 from .altitude import AngleParam
-from .constants import J2000, FLATTEN, EQUAT_RAD
+from .constants import EQUAT_RAD, FLATTEN, J2000
 
 
 def current_geocent_frame(time: Time) -> BaseRADecFrame:
