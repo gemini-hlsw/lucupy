@@ -3,7 +3,7 @@
 
 from dataclasses import dataclass
 from datetime import datetime
-from enum import auto, Enum, IntEnum
+from enum import Enum, IntEnum, auto
 from typing import ClassVar, List, Optional, Sequence, Union
 
 import numpy as np
@@ -13,13 +13,14 @@ from astropy.units import Quantity
 
 from lucupy.helpers import flatten
 from lucupy.types import ScalarOrNDArray
+
 from .timingwindow import TimingWindow
 
 
 class SkyBackground(float, Enum):
     """
     Bins for observation sky background requirements or current conditions.
-    
+
     Members:
         - SB20 = 0.2
         - SB50 = 0.5
@@ -52,7 +53,7 @@ class CloudCover(float, Enum):
 class ImageQuality(float, Enum):
     """
     Bins for observation image quality requirements or current conditions.
-    
+
     Members:
         - IQ20 = 0.2
         - IQ70 = 0.7
@@ -194,7 +195,7 @@ class Conditions:
 @dataclass
 class Constraints:
     """The constraints required for an observation to be performed.
-    
+
     Default airmass values to use for elevation constraints if:
         1. The Constraints are not present in the Observation at all; or
         2. The elevation_type is set to NONE.

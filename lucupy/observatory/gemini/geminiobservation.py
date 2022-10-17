@@ -4,6 +4,7 @@
 from datetime import timedelta
 
 from lucupy.minimodel import Observation
+
 from .geminiproperties import GeminiProperties
 
 
@@ -25,7 +26,7 @@ class GeminiObservation(Observation):
         """Override total_used method from Observation.
 
            Adds IGRINS calibration time using a decorator.
-           
+
         Returns:
             timedelta: Total used time.
         """

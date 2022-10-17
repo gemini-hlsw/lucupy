@@ -1,0 +1,31 @@
+repos:
+    -   repo: https://github.com/pre-commit/pre-commit-hooks
+        rev: v4.3.0  # Use the ref you want to point at
+        hooks:
+        -   id: trailing-whitespace
+        -   id: end-of-file-fixer
+        -   id: check-docstring-first
+    -   repo: https://github.com/pycqa/isort
+        rev: 5.10.1
+        hooks:
+        - id: isort
+          name: isort (python)
+    -   repo: https://github.com/pre-commit/pygrep-hooks
+        rev: v1.9.0  # Use the ref you want to point at
+        hooks:
+        -   id: python-use-type-annotations
+# This hook is still too restrictive. We should if we want to add it or not.
+#    -   repo: https://github.com/pycqa/pydocstyle
+#        rev: 4.0.0  # pick a git hash / tag to point to
+#        hooks:
+#        -   id: pydocstyle
+#
+#            -   --select=
+#                D100,
+#                D101,
+#                D102,
+#                D103,
+#                D104,
+#                D105,
+#                D106,
+#                D107,

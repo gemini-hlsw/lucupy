@@ -13,10 +13,10 @@ from astropy.time import Time
 def flatten(lst):
     """Flattens any iterable, no matter how irregular.
        Deliberately left untyped to allow for maximum type usage.
-    
+
     Example:
         flatten([1, 2, [3, 4, 5], [[6, 7], 8, [9, 10]]])
-    
+
     Args:
         lst: n-dimensional array
 
@@ -36,7 +36,7 @@ def round_minute(time: Time, up: bool = False) -> Time:
     Args:
         time: times value(s) to round down/up
         up: bool indicating whether to round up
-    
+
     Returns:
         Round up/down value(s) on Astropy Time object
     """
@@ -68,7 +68,7 @@ SIGNS = {'': 1, '+': 1, '-': -1}
 
 def dmsstr2deg(s: str) -> float:
     """Degrees, minutes, seconds (in string form) to decimal degrees
-    
+
     Args:
         s: string to convert
 
@@ -200,7 +200,7 @@ def angular_distance(ra1: float, dec1: float, ra2: float, dec2: float) -> float:
         dec2 (float): Declination for point 2
 
     Returns:
-        float: Angular Distance 
+        float: Angular Distance
     """
     phi_1 = dec1
     phi_2 = dec2
@@ -248,7 +248,7 @@ def mask_to_barcode(mask: str, inst: Optional[str]) -> str:
 
     Args:
         mask (str): GMOS Mask
-        inst (Optional[str]): Instrument 
+        inst (Optional[str]): Instrument
 
     Returns:
         str: Mask Barcode
@@ -264,8 +264,8 @@ def barcode_to_mask(barcode: str, rootname: Optional[str]) -> str:
     """Convert a barcode string to a mask string.
 
     Args:
-        barcode (str): Mask Barcode 
-        rootname (Optional[str]): Keyword that allows the decoding 
+        barcode (str): Mask Barcode
+        rootname (Optional[str]): Keyword that allows the decoding
 
     Returns:
         str: _description_

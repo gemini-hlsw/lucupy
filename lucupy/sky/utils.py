@@ -13,14 +13,14 @@ from typing import Tuple
 import astropy.units as u
 import numpy as np
 import numpy.typing as npt
-from astropy.coordinates import BaseRADecFrame
-from astropy.coordinates import PrecessedGeocentric, Angle, EarthLocation
+from astropy.coordinates import (Angle, BaseRADecFrame, EarthLocation,
+                                 PrecessedGeocentric)
 from astropy.time import Time
 from astropy.units import Quantity
 from pytz import timezone
 
 from .altitude import AngleParam
-from .constants import J2000, FLATTEN, EQUAT_RAD
+from .constants import EQUAT_RAD, FLATTEN, J2000
 
 
 def current_geocent_frame(time: Time) -> BaseRADecFrame:
@@ -53,7 +53,7 @@ def geocentric_coors(geolong: Angle, geolat: float, height: float) -> Tuple[floa
         geolat:  Geographic latitude
         height: Height above sea level, which must be in meters.
 
-    Returns:  
+    Returns:
         Triple of distances.
     """
 
@@ -130,7 +130,7 @@ def local_midnight_time(time: Time, localtzone: timezone) -> Time:
     If it's before noon local time, returns previous midnight;
     if after noon, return next midnight.
 
-    Args: 
+    Args:
         time (Time): astropy Time object
         localtzone (timezone) : Timezone object.
 
@@ -183,7 +183,7 @@ def local_sidereal_time(time: Time, location: EarthLocation) -> Angle:
     julian_int = np.asarray(time.jd, dtype=int)
 
     scalar_input = False
-    # check if time is an array or a scalar 
+    # check if time is an array or a scalar
     if julian_int.ndim == 0:
         julian_int = julian_int[None]
         scalar_input = True
@@ -269,8 +269,8 @@ def hour_angle_to_angle(dec: AngleParam,
                         lat: AngleParam,
                         alt: AngleParam) -> Angle:
     """Transform the Hour Angle in to an Angle.
-    
-    The hour angle from spherical astronomy, eastor west of meridian, 
+
+    The hour angle from spherical astronomy, eastor west of meridian,
     not the u.hourangle from astropy.
 
     dec and alt must have the same dimensions.
@@ -339,18 +339,18 @@ def hour_angle_to_angle(dec: AngleParam,
 
 
 def xair(zd: Quantity) -> npt.NDArray[float]:
-    """Evaluate true airmass. 
-    
+    """Evaluate true airmass.
+
     Equation 3 from Krisciunas &  Schaefer 1991.
     Trick for handling arrays and scalars from
     https://stackoverflow.com/questions/29318459/python-function-that-handles-scalar-or-arrays
 
     Args:
         zd: Float or numpy array of zenith distance angles
-    
+
     Returns:
         npt.NDArray[float]: values converted.
-    
+
     """
 
     zd = np.asarray(zd.to_value(u.rad).data) * u.rad

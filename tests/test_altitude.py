@@ -7,6 +7,7 @@ import pytest
 from astropy.coordinates import Angle, Longitude
 
 from lucupy.sky.altitude import Altitude
+
 from .fixtures import coord, location
 
 

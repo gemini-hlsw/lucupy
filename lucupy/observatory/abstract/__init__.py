@@ -6,12 +6,13 @@ from datetime import timedelta
 from typing import FrozenSet, NoReturn, Optional
 
 from astropy.time import Time
-from lucupy.minimodel import Resource, ObservationMode
+
+from lucupy.minimodel import ObservationMode, Resource
 
 
 class ObservatoryProperties(ABC):
     """Observatory-specific methods.
-    
+
        These are not tied to other components or
        structures, and allow computations to be implemented in one place.
 
@@ -57,7 +58,7 @@ class ObservatoryProperties(ABC):
         Returns:
             Time: Value(s) of standard time
         """
-    
+
         ObservatoryProperties._check_properties()
         return ObservatoryProperties._properties.determine_standard_time(
             resources,
@@ -85,7 +86,7 @@ class ObservatoryProperties(ABC):
            acquisition time for the specified mode.
 
         Args:
-            resource: A resource that should be an Instrument. 
+            resource: A resource that should be an Instrument.
             observation_mode: The observation mode to be used.
 
         Returns:

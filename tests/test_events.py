@@ -7,7 +7,8 @@ import pytz
 from astropy.time import Time
 
 from lucupy.sky.events import night_events
-from .fixtures import midnight, location
+
+from .fixtures import location, midnight
 
 
 @pytest.mark.usefixtures('midnight', 'location')

@@ -3,7 +3,7 @@
 
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from enum import auto, Enum, IntEnum
+from enum import Enum, IntEnum, auto
 from typing import ClassVar, FrozenSet, List, Optional
 
 from .group import AndGroup, Group, GroupID

@@ -7,23 +7,24 @@
 # Copyright John Thorstensen, 2018, who graciously has allowed Gemini to use this code under the BSD-3 Clause license.
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from typing import NoReturn, Tuple, Optional
+from typing import NoReturn, Optional, Tuple
 
 import astropy.units as u
 import numpy as np
-from astropy.coordinates import SkyCoord, EarthLocation, Distance, GeocentricTrueEcliptic, Angle
-from astropy.time import Time
-from astropy.time import TimeDelta
+from astropy.coordinates import (Angle, Distance, EarthLocation,
+                                 GeocentricTrueEcliptic, SkyCoord)
+from astropy.time import Time, TimeDelta
 
 from .altitude import Altitude
-from .constants import J2000, EQUAT_RAD
-from .utils import local_sidereal_time, current_geocent_frame, geocentric_coors, hour_angle_to_angle
+from .constants import EQUAT_RAD, J2000
+from .utils import (current_geocent_frame, geocentric_coors,
+                    hour_angle_to_angle, local_sidereal_time)
 
 
 class Moon:
     """Interface for night events for the moon an other calculations.
 
-    To use this is required to chain the `at` method at the beginning. 
+    To use this is required to chain the `at` method at the beginning.
     If not unhandled errors would happen.
 
     Attributes:
@@ -48,7 +49,7 @@ class Moon:
 
     def at(self, time: Time) -> "Moon":
         """Set time values for other calculations.
-           
+
            This method is meant to be called with:
             - location methods (either low or accurate).
             - time_by_altitude
@@ -282,7 +283,7 @@ class Moon:
         self.lambd = Angle(np.deg2rad(lambd), unit=u.rad)
 
     def low_precision_location(self, obs: EarthLocation) -> Tuple[SkyCoord, float]:
-        """This is the same as the high precision method, but with a different set of coefficients.  
+        """This is the same as the high precision method, but with a different set of coefficients.
         The difference is small. Good to about 0.1 deg, from the 1992 Astronomical Almanac, p. D46.
         Note that input time is a float.
 
@@ -460,8 +461,8 @@ class Moon:
 
         Args:
             location (EarthLocation): Earth location of the observer
-            midnight (Time): Midnight of that day as a Time object 
-            set_alt (Angle): Altitude for the moonset 
+            midnight (Time): Midnight of that day as a Time object
+            set_alt (Angle): Altitude for the moonset
             rise_alt (Angle): Altitude for the moonrise
 
         Returns:

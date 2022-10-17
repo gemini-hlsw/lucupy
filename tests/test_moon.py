@@ -7,6 +7,7 @@ import pytest
 from astropy.time import Time
 
 from lucupy.sky.moon import Moon
+
 from .fixtures import location, test_time
 
 

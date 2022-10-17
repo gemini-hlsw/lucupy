@@ -3,7 +3,7 @@
 
 import pytest
 
-from lucupy.helpers import mask_to_barcode, barcode_to_mask
+from lucupy.helpers import barcode_to_mask, mask_to_barcode
 
 
 @pytest.mark.parametrize('mask, inst, expected', [('GS2017BLP005-34', 'GMOS', '11200534'),

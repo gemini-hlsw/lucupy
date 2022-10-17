@@ -4,13 +4,14 @@
 import astropy.units as u
 import numpy as np
 import pytest
-from astropy.coordinates import EarthLocation, Angle, PrecessedGeocentric
+from astropy.coordinates import Angle, EarthLocation, PrecessedGeocentric
 from astropy.time import Time
 
-from lucupy.sky.utils import hour_angle_to_angle, true_airmass, ztwilight, xair
-from lucupy.sky.utils import local_sidereal_time, current_geocent_frame, min_max_alt
-from .fixtures import midnight, location, coord
+from lucupy.sky.utils import (current_geocent_frame, hour_angle_to_angle,
+                              local_sidereal_time, min_max_alt, true_airmass,
+                              xair, ztwilight)
 
+from .fixtures import coord, location, midnight
 
 # All values are calculated using the following code:
 # https://github.com/jrthorstensen/thorsky

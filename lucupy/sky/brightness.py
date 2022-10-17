@@ -14,7 +14,8 @@ from astropy.coordinates import Angle, Distance
 from astropy.units import Quantity
 
 from lucupy.minimodel import SkyBackground
-from .constants import KZEN, EQUAT_RAD
+
+from .constants import EQUAT_RAD, KZEN
 from .utils import xair, ztwilight
 
 
@@ -155,7 +156,7 @@ def calculate_sky_brightness_qpt(moon_phase_angle: Quantity,
 
     Returns:
         float: Numpy array of sky background magnitudes at target location
-    
+
     """
 
     # Constants
@@ -242,7 +243,7 @@ def convert_to_sky_background(sb: npt.NDArray[float]) -> npt.NDArray[SkyBackgrou
             0.8 | 19.61 < vsb <= 20.78
             0.5 | 20.78 < vsb <= 21.37
             0.2 | 21.37 < vsb
-    
+
     """
 
     cond = np.full([len(sb)], SkyBackground.SBANY)

@@ -3,8 +3,10 @@
 
 from dataclasses import dataclass
 from datetime import timedelta
-from enum import auto, IntEnum
+from enum import IntEnum, auto
 from typing import FrozenSet, List, Mapping, Optional
+
+from lucupy.observatory.abstract import ObservatoryProperties
 
 from .atom import Atom
 from .constraints import Constraints
@@ -13,8 +15,6 @@ from .resource import Resource
 from .site import Site
 from .target import Target, TargetType
 from .too import TooType
-
-from lucupy.observatory.abstract import ObservatoryProperties
 
 ObservationID = str
 

@@ -2,7 +2,7 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 """ # Lucupy
 
-This package contains data structures and functions to support all the microservices that make up the Schedule app 
+This package contains data structures and functions to support all the microservices that make up the Schedule app
 for the Gemini Program Plataform (and other auxiliary services such as Env and Resource)
 
 ##Content
