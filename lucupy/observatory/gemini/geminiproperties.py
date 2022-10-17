@@ -8,7 +8,7 @@ from typing import FrozenSet, Optional
 import astropy.units as u
 from astropy.time import Time
 
-from lucupy.minimodel import ObservationMode, Resource, Site
+from lucupy.minimodel import Site
 from lucupy.observatory.abstract import ObservatoryProperties
 
 
@@ -87,7 +87,7 @@ class GeminiProperties(ObservatoryProperties):
         return resource in GeminiProperties.Instruments
 
     @staticmethod
-    def acquisition_time(resource: Resource, observation_mode: ObservationMode) -> Optional[timedelta]:
+    def acquisition_time(resource, observation_mode) -> Optional[timedelta]:
         """_summary_
 
         Args:

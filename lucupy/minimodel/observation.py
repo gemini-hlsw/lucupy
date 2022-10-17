@@ -4,7 +4,7 @@
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import IntEnum, auto
-from typing import FrozenSet, List, Mapping, Optional
+from typing import FrozenSet, List, Mapping, NoReturn, Optional
 
 from lucupy.observatory.abstract import ObservatoryProperties
 
@@ -255,6 +255,19 @@ class Observation:
         # TODO: Remove from Bryan's atomizer.
 
         return min(qastates, default=None)
+
+    def show(self, depth: int = 1) -> NoReturn:
+        """Print content of the Observation.
+
+        Args:
+            depth (int, optional): depth of the separator. Defaults to 1.
+        """
+        def sep(depth: int) -> str:
+            return '----- ' * depth
+
+        print(f'{sep(depth)} Observation: {self.id}')
+        for atom in self.sequence:
+            print(f'{sep(depth + 1)} {atom}')
 
     def __len__(self):
         """

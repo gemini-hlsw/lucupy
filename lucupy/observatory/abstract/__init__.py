@@ -7,8 +7,6 @@ from typing import FrozenSet, NoReturn, Optional
 
 from astropy.time import Time
 
-from lucupy.minimodel import ObservationMode, Resource
-
 
 class ObservatoryProperties(ABC):
     """Observatory-specific methods.
@@ -81,13 +79,13 @@ class ObservatoryProperties(ABC):
         return ObservatoryProperties._properties.is_instrument(resource)
 
     @staticmethod
-    def acquisition_time(resource: Resource, observation_mode: ObservationMode) -> Optional[timedelta]:
+    def acquisition_time(resource, observation_mode) -> Optional[timedelta]:
         """Given a resource, check if it is an instrument, and if so, lookup the
            acquisition time for the specified mode.
 
         Args:
-            resource: A resource that should be an Instrument.
-            observation_mode: The observation mode to be used.
+            resource (Resource): A resource that should be an Instrument.
+            observation_mode (ObservationMode): The observation mode to be used.
 
         Returns:
             Optional[timedelta]: The acquisition time for the instrument in that specific mode.
