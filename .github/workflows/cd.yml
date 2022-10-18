@@ -1,5 +1,8 @@
-name: CI
-on: push
+name: CD
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   test:
@@ -8,12 +11,12 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up Python 3.10
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v2
         with:
-          python-version: "3.10.4"
+          python-version: "3.10"
 
       - name: Install Poetry Action
         uses: snok/install-poetry@v1.3.3
@@ -36,5 +39,8 @@ jobs:
         run: poetry install
         if: steps.cache.outputs.cache-hit != 'true'
 
-      - name: Test with pytest
-        run: poetry run pytest . -n 4
+      - name: Poetry build
+        run: poetry build
+
+      - name: Poetry publish
+        run: poetry publish --username __token__ --password {{secrets.PYPI_TOKEN}}
