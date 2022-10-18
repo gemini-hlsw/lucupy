@@ -52,7 +52,7 @@ def test_min_max_alt(coord, location: EarthLocation):
 
 @pytest.mark.usefixtures("coord", "location")
 def test_hour_angle_to_angle(coord, location):
-    assert hour_angle_to_angle(coord[0].dec, location.lat, 30. * u.deg).deg == 66.23270582380651
+    assert hour_angle_to_angle(coord[0].dec, location.lat, 30. * u.deg).deg == pytest.approx(66.23270582380651)
 
 
 @pytest.mark.parametrize("alt, expected", [(30, 1.9927834307900005),
@@ -63,7 +63,7 @@ def test_hour_angle_to_angle(coord, location):
                                            (-20, 500)
                                            ])
 def test_true_airmass(alt, expected):
-    assert true_airmass(alt * u.deg) == expected
+    assert true_airmass(alt * u.deg) == pytest.approx(expected)
 
 
 def test_ztwilight():
