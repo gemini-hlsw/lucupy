@@ -47,6 +47,7 @@ pytest-xdist = "^2.5.0"
 
 [tool.poetry-dynamic-versioning]
 enable = true
+vcs = "git"
 format-jinja="""
     {%- if distance == 0 -%}
         {{ serialize_pep440(base, stage, revision) }}
