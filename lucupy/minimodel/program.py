@@ -132,3 +132,10 @@ class Program:
             return None
 
         return aux(self.root_group)
+
+    def show(self):
+        """Print content of the Program.
+        """
+        print(f'Program: {self.id}')
+        # Print the group and atom information.
+        self.root_group.show(1)

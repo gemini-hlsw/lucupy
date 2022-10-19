@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import Enum, auto
-from typing import FrozenSet, List, Optional, Union
+from typing import FrozenSet, List, NoReturn, Optional, Union
 
 from lucupy.helpers import flatten
 
@@ -111,6 +111,22 @@ class Group(ABC):
             bool: True if the group is a scheduling group, otherwise False.
         """
         return not (self.is_observation_group())
+
+    def show(self, depth: int = 1) -> NoReturn:
+        """Print content of the Group.
+
+        Args:
+            depth (int, optional): depth of the separator. Defaults to 1.
+        """
+        def sep(depth: int) -> str:
+            return '----- ' * depth
+        # Is this a subgroup or an observation?
+        if isinstance(self.children, Observation):
+            self.children.show(depth)
+        elif isinstance(self.children, list):
+            print(f'{sep(depth)} Group: {self.id}')
+            for child in self.children:
+                child.show(depth + 1)
 
     @abstractmethod
     def is_and_group(self) -> bool:

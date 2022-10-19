@@ -1,11 +1,18 @@
 # Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
+import io
+import unittest
+import unittest.mock
 from datetime import datetime
 
 from lucupy.minimodel import AndGroup, Observation, Program
-from lucupy.output import print_program
 
+
+@unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
+def assert_stdout(p, expected_output, mock_stdout):
+    p.show()
+    assert mock_stdout.getvalue() == expected_output
 
 def test_print_program():
     """
@@ -64,5 +71,6 @@ def test_print_program():
         root_group=g,
         too_type=None,
     )
-    print_program(p)
-    assert True
+
+    expected_output = 'Program: test\n-----  Group: test\n----- -----  Observation: test\n'
+    assert_stdout(p, expected_output)
