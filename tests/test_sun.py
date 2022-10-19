@@ -17,8 +17,8 @@ def test_sun_location_at_midnight(midnight):
     Test that the sun location is at the equator at J2000.
     """
     pos = Sun.at(midnight)
-    assert pos.ra.value == 100.88591931021546
-    assert pos.dec.value == 23.058699652854724
+    assert pos.ra.value == pytest.approx(100.88591931021546)
+    assert pos.dec.value == pytest.approx(23.058699652854724)
 
 
 @pytest.mark.usefixtures("test_time", "location")
