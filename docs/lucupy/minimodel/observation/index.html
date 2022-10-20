@@ -1,0 +1,2091 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.6">
+    
+    
+      
+        <title>observation - Lucupy Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="preference" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lucupy.minimodel.observation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="Lucupy Docs" class="md-header__button md-logo" aria-label="Lucupy Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Lucupy Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              observation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gemini-hlsw/lucupy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Lucupy Docs" class="md-nav__button md-logo" aria-label="Lucupy Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Lucupy Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gemini-hlsw/lucupy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        WELCOME
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Docs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Docs" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Docs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1" type="checkbox" id="__nav_2_1" checked>
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../">lucupy</a>
+          
+            <label for="__nav_2_1">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="lucupy" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          lucupy
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../decorators/" class="md-nav__link">
+        decorators
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../helpers/" class="md-nav__link">
+        helpers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1_3" type="checkbox" id="__nav_2_1_3" checked>
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../">minimodel</a>
+          
+            <label for="__nav_2_1_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="minimodel" data-md-level="3">
+        <label class="md-nav__title" for="__nav_2_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          minimodel
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../atom/" class="md-nav__link">
+        atom
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../constraints/" class="md-nav__link">
+        constraints
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../group/" class="md-nav__link">
+        group
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnitude/" class="md-nav__link">
+        magnitude
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          observation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        observation
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation" class="md-nav__link">
+    lucupy.minimodel.observation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation" class="md-nav__link">
+    Observation
+  </a>
+  
+    <nav class="md-nav" aria-label="Observation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.__eq__" class="md-nav__link">
+    __eq__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.__len__" class="md-nav__link">
+    __len__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.base_target" class="md-nav__link">
+    base_target()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.constraints" class="md-nav__link">
+    constraints()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.exec_time" class="md-nav__link">
+    exec_time()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.instrument" class="md-nav__link">
+    instrument()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.partner_used" class="md-nav__link">
+    partner_used()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.program_used" class="md-nav__link">
+    program_used()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.required_resources" class="md-nav__link">
+    required_resources()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.show" class="md-nav__link">
+    show()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.total_used" class="md-nav__link">
+    total_used()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.wavelengths" class="md-nav__link">
+    wavelengths()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.ObservationClass" class="md-nav__link">
+    ObservationClass
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.ObservationStatus" class="md-nav__link">
+    ObservationStatus
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Priority" class="md-nav__link">
+    Priority
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.SetupTimeType" class="md-nav__link">
+    SetupTimeType
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../observationmode/" class="md-nav__link">
+        observationmode
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../program/" class="md-nav__link">
+        program
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qastate/" class="md-nav__link">
+        qastate
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resource/" class="md-nav__link">
+        resource
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../semester/" class="md-nav__link">
+        semester
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../site/" class="md-nav__link">
+        site
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../target/" class="md-nav__link">
+        target
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../timeallocation/" class="md-nav__link">
+        timeallocation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../timingwindow/" class="md-nav__link">
+        timingwindow
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../too/" class="md-nav__link">
+        too
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1_4" type="checkbox" id="__nav_2_1_4" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../observatory/">observatory</a>
+          
+            <label for="__nav_2_1_4">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="observatory" data-md-level="3">
+        <label class="md-nav__title" for="__nav_2_1_4">
+          <span class="md-nav__icon md-icon"></span>
+          observatory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observatory/abstract/" class="md-nav__link">
+        abstract
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1_4_2" type="checkbox" id="__nav_2_1_4_2" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../observatory/gemini/">gemini</a>
+          
+            <label for="__nav_2_1_4_2">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="gemini" data-md-level="4">
+        <label class="md-nav__title" for="__nav_2_1_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          gemini
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observatory/gemini/geminiobservation/" class="md-nav__link">
+        geminiobservation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observatory/gemini/geminiproperties/" class="md-nav__link">
+        geminiproperties
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_1_5" type="checkbox" id="__nav_2_1_5" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../sky/">sky</a>
+          
+            <label for="__nav_2_1_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="sky" data-md-level="3">
+        <label class="md-nav__title" for="__nav_2_1_5">
+          <span class="md-nav__icon md-icon"></span>
+          sky
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sky/altitude/" class="md-nav__link">
+        altitude
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sky/brightness/" class="md-nav__link">
+        brightness
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sky/constants/" class="md-nav__link">
+        constants
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sky/events/" class="md-nav__link">
+        events
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sky/moon/" class="md-nav__link">
+        moon
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sky/sun/" class="md-nav__link">
+        sun
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sky/utils/" class="md-nav__link">
+        utils
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../timeutils/" class="md-nav__link">
+        timeutils
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../types/" class="md-nav__link">
+        types
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation" class="md-nav__link">
+    lucupy.minimodel.observation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation" class="md-nav__link">
+    Observation
+  </a>
+  
+    <nav class="md-nav" aria-label="Observation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.__eq__" class="md-nav__link">
+    __eq__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.__len__" class="md-nav__link">
+    __len__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.base_target" class="md-nav__link">
+    base_target()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.constraints" class="md-nav__link">
+    constraints()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.exec_time" class="md-nav__link">
+    exec_time()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.instrument" class="md-nav__link">
+    instrument()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.partner_used" class="md-nav__link">
+    partner_used()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.program_used" class="md-nav__link">
+    program_used()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.required_resources" class="md-nav__link">
+    required_resources()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.show" class="md-nav__link">
+    show()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.total_used" class="md-nav__link">
+    total_used()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Observation.wavelengths" class="md-nav__link">
+    wavelengths()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.ObservationClass" class="md-nav__link">
+    ObservationClass
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.ObservationStatus" class="md-nav__link">
+    ObservationStatus
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.Priority" class="md-nav__link">
+    Priority
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lucupy.minimodel.observation.SetupTimeType" class="md-nav__link">
+    SetupTimeType
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/gemini-hlsw/lucupy/edit/master/lucupy/minimodel/observation.py" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+  <h1>observation</h1>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="lucupy.minimodel.observation"></a>
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="lucupy.minimodel.observation.Observation" class="doc doc-heading">
+        <code>Observation</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>Representation of an observation.
+Non-obvious fields are documented below.</p>
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>id</code></td>
+          <td>
+                <code><span title="lucupy.minimodel.observation.ObservationID">ObservationID</span></code>
+          </td>
+          <td><p>should represent the observation's ID, e.g. GN-2018B-Q-101-123.</p></td>
+        </tr>
+        <tr>
+          <td><code>internal_id</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>is the key associated with the observation</p></td>
+        </tr>
+        <tr>
+          <td><code>order</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>refers to the order of the observation in either its group or the program</p></td>
+        </tr>
+        <tr>
+          <td><code>title</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>site</code></td>
+          <td>
+                <code><span title="lucupy.minimodel.observation.Observation.site">site</span></code>
+          </td>
+          <td><p>the Site in which the Observation has to be done.</p></td>
+        </tr>
+        <tr>
+          <td><code>status</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="lucupy.minimodel.observation.ObservationStatus" href="#lucupy.minimodel.observation.ObservationStatus">ObservationStatus</a></code>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>active</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td><p>Indicates if the Observation is active or not.</p></td>
+        </tr>
+        <tr>
+          <td><code>priority(Priority)</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td><p>Priority of the Observation. Affects the scoring.</p></td>
+        </tr>
+        <tr>
+          <td><code>setuptime_type(SetupTimeType)</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td><p>When doing / resuming an Observation,
+indicates if a reacquisition, a full setup or just nothing has to be done.</p></td>
+        </tr>
+        <tr>
+          <td><code>acq_overhead</code></td>
+          <td>
+                <code><span title="datetime.timedelta">timedelta</span></code>
+          </td>
+          <td><p>Time overhead for acquisition.</p></td>
+        </tr>
+        <tr>
+          <td><code>obs_class</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="lucupy.minimodel.observation.ObservationClass" href="#lucupy.minimodel.observation.ObservationClass">ObservationClass</a></code>
+          </td>
+          <td><p>Type of Observation.</p></td>
+        </tr>
+        <tr>
+          <td><code>targets</code></td>
+          <td>
+                <code><span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="lucupy.minimodel.target.Target" href="../target/#lucupy.minimodel.target.Target">Target</a>]</code>
+          </td>
+          <td><p>should contain a complete list of all targets associated with the observation,
+with the base being in the first position</p></td>
+        </tr>
+        <tr>
+          <td><code>guiding</code></td>
+          <td>
+                <code><span title="typing.Mapping">Mapping</span>[<a class="autorefs autorefs-internal" title="lucupy.minimodel.resource.Resource" href="../resource/#lucupy.minimodel.resource.Resource">Resource</a>, <a class="autorefs autorefs-internal" title="lucupy.minimodel.target.Target" href="../target/#lucupy.minimodel.target.Target">Target</a>]</code>
+          </td>
+          <td><p>is a map between guide probe resources and their targets.</p></td>
+        </tr>
+        <tr>
+          <td><code>sequence</code></td>
+          <td>
+                <code><span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="lucupy.minimodel.atom.Atom" href="../atom/#lucupy.minimodel.atom.Atom">Atom</a>]</code>
+          </td>
+          <td><p>Sequence of Atoms that describe the observation.</p></td>
+        </tr>
+        <tr>
+          <td><code>constraints</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="lucupy.minimodel.constraints.Constraints" href="../constraints/#lucupy.minimodel.constraints.Constraints">Constraints</a></code>
+          </td>
+          <td><p>Some observations do not have constraints, e.g. GN-208A-FT-103-6.</p></td>
+        </tr>
+        <tr>
+          <td><code>too_type</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="lucupy.minimodel.too.TooType" href="../too/#lucupy.minimodel.too.TooType">TooType</a></code>
+          </td>
+          <td><p>Default to None.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="lucupy.minimodel.observation.Observation.__eq__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__eq__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>We override the equality checker created by @dataclass to temporarily skip sequence
+comparison in test cases until the atom creation process is finish.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="lucupy.minimodel.observation.Observation.__len__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__len__</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>This is to treat observations the same as groups and is a bit of a hack.
+Observations are to be placed in AND Groups of size 1 for scheduling purposes.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="lucupy.minimodel.observation.Observation.base_target" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">base_target</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="lucupy.minimodel.target.Target" href="../target/#lucupy.minimodel.target.Target">Target</a>]</code>
+          </td>
+          <td><p>Get the base target for this Observation if it has one, and None otherwise.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="lucupy.minimodel.observation.Observation.constraints" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">constraints</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="typing.FrozenSet">FrozenSet</span>[<a class="autorefs autorefs-internal" title="lucupy.minimodel.constraints.Constraints" href="../constraints/#lucupy.minimodel.constraints.Constraints">Constraints</a>]</code>
+          </td>
+          <td><p>A set of the constraints required by the observation.</p></td>
+        </tr>
+        <tr>
+          <td>
+                <code><span title="typing.FrozenSet">FrozenSet</span>[<a class="autorefs autorefs-internal" title="lucupy.minimodel.constraints.Constraints" href="../constraints/#lucupy.minimodel.constraints.Constraints">Constraints</a>]</code>
+          </td>
+          <td><p>In the case of an observation, this is just the (optional) constraints.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="lucupy.minimodel.observation.Observation.exec_time" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">exec_time</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="datetime.timedelta">timedelta</span></code>
+          </td>
+          <td><p>Total execution time for the program, which is the sum across atoms and the acquisition overhead.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="lucupy.minimodel.observation.Observation.instrument" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">instrument</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="typing.Optional">Optional</span>[<a class="autorefs autorefs-internal" title="lucupy.minimodel.resource.Resource" href="../resource/#lucupy.minimodel.resource.Resource">Resource</a>]</code>
+          </td>
+          <td><p>A resource that is an instrument, if one exists. There should be only one.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="lucupy.minimodel.observation.Observation.partner_used" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">partner_used</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>We roll this information up from the atoms as it will be calculated
+during the Optimizer algorithm. Note that it is also available directly
+from the OCS, which is used to populate the time allocation.</p>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="datetime.timedelta">timedelta</span></code>
+          </td>
+          <td><p>With the time program used.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="lucupy.minimodel.observation.Observation.program_used" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">program_used</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>We roll this information up from the atoms as it will be calculated
+    during the Optimizer algorithm. Note that it is also available directly
+    from the OCS, which is used to populate the time allocation.</p>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="datetime.timedelta">timedelta</span></code>
+          </td>
+          <td><p>With the time program used.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="lucupy.minimodel.observation.Observation.required_resources" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">required_resources</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="typing.FrozenSet">FrozenSet</span>[<a class="autorefs autorefs-internal" title="lucupy.minimodel.resource.Resource" href="../resource/#lucupy.minimodel.resource.Resource">Resource</a>]</code>
+          </td>
+          <td><p>The required resources for an observation based on the sequence's needs.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="lucupy.minimodel.observation.Observation.show" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">show</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Print content of the Observation.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>depth</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>depth of the separator. Defaults to 1.</p></td>
+          <td>
+                <code>1</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="lucupy.minimodel.observation.Observation.total_used" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">total_used</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="datetime.timedelta">timedelta</span></code>
+          </td>
+          <td><p>Total program time used: includes program time and partner time.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="lucupy.minimodel.observation.Observation.wavelengths" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">wavelengths</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="typing.FrozenSet">FrozenSet</span>[float]</code>
+          </td>
+          <td><p>The set of wavelengths included in the sequence.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="lucupy.minimodel.observation.ObservationClass" class="doc doc-heading">
+        <code>ObservationClass</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><span title="enum.IntEnum">IntEnum</span></code></p>
+
+  
+      <p>The class of an observation.</p>
+<p>Note that the order of these is specific and deliberate: they are listed in
+preference order for observation classes, and hence, should not be rearranged.
+These correspond to the values in the OCS when made uppercase.</p>
+
+<details class="members">
+  <summary>Members</summary>
+  <ul>
+<li>SCIENCE</li>
+<li>PROGCAL</li>
+<li>PARTNERCAL</li>
+<li>ACQ</li>
+<li>ACQCAL</li>
+<li>DAYCAL</li>
+</ul>
+</details>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="lucupy.minimodel.observation.ObservationStatus" class="doc doc-heading">
+        <code>ObservationStatus</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><span title="enum.IntEnum">IntEnum</span></code></p>
+
+  
+      <p>The status of an observation as indicated in the Observing Tool / ODB.</p>
+
+<details class="members">
+  <summary>Members</summary>
+  <ul>
+<li>NEW</li>
+<li>INCLUDED</li>
+<li>PROPOSED</li>
+<li>APPROVED</li>
+<li>FOR_REVIEW: Not in original mini-model description, but returned by OCS.</li>
+<li>ON_HOLD</li>
+<li>READY</li>
+<li>ONGOING</li>
+<li>OBSERVED</li>
+<li>INACTIVE</li>
+<li>PHASE2</li>
+</ul>
+</details>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="lucupy.minimodel.observation.Priority" class="doc doc-heading">
+        <code>Priority</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><span title="enum.IntEnum">IntEnum</span></code></p>
+
+  
+      <p>An observation's priority.
+Note that these are ordered specifically so that we can compare them.</p>
+
+<details class="members">
+  <summary>Members</summary>
+  <ul>
+<li>LOW</li>
+<li>MEDIUM</li>
+<li>HIGH</li>
+</ul>
+</details>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="lucupy.minimodel.observation.SetupTimeType" class="doc doc-heading">
+        <code>SetupTimeType</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><span title="enum.IntEnum">IntEnum</span></code></p>
+
+  
+      <p>The setup time type for an observation.</p>
+
+<details class="members">
+  <summary>Members</summary>
+  <ul>
+<li>NONE</li>
+<li>REACQUISITION</li>
+<li>FULL</li>
+</ul>
+</details>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../magnitude/" class="md-footer__link md-footer__link--prev" aria-label="Previous: magnitude" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              magnitude
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../observationmode/" class="md-footer__link md-footer__link--next" aria-label="Next: observationmode" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              observationmode
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.078830c0.min.js"></script>
+      
+    
+  </body>
+</html>
