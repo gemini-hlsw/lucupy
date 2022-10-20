@@ -2,7 +2,6 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 import io
-import unittest
 import unittest.mock
 from datetime import datetime
 
@@ -13,6 +12,7 @@ from lucupy.minimodel import AndGroup, Observation, Program
 def assert_stdout(p, expected_output, mock_stdout):
     p.show()
     assert mock_stdout.getvalue() == expected_output
+
 
 def test_print_program():
     """

@@ -8,7 +8,7 @@ from typing import FrozenSet, Optional
 import astropy.units as u
 from astropy.time import Time
 
-from lucupy.minimodel import Site
+from lucupy.minimodel import ObservationMode, Resource
 from lucupy.observatory.abstract import ObservatoryProperties
 
 
