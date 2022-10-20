@@ -40,4 +40,4 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: Build dependencies and publish
-        run: mkdocs gh-deploy --force --clean --verbose
+        run: poetry run mkdocs gh-deploy --force --clean --verbose
