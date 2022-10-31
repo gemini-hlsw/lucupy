@@ -28,9 +28,10 @@ class Group(ABC):
     Attributes:
         id (GroupID): the identification of the group.
         group_name (str): a human-readable name of the group.
-        number_to_observe (int): the number of children in the group that must be observed for the group to be considered complete.
+        number_to_observe (int): the number of children in the group that must be observed for the group to be
+                                 considered complete.
         delay_min(timedelta): used in cadences.
-        delay_ma(timedelta): used in cadences.
+        delay_max(timedelta): used in cadences.
         children (Union[List['Group'], Observation]): member(s) of the group
     """
     id: GroupID
@@ -46,7 +47,7 @@ class Group(ABC):
             raise ValueError(msg)
 
     def subgroup_ids(self) -> FrozenSet[GroupID]:
-        """Get the ids for all the sub-groups inside.
+        """Get the ids for all the subgroups inside.
 
         Returns:
             FrozenSet[GroupID]: Set of GroupID values.
