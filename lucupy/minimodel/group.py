@@ -112,14 +112,58 @@ class Group(ABC):
         """
         return not (self.is_observation_group())
 
+    def exec_time(self) -> timedelta:
+        """Total execution time across the children of this group.
+
+        Returns:
+            exec_time (timedelta): Sum of all the execution times.
+        """
+        if issubclass(type(self.children), Observation):
+            return self.children.exec_time()
+        else:
+            sum(child.exec_time() for child in self.children)
+
+    def program_used(self) -> timedelta:
+        """Program time used across the group.
+
+        Returns:
+            program_used (timedelta): Sum of all program_used times across children of this group.
+        """
+        if issubclass(type(self.children), Observation):
+            return self.children.program_used()
+        else:
+            return sum(child.program_used() for child in self.children)
+
+    def partner_used(self) -> timedelta:
+        """Partner time used across the group.
+
+        Returns:
+            partner_time (timedelta): Sum of all `partner_used` across the children of this group.
+        """
+        if issubclass(type(self.children), Observation):
+            return self.children.partner_used()
+        else:
+            return sum(child.partner_used() for child in self.children)
+
+    def total_used(self) -> timedelta:
+        """Total time used across the group: includes program time and partner time.
+
+        Returns:
+            total_used (timedelta): Sum of total_used times across all children.
+        """
+        if issubclass(type(self.children), Observation):
+            return self.children.total_used()
+        else:
+            return sum(child.total_used() for child in self.children)
+
     def show(self, depth: int = 1) -> NoReturn:
         """Print content of the Group.
 
         Args:
             depth (int, optional): depth of the separator. Defaults to 1.
         """
-        def sep(depth: int) -> str:
-            return '----- ' * depth
+        def sep(indent: int) -> str:
+            return '----- ' * indent
         # Is this a subgroup or an observation?
         if isinstance(self.children, Observation):
             self.children.show(depth)
@@ -190,28 +234,6 @@ class AndGroup(Group):
 
     def is_or_group(self) -> bool:
         return False
-
-    def exec_time(self) -> timedelta:
-        """Total execution time across the children of this group.
-
-        Returns:
-            exec_time (timedelta): Sum of all the executions time.
-        """
-        if issubclass(type(self.children), Observation):
-            return self.children.exec_time()
-        else:
-            sum(child.exec_time() for child in self.children)
-
-    def total_used(self) -> timedelta:
-        """Total time used across the group: includes program time and partner time.
-
-        Returns:
-            total_used (timedelta): Sum of all total used times.
-        """
-        if issubclass(type(self.children), Observation):
-            return self.children.total_used()
-        else:
-            sum(child.total_used() for child in self.children)
 
     def instruments(self) -> FrozenSet[Resource]:
         """
