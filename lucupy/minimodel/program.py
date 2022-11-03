@@ -99,20 +99,29 @@ class Program:
     def program_awarded(self) -> timedelta:
         return sum((t.program_awarded for t in self.allocated_time), timedelta())
 
-    def program_used(self) -> timedelta:
+    def program_awarded_used(self) -> timedelta:
         return sum((t.program_used for t in self.allocated_time), timedelta())
 
     def partner_awarded(self) -> timedelta:
         return sum((t.partner_awarded for t in self.allocated_time), timedelta())
 
-    def partner_used(self) -> timedelta:
+    def partner_awarded_used(self) -> timedelta:
         return sum((t.partner_used for t in self.allocated_time), timedelta())
 
     def total_awarded(self) -> timedelta:
         return sum((t.total_awarded() for t in self.allocated_time), timedelta())
 
-    def total_used(self) -> timedelta:
+    def total_awarded_used(self) -> timedelta:
         return sum((t.total_used() for t in self.allocated_time), timedelta())
+
+    def program_used(self) -> timedelta:
+        return self.root_group.program_used()
+
+    def partner_used(self) -> timedelta:
+        return self.root_group.partner_used()
+
+    def total_used(self) -> timedelta:
+        return self.root_group.total_used()
 
     def observations(self) -> List[Observation]:
         return self.root_group.observations()

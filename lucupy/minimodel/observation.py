@@ -262,8 +262,8 @@ class Observation:
         Args:
             depth (int, optional): depth of the separator. Defaults to 1.
         """
-        def sep(depth: int) -> str:
-            return '----- ' * depth
+        def sep(indent: int) -> str:
+            return '----- ' * indent
 
         print(f'{sep(depth)} Observation: {self.id}')
         for atom in self.sequence:
