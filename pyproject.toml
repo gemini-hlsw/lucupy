@@ -37,6 +37,8 @@ mkdocstrings = {extras = ["python"], version = "^0.19.0"}
 [tool.poetry.dependencies]
 python = "^3.10"
 astropy = "^5.1"
+hypothesis = "6.54.2"
+pytest = "^7.1.2"
 pytz = "^2022.2"
 
 [tool.poetry.group.dev.dependencies]
