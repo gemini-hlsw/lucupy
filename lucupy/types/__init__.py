@@ -14,4 +14,4 @@ ScalarOrNDArray = Union[T, npt.NDArray[T]]
 TimeScalarOrNDArray = Union[Time, npt.NDArray[float]]
 ListOrNDArray = Union[List[T], npt.NDArray[T]]
 
-ZeroTime = Final[timedelta()]
+ZeroTime: Final[timedelta] = timedelta()
