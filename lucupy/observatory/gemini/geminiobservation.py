@@ -10,8 +10,9 @@ from .geminiproperties import GeminiProperties
 
 def with_igrins_cal(func):
     def add_calibration(self):
-        if GeminiProperties.Instruments.IGRINS in self.required_resources() and self.partner_used() > 0:
-            return func(self) + timedelta(seconds=(1 / 6))
+        if (GeminiProperties.Instruments.IGRINS in self.required_resources()
+                and self.total_used - self.program_time() > timedelta()):
+            return func(self) + timedelta(minutes=10)
         return func(self)
 
     return add_calibration
