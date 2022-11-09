@@ -13,6 +13,7 @@ from .constraints import Constraints
 from .observation import Observation
 from .resource import Resource
 from .site import Site
+from ..types import ZeroTime
 
 GroupID = str
 
@@ -122,7 +123,7 @@ class Group(ABC):
         if issubclass(type(self.children), Observation):
             return self.children.exec_time()
         else:
-            sum((child.exec_time() for child in self.children), timedelta())
+            sum((child.exec_time() for child in self.children), ZeroTime)
 
     def program_used(self) -> timedelta:
         """Program time used across the group.
@@ -133,7 +134,7 @@ class Group(ABC):
         if issubclass(type(self.children), Observation):
             return self.children.program_used()
         else:
-            return sum((child.program_used() for child in self.children), timedelta())
+            return sum((child.program_used() for child in self.children), ZeroTime)
 
     def partner_used(self) -> timedelta:
         """Partner time used across the group.
@@ -144,7 +145,7 @@ class Group(ABC):
         if issubclass(type(self.children), Observation):
             return self.children.partner_used()
         else:
-            return sum((child.partner_used() for child in self.children), timedelta())
+            return sum((child.partner_used() for child in self.children), ZeroTime)
 
     def total_used(self) -> timedelta:
         """Total time used across the group: includes program time and partner time.
@@ -155,7 +156,7 @@ class Group(ABC):
         if issubclass(type(self.children), Observation):
             return self.children.total_used()
         else:
-            return sum((child.total_used() for child in self.children), timedelta())
+            return sum((child.total_used() for child in self.children), ZeroTime)
 
     def show(self, depth: int = 1) -> NoReturn:
         """Print content of the Group.

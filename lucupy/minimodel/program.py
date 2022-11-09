@@ -11,6 +11,7 @@ from .observation import Observation
 from .semester import Semester
 from .timeallocation import TimeAllocation
 from .too import TooType
+from ..types import ZeroTime
 
 ProgramID = str
 
@@ -97,22 +98,22 @@ class Program:
     FUZZY_BOUNDARY: ClassVar[timedelta] = timedelta(days=14)
 
     def program_awarded(self) -> timedelta:
-        return sum((t.program_awarded for t in self.allocated_time), timedelta())
+        return sum((t.program_awarded for t in self.allocated_time), ZeroTime)
 
     def program_awarded_used(self) -> timedelta:
-        return sum((t.program_used for t in self.allocated_time), timedelta())
+        return sum((t.program_used for t in self.allocated_time), ZeroTime)
 
     def partner_awarded(self) -> timedelta:
-        return sum((t.partner_awarded for t in self.allocated_time), timedelta())
+        return sum((t.partner_awarded for t in self.allocated_time), ZeroTime)
 
     def partner_awarded_used(self) -> timedelta:
-        return sum((t.partner_used for t in self.allocated_time), timedelta())
+        return sum((t.partner_used for t in self.allocated_time), ZeroTime)
 
     def total_awarded(self) -> timedelta:
-        return sum((t.total_awarded() for t in self.allocated_time), timedelta())
+        return sum((t.total_awarded() for t in self.allocated_time), ZeroTime)
 
     def total_awarded_used(self) -> timedelta:
-        return sum((t.total_used() for t in self.allocated_time), timedelta())
+        return sum((t.total_used() for t in self.allocated_time), ZeroTime)
 
     def program_used(self) -> timedelta:
         return self.root_group.program_used()

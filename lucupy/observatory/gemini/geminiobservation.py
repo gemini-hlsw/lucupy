@@ -2,16 +2,21 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from datetime import timedelta
+from typing import Final
 
 from lucupy.minimodel import Observation
 
 from .geminiproperties import GeminiProperties
+from ...types import ZeroTime
+
+_IGRINS_CAL_TIME: Final[timedelta] = timedelta(minutes=10)
 
 
 def with_igrins_cal(func):
     def add_calibration(self):
-        if GeminiProperties.Instruments.IGRINS in self.required_resources() and self.partner_used() > 0:
-            return func(self) + timedelta(seconds=(1 / 6))
+        if (GeminiProperties.Instruments.IGRINS in self.required_resources()
+                and self.total_used - self.program_time() > ZeroTime):
+            return func(self) + _IGRINS_CAL_TIME
         return func(self)
 
     return add_calibration

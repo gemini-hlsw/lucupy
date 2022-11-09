@@ -15,6 +15,7 @@ from .resource import Resource
 from .site import Site
 from .target import Target, TargetType
 from .too import TooType
+from ..types import ZeroTime
 
 ObservationID = str
 
@@ -168,7 +169,7 @@ class Observation:
         Returns:
             Total execution time for the program, which is the sum across atoms and the acquisition overhead.
         """
-        return sum((atom.exec_time for atom in self.sequence), timedelta()) + self.acq_overhead
+        return sum((atom.exec_time for atom in self.sequence), ZeroTime) + self.acq_overhead
 
     def total_used(self) -> timedelta:
         """
@@ -216,7 +217,7 @@ class Observation:
         Returns:
             (timedelta): With the time program used.
         """
-        return sum((atom.prog_time for atom in self.sequence), start=timedelta())
+        return sum((atom.prog_time for atom in self.sequence), start=ZeroTime)
 
     def partner_used(self) -> timedelta:
         """We roll this information up from the atoms as it will be calculated
@@ -226,7 +227,7 @@ class Observation:
         Returns:
             (timedelta): With the time program used.
         """
-        return sum((atom.part_time for atom in self.sequence), start=timedelta())
+        return sum((atom.part_time for atom in self.sequence), start=ZeroTime)
 
     @staticmethod
     def _select_obsclass(classes: List[ObservationClass]) -> Optional[ObservationClass]:
