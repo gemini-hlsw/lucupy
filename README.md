@@ -11,11 +11,11 @@ $ pip install lucupy
 
 ## Documentation
 
-You can clone this repo and run:
+You can find our documentation [here](https://gemini-hlsw.github.io/lucupy/docs/lucupy/)
 
-```
-$ mkdocs serve
-```
+To add new changes to the doc is needed to force push to `gh-pages` branch to trigger an Actions.
+
+See `.github/workflow/docs.yml`.
 
 ## License
 
