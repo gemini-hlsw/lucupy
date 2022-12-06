@@ -2,6 +2,7 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass
+from datetime import date
 from enum import Enum
 
 
@@ -16,6 +17,12 @@ class SemesterHalf(str, Enum):
     A = 'A'
     B = 'B'
 
+    def start_month(self) -> int:
+        return 2 if self == SemesterHalf.A else 8
+
+    def end_month(self) -> int:
+        return 7 if self == SemesterHalf.A else 1
+
 
 @dataclass(frozen=True, order=True)
 class Semester:
@@ -27,6 +34,12 @@ class Semester:
     """
     year: int
     half: SemesterHalf
+
+    def start_date(self) -> date:
+        return date(year=self.year, month=self.half.start_month(), day=1)
+
+    def end_date(self) -> date:
+        return date(year=self.year, month=self.half.end_month(), day=31)
 
     def __str__(self):
         return f'{self.year}{self.half.value}'
