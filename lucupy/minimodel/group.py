@@ -112,7 +112,7 @@ class Group(ABC):
         Returns:
             bool: True if the group is a scheduling group, otherwise False.
         """
-        return not (self.is_observation_group())
+        return not self.is_observation_group()
 
     def exec_time(self) -> timedelta:
         """Total execution time across the children of this group.
