@@ -20,7 +20,7 @@ def test_print_program():
     """
 
     o = Observation(
-        id='test',
+        id='test_observation',
         internal_id='acc39a30-97a8-42de-98a6-5e77cc95d3ec',
         order=0,
         title='GMOSN-1',
@@ -40,7 +40,7 @@ def test_print_program():
 
     # Create the trivial AND group containing the gnirs1 observation.
     g1 = AndGroup(
-        id='test',
+        id='test_group',
         group_name='test',
         number_to_observe=1,
         delay_min=None,
@@ -49,8 +49,8 @@ def test_print_program():
         group_option=None
     )
 
-    g = AndGroup(id='test',
-                 group_name='test',
+    g = AndGroup(id='root',
+                 group_name='root',
                  number_to_observe=1,
                  delay_min=None,
                  delay_max=None,
@@ -58,7 +58,7 @@ def test_print_program():
                  group_option=None,
                  )
     p = Program(
-        id='test',
+        id='test_program',
         internal_id='c396b9c9-9bdd-4eec-be83-81162090d032',
         semester=None,
         band=None,
@@ -72,5 +72,8 @@ def test_print_program():
         too_type=None,
     )
 
-    expected_output = 'Program: test\n-----  Group: test\n----- -----  Observation: test\n'
+    expected_output = ('Program: test_program\n'
+                       '----- Group: root (Scheduling Group, num_children=1)\n'
+                       '---------- Group: test_group (Observation Group, num_children=1)\n'
+                       '--------------- Observation: test_observation\n')
     assert_stdout(p, expected_output)
