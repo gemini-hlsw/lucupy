@@ -123,7 +123,7 @@ class Group(ABC):
         if issubclass(type(self.children), Observation):
             return self.children.exec_time()
         else:
-            sum((child.exec_time() for child in self.children), ZeroTime)
+            return sum((child.exec_time() for child in self.children), ZeroTime)
 
     def program_used(self) -> timedelta:
         """Program time used across the group.
