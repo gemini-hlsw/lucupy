@@ -23,7 +23,7 @@ class TimingWindow:
 
     # For infinite duration, use the length of an LP.
     INFINITE_DURATION_FLAG: ClassVar[int] = -1
-    INFINITE_DURATION: ClassVar[int] = timedelta(days=3 * 365, hours=24)
+    INFINITE_DURATION: ClassVar[timedelta] = timedelta(days=3 * 365, hours=24)
     FOREVER_REPEATING: ClassVar[int] = -1
     NON_REPEATING: ClassVar[int] = 0
     NO_PERIOD: ClassVar[Optional[timedelta]] = None

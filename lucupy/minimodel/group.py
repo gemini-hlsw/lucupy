@@ -112,7 +112,7 @@ class Group(ABC):
         Returns:
             bool: True if the group is a scheduling group, otherwise False.
         """
-        return not (self.is_observation_group())
+        return not self.is_observation_group()
 
     def exec_time(self) -> timedelta:
         """Total execution time across the children of this group.
@@ -165,12 +165,14 @@ class Group(ABC):
             depth (int, optional): depth of the separator. Defaults to 1.
         """
         def sep(indent: int) -> str:
-            return '----- ' * indent
+            return '-----' * indent
+
         # Is this a subgroup or an observation?
+        group_type = 'Scheduling Group' if self.is_scheduling_group() else 'Observation Group'
+        print(f'{sep(depth)} Group: {self.id} ({group_type}, num_children={len(self.children)})')
         if isinstance(self.children, Observation):
-            self.children.show(depth)
+            self.children.show(depth + 1)
         elif isinstance(self.children, list):
-            print(f'{sep(depth)} Group: {self.id}')
             for child in self.children:
                 child.show(depth + 1)
 
