@@ -75,8 +75,10 @@ def test_print_program():
         too_type=None,
     )
 
-    expected_output = ('Program: test_program\n'
-                       '----- Group: root (Scheduling Group, num_children=1)\n'
-                       '---------- Group: test_group (Observation Group, num_children=1)\n'
-                       '--------------- Observation: test_observation\n')
+    expected_output = (
+        'Program: test_program\n'
+        '----- Group: root, unique_id=test_program:root (Scheduling Group, num_children=1)\n'
+        '---------- Group: test_group, unique_id=test_program:test_group (Observation Group, num_children=1)\n'
+        '--------------- Observation: test_observation\n'
+    )
     assert_stdout(p, expected_output)
