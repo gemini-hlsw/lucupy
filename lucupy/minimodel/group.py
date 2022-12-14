@@ -184,7 +184,8 @@ class Group(ABC):
 
         # Is this a subgroup or an observation?
         group_type = 'Scheduling Group' if self.is_scheduling_group() else 'Observation Group'
-        print(f'{sep(depth)} Group: {self.id} ({group_type}, num_children={len(self.children)})')
+        print(f'{sep(depth)} Group: {self.id}, unique_id={self.unique_id()} '
+              f'({group_type}, num_children={len(self.children)})')
         if isinstance(self.children, Observation):
             self.children.show(depth + 1)
         elif isinstance(self.children, list):
