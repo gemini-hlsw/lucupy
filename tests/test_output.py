@@ -18,6 +18,7 @@ def test_print_program():
     """
     Test the print_program function.
     """
+    program_id = 'test_program'
 
     o = Observation(
         id='test_observation',
@@ -41,6 +42,7 @@ def test_print_program():
     # Create the trivial AND group containing the gnirs1 observation.
     g1 = AndGroup(
         id='test_group',
+        program_id=program_id,
         group_name='test',
         number_to_observe=1,
         delay_min=None,
@@ -50,6 +52,7 @@ def test_print_program():
     )
 
     g = AndGroup(id='root',
+                 program_id=program_id,
                  group_name='root',
                  number_to_observe=1,
                  delay_min=None,
@@ -58,7 +61,7 @@ def test_print_program():
                  group_option=None,
                  )
     p = Program(
-        id='test_program',
+        id=program_id,
         internal_id='c396b9c9-9bdd-4eec-be83-81162090d032',
         semester=None,
         band=None,
