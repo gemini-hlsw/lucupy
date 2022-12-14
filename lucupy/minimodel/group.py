@@ -10,12 +10,11 @@ from typing import FrozenSet, List, NoReturn, Optional, Union
 from lucupy.helpers import flatten
 
 from .constraints import Constraints
+from .ids import GroupID, ProgramID, UniqueGroupID
 from .observation import Observation
 from .resource import Resource
 from .site import Site
 from ..types import ZeroTime
-
-GroupID = str
 
 
 @dataclass
@@ -27,7 +26,8 @@ class Group(ABC):
 
 
     Attributes:
-        id (GroupID): the identification of the group.
+        id (GroupID): the identifier of the group.
+        program_id (ProgramID): the identifier of the program to which this group belongs.
         group_name (str): a human-readable name of the group.
         number_to_observe (int): the number of children in the group that must be observed for the group to be
                                  considered complete.
@@ -36,6 +36,7 @@ class Group(ABC):
         children (Union[List['Group'], Observation]): member(s) of the group
     """
     id: GroupID
+    program_id: ProgramID
     group_name: str
     number_to_observe: int
     delay_min: timedelta
@@ -46,6 +47,20 @@ class Group(ABC):
         if self.number_to_observe <= 0:
             msg = f'Group {self.group_name} specifies non-positive {self.number_to_observe} children to be observed.'
             raise ValueError(msg)
+
+    def unique_id(self) -> UniqueGroupID:
+        """Get a unique name for the group.
+        If this is an observation group, it is just the group_id.
+        If this is a scheduling group, since in OCS this is just an integer, we combine with the program_id to
+            make it unique.
+
+        Returns:
+            UniqueGroupID: A unique identifier for the group.
+        """
+        if self.id.startswith(self.program_id):
+            return self.id
+        else:
+            return f'{self.program_id}:{self.id}'
 
     def subgroup_ids(self) -> FrozenSet[GroupID]:
         """Get the ids for all the subgroups inside.

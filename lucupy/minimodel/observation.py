@@ -10,14 +10,13 @@ from lucupy.observatory.abstract import ObservatoryProperties
 
 from .atom import Atom
 from .constraints import Constraints
+from .ids import ObservationID
 from .qastate import QAState
 from .resource import Resource
 from .site import Site
 from .target import Target, TargetType
 from .too import TooType
 from ..types import ZeroTime
-
-ObservationID = str
 
 
 class ObservationStatus(IntEnum):

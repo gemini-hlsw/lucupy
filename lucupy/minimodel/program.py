@@ -6,14 +6,13 @@ from datetime import datetime, timedelta
 from enum import Enum, IntEnum, auto
 from typing import ClassVar, FrozenSet, List, Optional
 
-from .group import AndGroup, Group, GroupID
+from .group import AndGroup, Group
+from .ids import ProgramID, GroupID
 from .observation import Observation
 from .semester import Semester
 from .timeallocation import TimeAllocation
 from .too import TooType
 from ..types import ZeroTime
-
-ProgramID = str
 
 
 class Band(IntEnum):
