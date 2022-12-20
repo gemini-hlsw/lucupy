@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import Enum, auto
-from typing import FrozenSet, List, NoReturn, Optional, Union
+from typing import Final, FrozenSet, List, NoReturn, Optional, Union
 
 from lucupy.helpers import flatten
 
@@ -15,6 +15,9 @@ from .observation import Observation
 from .resource import Resource
 from .site import Site
 from ..types import ZeroTime
+
+
+ROOT_GROUP_ID: Final[str] = 'root'
 
 
 @dataclass

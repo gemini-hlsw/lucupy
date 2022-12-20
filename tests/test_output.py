@@ -5,7 +5,7 @@ import io
 import unittest.mock
 from datetime import datetime
 
-from lucupy.minimodel import AndGroup, Observation, Program
+from lucupy.minimodel import AndGroup, Observation, Program, ROOT_GROUP_ID
 
 
 @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
@@ -51,9 +51,9 @@ def test_print_program():
         group_option=None
     )
 
-    g = AndGroup(id='root',
+    g = AndGroup(id=ROOT_GROUP_ID,
                  program_id=program_id,
-                 group_name='root',
+                 group_name=ROOT_GROUP_ID,
                  number_to_observe=1,
                  delay_min=None,
                  delay_max=None,
@@ -77,7 +77,7 @@ def test_print_program():
 
     expected_output = (
         'Program: test_program\n'
-        '----- Group: root, unique_id=test_program:root (Scheduling Group, num_children=1)\n'
+        f'----- Group: {ROOT_GROUP_ID}, unique_id=test_program:{ROOT_GROUP_ID} (Scheduling Group, num_children=1)\n'
         '---------- Group: test_group, unique_id=test_program:test_group (Observation Group, num_children=1)\n'
         '--------------- Observation: test_observation\n'
     )
