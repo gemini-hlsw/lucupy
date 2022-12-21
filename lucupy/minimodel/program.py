@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from enum import Enum, IntEnum, auto
 from typing import ClassVar, FrozenSet, List, Optional
 
-from .group import AndGroup, Group
+from .group import AndGroup, Group, ROOT_GROUP_ID
 from .ids import ProgramID, GroupID
 from .observation import Observation
 from .semester import Semester
@@ -95,6 +95,11 @@ class Program:
     too_type: Optional[TooType] = None
 
     FUZZY_BOUNDARY: ClassVar[timedelta] = timedelta(days=14)
+
+    def __post_init__(self):
+        if self.root_group.id != ROOT_GROUP_ID:
+            raise ValueError(f"A Program's root group should be named {ROOT_GROUP_ID}, received: "
+                             f'"{self.root_group.id}".')
 
     def program_awarded(self) -> timedelta:
         return sum((t.program_awarded for t in self.allocated_time), ZeroTime)
