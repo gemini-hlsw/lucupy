@@ -1,12 +1,17 @@
 # Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
+from copy import deepcopy
 from datetime import datetime, timedelta
 
-from lucupy.minimodel import (AndGroup, AndOption, Band, CloudCover, Conditions, Constraints, ElevationType, ImageQuality, Magnitude, MagnitudeBands, Observation, ObservationClass, ObservationStatus, Priority, Program, ProgramMode, ProgramTypes, ROOT_GROUP_ID, SetupTimeType, Semester, SemesterHalf, SiderealTarget, Site, SkyBackground, TargetType, TimeAccountingCode, TimeAllocation, TimingWindow, WaterVapor)
+from lucupy.minimodel import (AndGroup, AndOption, Band, CloudCover, Conditions, Constraints, ElevationType,
+                              ImageQuality, Magnitude, MagnitudeBands, Observation, ObservationClass,
+                              ObservationStatus, Priority, Program, ProgramMode, ProgramTypes, ROOT_GROUP_ID,
+                              SetupTimeType, Semester, SemesterHalf, SiderealTarget, Site, SkyBackground, TargetType,
+                              TimeAccountingCode, TimeAllocation, TimingWindow, WaterVapor)
 
 
-def test_deepcopy():
+def test_immutable_deepcopy():
     m1 = Magnitude(band=MagnitudeBands.R,
                    value=1.)
     m2 = Magnitude(band=MagnitudeBands.B,
@@ -91,3 +96,32 @@ def test_deepcopy():
                 end=datetime.now(),
                 allocated_time=frozenset({ta}),
                 root_group=root)
+
+    p2 = deepcopy(p)
+
+    # Program should not be the same.
+    assert p is not p2
+
+    # Semester should be the same.
+    assert p.semester is p2.semester
+
+    # Time Allocation should not be the same.
+    assert p.allocated_time is not p2.allocated_time
+
+    # Root group should not be the same.
+    root2 = p2.root_group
+    assert root is not root2
+
+    # Child group should not be the same.
+    gp2 = root2.children[0]
+    assert gp is not gp2
+
+    # Observation should not be the same.
+    o2 = gp2.children
+    assert o is not o2
+
+    # Constraints should be the same. This will implicitly test timing windows as well.
+    assert o.constraints is o2.constraints
+
+    # Targets should be the same. This will implicitly test magnitudes as well.
+    assert o.targets[0] is o2.targets[0]
