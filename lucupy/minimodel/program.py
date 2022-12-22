@@ -74,7 +74,7 @@ class ProgramTypes(Enum):
     SV = ProgramType('SV', 'System Verification')
 
 
-@dataclass(unsafe_hash=True)
+@dataclass
 class Program:
     """
     Representation of a program.
