@@ -5,7 +5,10 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import ClassVar, Optional
 
+from ..decorators import immutable
 
+
+@immutable
 @dataclass(frozen=True)
 class TimingWindow:
     """Representation of timing windows in the mini-model.

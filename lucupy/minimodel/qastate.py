@@ -26,5 +26,4 @@ class QAState(IntEnum):
     FAIL = auto()
     USABLE = auto()
     PASS = auto()
-    # TODO: Not in original mini-model description, but returned by OCS.
     CHECK = auto()

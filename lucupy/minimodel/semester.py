@@ -6,6 +6,10 @@ from datetime import date
 from enum import Enum
 from typing import Dict, List
 
+from gelidum import freeze
+
+from ..decorators import immutable
+
 
 class SemesterHalf(str, Enum):
     """Gemini typically schedules programs for two semesters per year, namely A and B.
@@ -18,10 +22,10 @@ class SemesterHalf(str, Enum):
     A = 'A'
     B = 'B'
 
-    def start_day(self) -> int:
+    def start_day(self) -> int: # noqa
         return 1
 
-    def end_day(self) -> int:
+    def end_day(self) -> int: # noqa
         return 31
 
     def start_month(self) -> int:
@@ -31,7 +35,7 @@ class SemesterHalf(str, Enum):
         return _semester_half_months[self][-1]
 
     @staticmethod
-    def determine_half(month: int):
+    def determine_half(month: int) -> 'SemesterHalf':
         """
         Given a month, return the SemesterHalf this falls in.
 
@@ -49,13 +53,14 @@ class SemesterHalf(str, Enum):
         raise ValueError(f'Month {month} cannot be found in any SemesterHalf.')
 
 
-# This map actually works. It maps the SemesterHalfs to the months they contain.
-_semester_half_months: Dict[SemesterHalf, List[int]] = {
+# Make a FrozenDict with values FrozenList, so the lists cannot be changed, nor can the dict.
+_semester_half_months: Dict[SemesterHalf, List[int]] = freeze({
     SemesterHalf.A: [2, 3, 4, 5, 6, 7],
     SemesterHalf.B: [8, 9, 10, 11, 12, 1]
-}
+})
 
 
+@immutable
 @dataclass(frozen=True, order=True)
 class Semester:
     """ A semester is a period for which programs may be submitted to Gemini.
@@ -87,7 +92,7 @@ class Semester:
         return date(year=end_year, month=self.half.end_month(), day=self.half.end_day())
 
     @staticmethod
-    def find_semester_from_date(lookup_date: date):
+    def find_semester_from_date(lookup_date: date) -> 'Semester':
         """
         Given a date, return the Semester in which it occurs.
 

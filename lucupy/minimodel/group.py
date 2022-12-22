@@ -20,7 +20,7 @@ from ..types import ZeroTime
 ROOT_GROUP_ID: Final[str] = 'root'
 
 
-@dataclass
+@dataclass(slots=False)
 class Group(ABC):
     """This is the base implementation of AND / OR Groups.
     Python does not allow classes to self-reference unless in static contexts,
@@ -44,6 +44,8 @@ class Group(ABC):
     number_to_observe: int
     delay_min: timedelta
     delay_max: timedelta
+
+    # Cannot be frozen with gelidum.
     children: Union[List['Group'], Observation]
 
     def __post_init__(self):

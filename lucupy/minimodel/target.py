@@ -2,13 +2,14 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from abc import ABC
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum, IntEnum, auto
 from typing import FrozenSet
 
 import numpy.typing as npt
 
 from .magnitude import Magnitude
+from ..decorators import immutable
 
 TargetName = str
 
@@ -58,7 +59,8 @@ class TargetTag(Enum):
     MAJOR_BODY = auto()
 
 
-@dataclass
+@immutable
+@dataclass(frozen=True)
 class Target(ABC):
     """
     Basic target information.
@@ -79,7 +81,8 @@ class Target(ABC):
         ...
 
 
-@dataclass
+@immutable
+@dataclass(frozen=True)
 class SiderealTarget(Target):
     """
     For a SiderealTarget, we have an RA and Dec and then proper motion information
@@ -106,7 +109,8 @@ class SiderealTarget(Target):
     epoch: float
 
 
-@dataclass
+@immutable
+@dataclass(frozen=True)
 class NonsiderealTarget(Target):
     """
     For a NonsiderealTarget, we have a HORIZONS designation to indicate the lookup
