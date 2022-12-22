@@ -20,7 +20,7 @@ from ..types import ZeroTime
 ROOT_GROUP_ID: Final[str] = 'root'
 
 
-@dataclass(slots=False)
+@dataclass
 class Group(ABC):
     """This is the base implementation of AND / OR Groups.
     Python does not allow classes to self-reference unless in static contexts,
