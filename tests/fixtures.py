@@ -29,7 +29,7 @@ def observation():
         targets=[],
         guiding={},
         sequence=[],
-        constraints=None,
+        constraints=None
     )
 
 

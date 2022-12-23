@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Optional
 
+from ..decorators import immutable
+
 
 class MagnitudeSystem(Enum):
     """
@@ -20,6 +22,7 @@ class MagnitudeSystem(Enum):
     JY = auto()
 
 
+@immutable
 @dataclass(frozen=True)
 class MagnitudeBand:
     """They are fully enumerated in MagnitudeBands, so they should be looked up by name there.
@@ -73,6 +76,7 @@ class MagnitudeBands(Enum):
     AP = MagnitudeBand('AP', 0.550, 0.085, description='apparent')
 
 
+@immutable
 @dataclass(frozen=True)
 class Magnitude:
     """A magnitude value in a particular band.

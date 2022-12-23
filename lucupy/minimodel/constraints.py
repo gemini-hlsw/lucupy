@@ -1,7 +1,7 @@
 # Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum, IntEnum, auto
 from typing import ClassVar, List, Optional, Sequence, Union
@@ -15,6 +15,7 @@ from lucupy.helpers import flatten
 from lucupy.types import ScalarOrNDArray
 
 from .timingwindow import TimingWindow
+from ..decorators import immutable
 
 
 class SkyBackground(float, Enum):
@@ -122,7 +123,8 @@ class ElevationType(IntEnum):
     AIRMASS = auto()
 
 
-@dataclass(order=True, frozen=True)
+@immutable
+@dataclass(frozen=True)
 class Conditions:
     """
     A set of conditions.
@@ -192,7 +194,8 @@ class Conditions:
         return len(self.cc) if isinstance(self.cc, np.ndarray) else 1
 
 
-@dataclass
+@immutable
+@dataclass(frozen=True)
 class Constraints:
     """The constraints required for an observation to be performed.
 
@@ -224,11 +227,12 @@ class Constraints:
     # Default airmass values to use for elevation constraints if:
     # 1. The Constraints are not present in the Observation at all; or
     # 2. The elevation_type is set to NONE.
-    DEFAULT_AIRMASS_ELEVATION_MIN: ClassVar[float] = 1.0
-    DEFAULT_AIRMASS_ELEVATION_MAX: ClassVar[float] = 2.3
+    DEFAULT_AIRMASS_ELEVATION_MIN: ClassVar[float] = field(init=False, default=1.0, repr=False, compare=False)
+    DEFAULT_AIRMASS_ELEVATION_MAX: ClassVar[float] = field(init=False, default=2.3, repr=False, compare=False)
 
 
-@dataclass(order=True, eq=True, frozen=True)
+@immutable
+@dataclass(frozen=True)
 class Variant:
     """A weather variant.
     wind_speed should be in m / s.

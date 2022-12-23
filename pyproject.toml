@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lucupy"
-version = "0.1.19"
+version = "0.1.20"
 description = "Lucuma core package for the Gemini Automated Scheduler at: https://github.com/gemini-hlsw/scheduler"
 authors = ["Sergio Troncoso <sergio.troncoso@noirlab.edu>",
            "Sebastian Raaphorst <sebastian.raaphorst@noirlab.edu>",
@@ -37,7 +37,8 @@ mkdocstrings = {extras = ["python"], version = "^0.19.0"}
 [tool.poetry.dependencies]
 python = "^3.10"
 astropy = "^5.1"
-pytz = "^2022.2"
+pytz = "^2022.7"
+gelidum = "^0.5.8"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.2"

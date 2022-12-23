@@ -44,6 +44,8 @@ class Group(ABC):
     number_to_observe: int
     delay_min: timedelta
     delay_max: timedelta
+
+    # Cannot be frozen with gelidum.
     children: Union[List['Group'], Observation]
 
     def __post_init__(self):

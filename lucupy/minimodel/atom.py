@@ -1,7 +1,7 @@
 # Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import FrozenSet
 
@@ -30,9 +30,9 @@ class Atom:
 
     """
     id: int
-    exec_time: timedelta
-    prog_time: timedelta
-    part_time: timedelta
+    exec_time: timedelta = field(hash=False, compare=False)
+    prog_time: timedelta = field(hash=False, compare=False)
+    part_time: timedelta = field(hash=False, compare=False)
     observed: bool
     qa_state: QAState
     guide_state: bool

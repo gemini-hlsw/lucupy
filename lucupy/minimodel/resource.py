@@ -4,7 +4,10 @@
 from dataclasses import dataclass
 from typing import Optional
 
+from ..decorators import immutable
 
+
+@immutable
 @dataclass(frozen=True)
 class Resource:
     """This is a general observatory resource.

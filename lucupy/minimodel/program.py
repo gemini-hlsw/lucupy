@@ -1,7 +1,7 @@
 # Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum, IntEnum, auto
 from typing import ClassVar, FrozenSet, List, Optional
@@ -12,6 +12,7 @@ from .observation import Observation
 from .semester import Semester
 from .timeallocation import TimeAllocation
 from .too import TooType
+from ..decorators import immutable
 from ..types import ZeroTime
 
 
@@ -37,6 +38,7 @@ class ProgramMode(IntEnum):
     PV = auto()
 
 
+@immutable
 @dataclass(frozen=True)
 class ProgramType:
     """
@@ -72,7 +74,7 @@ class ProgramTypes(Enum):
     SV = ProgramType('SV', 'System Verification')
 
 
-@dataclass(unsafe_hash=True)
+@dataclass
 class Program:
     """
     Representation of a program.
@@ -90,8 +92,11 @@ class Program:
     type: Optional[ProgramTypes]
     start: datetime
     end: datetime
-    allocated_time: FrozenSet[TimeAllocation]
+    allocated_time: FrozenSet[TimeAllocation] = field(hash=False, compare=False)
+
+    # Root group is immutable and should not be used in hashing or comparisons.
     root_group: AndGroup
+
     too_type: Optional[TooType] = None
 
     FUZZY_BOUNDARY: ClassVar[timedelta] = timedelta(days=14)
