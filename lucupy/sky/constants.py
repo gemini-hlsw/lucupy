@@ -32,6 +32,8 @@ SPEED_OF_LIGHT: Final[float] = 299792.458  # in km per sec ... exact.
 SS_MASS: Final[float] = 1.00134198  # solar system mass in solar units
 J2000: Final[float] = 2451545.  # Julian date at standard epoch
 J2000_Time: Final[Time] = Time(2451545., format='jd')  # J2000 rendered as a Time
+JYEAR: Final[float] = 365.25 # noqa
+JYEAR_100: Final[float] = JYEAR * 100 # noqa
 SEC_IN_DAY: Final[float] = 86400.
 FLATTEN: Final[float] = 0.003352813  # flattening of earth, 1/298.257
 EQUAT_RAD: Final[Distance] = 6378137. * u.m  # equatorial radius of earth, meters

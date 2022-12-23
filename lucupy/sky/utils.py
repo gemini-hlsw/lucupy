@@ -20,7 +20,7 @@ from astropy.units import Quantity
 from pytz import timezone
 
 from .altitude import AngleParam
-from .constants import EQUAT_RAD, FLATTEN, J2000
+from .constants import EQUAT_RAD, FLATTEN, JYEAR, JYEAR_100, J2000
 
 
 def current_geocent_frame(time: Time) -> BaseRADecFrame:
@@ -33,7 +33,7 @@ def current_geocent_frame(time: Time) -> BaseRADecFrame:
         an astropy PrecessedGeocentric time.
     """
     # Generate a PrecessedGeocentric frame for the current equinox.
-    time_ep = 2000. + (np.asarray(time.jd) - J2000) / 365.25
+    time_ep = 2000. + (np.asarray(time.jd) - J2000) / JYEAR
     if time_ep.ndim == 0:
         time_ep = time_ep[None]  # Makes 1D
     equinox = Time(f'J{time_ep[0]:7.2f}')
@@ -196,7 +196,7 @@ def local_sidereal_time(time: Time, location: EarthLocation) -> Angle:
         mid[less_than_half] = julian_int[less_than_half] - 0.5
         ut[less_than_half] = fraction[less_than_half] + 0.5  # as fraction of a day.
 
-    t = (mid - J2000) / 36525.
+    t = (mid - J2000) / JYEAR_100
 
     sidereal = (24110.54841 + 8640184.812866 * t + 0.093104 * t ** 2 - 6.2e-6 * t ** 3) / 86400.
     # at Greenwich

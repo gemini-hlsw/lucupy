@@ -16,7 +16,7 @@ from astropy.coordinates import (Angle, Distance, EarthLocation,
 from astropy.time import Time, TimeDelta
 
 from .altitude import Altitude
-from .constants import EQUAT_RAD, J2000
+from .constants import EQUAT_RAD, JYEAR, JYEAR_100, J2000
 from .utils import (current_geocent_frame, geocentric_coors,
                     hour_angle_to_angle, local_sidereal_time)
 
@@ -74,7 +74,7 @@ class Moon:
     def _low_precision_calculations(self) -> NoReturn:
         """Compute low precision values for the moon location method calculations.
         """
-        t = (self.time_jd - J2000) / 36525.  # jul cent. since J2000.0
+        t = (self.time_jd - J2000) / JYEAR_100  # jul cent. since J2000.0
 
         lambd = (218.32 + 481267.883 * t
                  + 6.29 * np.sin(np.deg2rad(134.9 + 477198.85 * t))
@@ -100,7 +100,7 @@ class Moon:
     def _high_precision_calculations(self) -> NoReturn:
         """Compute accurate precession values for the moon location method calculations.
         """
-        t = (self.time_ttjd - 2415020.) / 36525.  # this based around 1900 ... */
+        t = (self.time_ttjd - 2415020.) / JYEAR_100  # this based around 1900 ... */
         t_2 = t * t
         t_3 = t_2 * t
         lpr = 270.434164 + 481267.8831 * t - 0.001133 * t_2 + 0.0000019 * t_3
@@ -343,8 +343,8 @@ class Moon:
         # place these in a skycoord in ecliptic coords of date.  Handle distance
         # separately since it does not transform properly for some reason.
 
-        # eq = 'J{:7.2f}'.format(2000. + (time_ttjd[0] - _Constants.J2000) / 365.25)
-        equinox = f'J{2000. + (self.time_ttjd[0] - J2000) / 365.25:7.2f}'
+        # eq = 'J{:7.2f}'.format(2000. + (time_ttjd[0] - _Constants.J2000) / JYEAR)
+        equinox = f'J{2000. + (self.time_ttjd[0] - J2000) / JYEAR:7.2f}'
         frame = GeocentricTrueEcliptic(equinox=equinox)
         inecl = SkyCoord(lon=Angle(self.lambd, unit=u.rad), lat=Angle(self.beta, unit=u.rad), frame=frame)
 
