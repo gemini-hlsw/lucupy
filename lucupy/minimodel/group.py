@@ -94,21 +94,30 @@ class Group(ABC):
         Returns:
             FrozenSet[Resource]: A set of Resources.
         """
-        return frozenset(r for c in self.children for r in c.required_resources())
+        if isinstance(self.children, Observation):
+            return self.children.required_resources()
+        else:
+            return frozenset(r for c in self.children for r in c.required_resources())
 
     def wavelengths(self) -> FrozenSet[float]:
         """
         Returns:
             FrozenSet[float]: A set of wavelengths.
         """
-        return frozenset(w for c in self.children for w in c.wavelengths())
+        if isinstance(self.children, Observation):
+            return self.children.wavelengths()
+        else:
+            return frozenset(w for c in self.children for w in c.wavelengths())
 
     def constraints(self) -> FrozenSet[Constraints]:
         """
         Returns:
             FrozenSet[Constraints]: All set of Constraints in the group.
         """
-        return frozenset(cs for c in self.children for cs in c.constraints())
+        if isinstance(self.children, Observation):
+            return frozenset([self.children.constraints])
+        else:
+            return frozenset(cs for c in self.children for cs in c.constraints())
 
     def observations(self) -> List[Observation]:
         """
@@ -140,7 +149,7 @@ class Group(ABC):
         Returns:
             exec_time (timedelta): Sum of all the execution times.
         """
-        if issubclass(type(self.children), Observation):
+        if isinstance(self.children, Observation):
             return self.children.exec_time()
         else:
             return sum((child.exec_time() for child in self.children), ZeroTime)
@@ -151,7 +160,7 @@ class Group(ABC):
         Returns:
             program_used (timedelta): Sum of all program_used times across children of this group.
         """
-        if issubclass(type(self.children), Observation):
+        if isinstance(self.children, Observation):
             return self.children.program_used()
         else:
             return sum((child.program_used() for child in self.children), ZeroTime)
@@ -162,7 +171,7 @@ class Group(ABC):
         Returns:
             partner_time (timedelta): Sum of all `partner_used` across the children of this group.
         """
-        if issubclass(type(self.children), Observation):
+        if isinstance(self.children, Observation):
             return self.children.partner_used()
         else:
             return sum((child.partner_used() for child in self.children), ZeroTime)
@@ -173,7 +182,7 @@ class Group(ABC):
         Returns:
             total_used (timedelta): Sum of total_used times across all children.
         """
-        if issubclass(type(self.children), Observation):
+        if isinstance(self.children, Observation):
             return self.children.total_used()
         else:
             return sum((child.total_used() for child in self.children), ZeroTime)
@@ -193,7 +202,7 @@ class Group(ABC):
               f'({group_type}, num_children={len(self.children)})')
         if isinstance(self.children, Observation):
             self.children.show(depth + 1)
-        elif isinstance(self.children, list):
+        else:
             for child in self.children:
                 child.show(depth + 1)
 
