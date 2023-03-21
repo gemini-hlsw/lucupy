@@ -5,7 +5,7 @@ import io
 import unittest.mock
 from datetime import datetime
 
-from lucupy.minimodel import AndGroup, Observation, Program, ROOT_GROUP_ID
+from lucupy.minimodel import ROOT_GROUP_ID, AndGroup, Observation, Program
 
 
 @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
@@ -36,6 +36,7 @@ def test_print_program():
         guiding=None,
         sequence=[],
         constraints=None,
+        belongs_to=program_id,
         too_type=None
     )
 

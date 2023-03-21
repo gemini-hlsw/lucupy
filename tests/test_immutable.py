@@ -4,11 +4,16 @@
 from copy import deepcopy
 from datetime import datetime, timedelta
 
-from lucupy.minimodel import (AndGroup, AndOption, Band, CloudCover, Conditions, Constraints, ElevationType,
-                              ImageQuality, Magnitude, MagnitudeBands, Observation, ObservationClass,
-                              ObservationStatus, Priority, Program, ProgramMode, ProgramTypes, ROOT_GROUP_ID,
-                              SetupTimeType, Semester, SemesterHalf, SiderealTarget, Site, SkyBackground, TargetType,
-                              TimeAccountingCode, TimeAllocation, TimingWindow, WaterVapor)
+from lucupy.minimodel import (ROOT_GROUP_ID, AndGroup, AndOption, Band,
+                              CloudCover, Conditions, Constraints,
+                              ElevationType, ImageQuality, Magnitude,
+                              MagnitudeBands, Observation, ObservationClass,
+                              ObservationStatus, Priority, Program,
+                              ProgramMode, ProgramTypes, Semester,
+                              SemesterHalf, SetupTimeType, SiderealTarget,
+                              Site, SkyBackground, TargetType,
+                              TimeAccountingCode, TimeAllocation, TimingWindow,
+                              WaterVapor)
 
 
 def test_immutable_deepcopy():
@@ -56,7 +61,8 @@ def test_immutable_deepcopy():
                     targets=[t],
                     guiding={},
                     sequence=[],
-                    constraints=c)
+                    constraints=c,
+                    belongs_to='p1')
 
     gp = AndGroup(id='g1',
                   program_id='p1',
