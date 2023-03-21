@@ -8,7 +8,8 @@ import pytest
 from astropy.coordinates import EarthLocation, SkyCoord
 from astropy.time import Time
 
-from lucupy.minimodel import (AndGroup, AndOption, Observation, ObservationClass, ObservationStatus, Priority,
+from lucupy.minimodel import (AndGroup, AndOption, Observation,
+                              ObservationClass, ObservationStatus, Priority,
                               SetupTimeType, Site)
 
 
@@ -29,7 +30,8 @@ def observation():
         targets=[],
         guiding={},
         sequence=[],
-        constraints=None
+        constraints=None,
+        belongs_to='GN-2018B-Q-101'
     )
 
 

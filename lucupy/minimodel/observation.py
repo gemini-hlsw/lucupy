@@ -8,15 +8,15 @@ from typing import FrozenSet, List, Mapping, NoReturn, Optional
 
 from lucupy.observatory.abstract import ObservatoryProperties
 
+from ..types import ZeroTime
 from .atom import Atom
 from .constraints import Constraints
-from .ids import ObservationID
+from .ids import ObservationID, ProgramID
 from .qastate import QAState
 from .resource import Resource
 from .site import Site
 from .target import Target, TargetType
 from .too import TooType
-from ..types import ZeroTime
 
 
 class ObservationStatus(IntEnum):
@@ -121,6 +121,7 @@ class Observation:
             with the base being in the first position
         guiding (Mapping[Resource, Target]): is a map between guide probe resources and their targets.
         sequence (List[Atom]): Sequence of Atoms that describe the observation.
+        belongs_to (ProgramID): Id for the program the observation belongs to.
         constraints (Constraints, optional): Some observations do not have constraints, e.g. GN-208A-FT-103-6.
         too_type (TooType, optional): Default to None.
 
@@ -149,6 +150,7 @@ class Observation:
     targets: List[Target]
     guiding: Mapping[Resource, Target]
     sequence: List[Atom]
+    belongs_to: ProgramID
 
     # Some observations do not have constraints, e.g. GN-208A-FT-103-6.
     constraints: Optional[Constraints]
