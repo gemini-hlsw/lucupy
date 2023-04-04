@@ -112,7 +112,7 @@ class Group(ABC):
     def constraints(self) -> FrozenSet[Constraints]:
         """
         Returns:
-            FrozenSet[Constraints]: All set of Constraints in the group.
+            FrozenSet[Constraints]: All set of Constraints of children in the group.
         """
         if isinstance(self.children, Observation):
             return frozenset([self.children.constraints])
