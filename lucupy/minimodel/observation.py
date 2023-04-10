@@ -157,6 +157,13 @@ class Observation:
 
     too_type: Optional[TooType] = None
 
+    def unique_id(self):
+        """
+        Unique ID for the Observation to make it treatable as a Group.
+        It is simply the same as the ObservationID.
+        """
+        return self.id
+
     def base_target(self) -> Optional[Target]:
         """
         Returns:

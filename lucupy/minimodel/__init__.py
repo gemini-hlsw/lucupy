@@ -20,5 +20,8 @@ from .timeallocation import *
 from .timingwindow import *
 from .too import *
 
-# Type alias for night indices.
+# Type alias for a night index.
 NightIndex = int
+
+# Type alias for multiple night indices.
+NightIndices = npt.NDArray[NightIndex]
