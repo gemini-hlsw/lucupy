@@ -202,14 +202,6 @@ class Observation:
         """
         return frozenset((w for c in self.sequence for w in c.wavelengths))
 
-    def constraints(self) -> FrozenSet[Constraints]:
-        """
-        Returns:
-            A set of the constraints required by the observation.
-            In the case of an observation, this is just the (optional) constraints.
-        """
-        return frozenset([self.constraints] if self.constraints is not None else [])
-
     def program_used(self) -> timedelta:
         """We roll this information up from the atoms as it will be calculated
             during the Optimizer algorithm. Note that it is also available directly
