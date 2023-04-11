@@ -3,12 +3,11 @@
 
 from abc import ABC
 from datetime import timedelta
-from functools import wraps
 from typing import FrozenSet, Optional, Union
 
 from astropy.time import Time  # type: ignore
 
-from lucupy.minimodel import ObservationMode, Resource
+from lucupy.minimodel import Resource
 
 
 class ObservatoryProperties(ABC):
@@ -86,7 +85,7 @@ class ObservatoryProperties(ABC):
             raise ValueError('Properties have not been set.')
 
     @staticmethod
-    def acquisition_time(resource: Resource, observation_mode: ObservationMode) -> Optional[timedelta]:
+    def acquisition_time(resource: Resource, observation_mode) -> Optional[timedelta]:
         """Given a resource, check if it is an instrument, and if so, lookup the
            acquisition time for the specified mode.
 

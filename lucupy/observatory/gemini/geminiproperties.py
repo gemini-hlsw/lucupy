@@ -1,9 +1,8 @@
 # Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from datetime import timedelta
 from enum import Enum, EnumMeta
-from typing import FrozenSet, Optional
+from typing import FrozenSet
 
 import astropy.units as u
 from astropy.time import Time  # type: ignore

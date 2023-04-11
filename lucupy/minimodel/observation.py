@@ -4,7 +4,7 @@
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import IntEnum, auto
-from typing import FrozenSet, List, Mapping, Optional, Union
+from typing import FrozenSet, List, Mapping, Optional
 
 from lucupy.observatory.abstract import ObservatoryProperties
 

@@ -19,6 +19,10 @@ repos:
         hooks:
         -   id: mypy
             additional_dependencies: ["types-pytz"]
+    -   repo: https://github.com/PyCQA/autoflake
+        rev: v2.0.2
+        hooks:
+            -   id: autoflake
 # This hook is still too restrictive. We should if we want to add it or not.
 #    -   repo: https://github.com/pycqa/pydocstyle
 #        rev: 4.0.0  # pick a git hash / tag to point to

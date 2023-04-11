@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import Enum, auto
-from typing import Final, FrozenSet, List, NoReturn, Optional, Union
+from typing import Final, FrozenSet, List, Optional, Union
 
 from lucupy.helpers import flatten
 
