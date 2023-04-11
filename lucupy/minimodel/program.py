@@ -6,14 +6,14 @@ from datetime import datetime, timedelta
 from enum import Enum, IntEnum, auto
 from typing import ClassVar, FrozenSet, List, Optional
 
-from .group import AndGroup, Group, ROOT_GROUP_ID
-from .ids import ProgramID, GroupID
+from ..decorators import immutable
+from ..types import ZeroTime
+from .group import ROOT_GROUP_ID, AndGroup, Group
+from .ids import GroupID, ProgramID
 from .observation import Observation
 from .semester import Semester
 from .timeallocation import TimeAllocation
 from .too import TooType
-from ..decorators import immutable
-from ..types import ZeroTime
 
 
 class Band(IntEnum):
@@ -143,7 +143,7 @@ class Program:
         def aux(group: Group) -> Optional[Group]:
             if group.id == group_id:
                 return group
-            elif group.is_scheduling_group():
+            elif not isinstance(group.children, Observation):
                 for subgroup in group.children:
                     retval = aux(subgroup)
                     if retval is not None:

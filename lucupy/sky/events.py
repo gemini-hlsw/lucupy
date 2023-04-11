@@ -11,9 +11,9 @@ from typing import Tuple
 
 import astropy.units as u
 import numpy as np
-from astropy.coordinates import Angle, EarthLocation
-from astropy.time import Time
-from pytz import timezone
+from astropy.coordinates import Angle, EarthLocation  # type: ignore
+from astropy.time import Time  # type: ignore
+from pytz import BaseTzInfo, timezone
 
 from lucupy.types import TimeScalarOrNDArray
 
@@ -23,7 +23,7 @@ from .sun import Sun
 from .utils import local_midnight_time
 
 
-def night_events(time: Time, location: EarthLocation, localtzone: timezone) -> Tuple[Time,
+def night_events(time: Time, location: EarthLocation, localtzone: BaseTzInfo) -> Tuple[Time,
                                                                                      TimeScalarOrNDArray,
                                                                                      TimeScalarOrNDArray,
                                                                                      TimeScalarOrNDArray,

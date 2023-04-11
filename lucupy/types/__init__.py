@@ -6,7 +6,7 @@ from datetime import timedelta
 from typing import Final, List, TypeVar, Union
 
 import numpy.typing as npt
-from astropy.time import Time
+from astropy.time import Time  # type: ignore
 
 T = TypeVar('T')
 

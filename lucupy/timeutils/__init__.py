@@ -60,14 +60,14 @@ def dtsex2dec(dt: datetime,
     return sign * f * (abs(dt.hour) + dt.minute / 60. + dt.second / 3600.)
 
 
-def sixty(dd: float) -> Tuple[int, int, int]:
+def sixty(dd: float) -> Tuple[float, float, float]:
     """Sixty
 
     Args:
         dd (float): Days
 
     Returns:
-        Tuple[int, int, int]: Degrees, minutes and seconds
+        Tuple[float, float, float]: Degrees, minutes and seconds
     """
     is_positive = dd >= 0
     l_dd = abs(dd)

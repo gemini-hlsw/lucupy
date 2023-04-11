@@ -17,10 +17,10 @@ from astropy.coordinates import (Angle, BaseRADecFrame, EarthLocation,
                                  PrecessedGeocentric)
 from astropy.time import Time
 from astropy.units import Quantity
-from pytz import timezone
+from pytz import BaseTzInfo, timezone
 
 from .altitude import AngleParam
-from .constants import EQUAT_RAD, FLATTEN, JYEAR, JYEAR_100, J2000
+from .constants import EQUAT_RAD, FLATTEN, J2000, JYEAR, JYEAR_100
 
 
 def current_geocent_frame(time: Time) -> BaseRADecFrame:
@@ -99,7 +99,7 @@ def min_max_alt(lat: Angle, dec: AngleParam) -> Tuple[Angle, Angle]:
     # where min and max are the minimum and maximum altitude
     # an object at declination dec reaches at this latitude.
 
-    dec = np.asarray(dec.to_value(u.rad).data)
+    dec = np.asarray(dec.to_value(u.rad).data)  # type: ignore
     scalar_input = False
     if dec.ndim == 0:
         dec = dec[None]
@@ -124,7 +124,7 @@ def min_max_alt(lat: Angle, dec: AngleParam) -> Tuple[Angle, Angle]:
     return Angle(minalt, unit=u.rad), Angle(maxalt, unit=u.rad)
 
 
-def local_midnight_time(time: Time, localtzone: timezone) -> Time:
+def local_midnight_time(time: Time, localtzone: BaseTzInfo) -> Time:
     """Find nearest local midnight (UT).
 
     If it's before noon local time, returns previous midnight;
@@ -292,8 +292,8 @@ def hour_angle_to_angle(dec: AngleParam,
     # returns hour angle at which object at dec is at altitude alt for a
     # latitude lat.
 
-    dec = np.asarray(dec.to_value(u.rad).data) * u.rad
-    alt = np.asarray(alt.to_value(u.rad)) * u.rad
+    dec = np.asarray(dec.to_value(u.rad).data) * u.rad  # type: ignore
+    alt = np.asarray(alt.to_value(u.rad)) * u.rad  # type: ignore
 
     scalar_input = False
     if dec.ndim == 0 and alt.ndim == 0:

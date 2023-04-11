@@ -9,13 +9,12 @@ from typing import Final, FrozenSet, List, NoReturn, Optional, Union
 
 from lucupy.helpers import flatten
 
+from ..types import ZeroTime
 from .constraints import Constraints
 from .ids import GroupID, ProgramID, UniqueGroupID
 from .observation import Observation
 from .resource import Resource
 from .site import Site
-from ..types import ZeroTime
-
 
 ROOT_GROUP_ID: Final[str] = 'root'
 
@@ -152,7 +151,7 @@ class Group(ABC):
         if isinstance(self.children, Observation):
             return self.children.exec_time()
         else:
-            return sum((child.exec_time() for child in self.children), ZeroTime)
+            return sum((child.exec_time() for child in self.children), timedelta())
 
     def program_used(self) -> timedelta:
         """Program time used across the group.
@@ -163,7 +162,7 @@ class Group(ABC):
         if isinstance(self.children, Observation):
             return self.children.program_used()
         else:
-            return sum((child.program_used() for child in self.children), ZeroTime)
+            return sum((child.program_used() for child in self.children), timedelta())
 
     def partner_used(self) -> timedelta:
         """Partner time used across the group.
@@ -174,7 +173,7 @@ class Group(ABC):
         if isinstance(self.children, Observation):
             return self.children.partner_used()
         else:
-            return sum((child.partner_used() for child in self.children), ZeroTime)
+            return sum((child.partner_used() for child in self.children), timedelta())
 
     def total_used(self) -> timedelta:
         """Total time used across the group: includes program time and partner time.
@@ -185,9 +184,9 @@ class Group(ABC):
         if isinstance(self.children, Observation):
             return self.children.total_used()
         else:
-            return sum((child.total_used() for child in self.children), ZeroTime)
+            return sum((child.total_used() for child in self.children), timedelta())
 
-    def show(self, depth: int = 1) -> NoReturn:
+    def show(self, depth: int = 1) -> None:
         """Print content of the Group.
 
         Args:
@@ -274,14 +273,14 @@ class AndGroup(Group):
         Returns:
             instruments (FrozenSet[Resource]): A set of all instruments used in this group.
         """
-        if issubclass(type(self.children), Observation):
+        if isinstance(self.children, Observation):
             instrument = self.children.instrument()
             if instrument is not None:
                 return frozenset({instrument})
             else:
                 return frozenset()
         else:
-            return frozenset(flatten([child.instruments() for child in self.children]))
+            return frozenset(flatten([child.instruments() for child in self.children]))  # type: ignore
 
 
 @dataclass

@@ -12,7 +12,7 @@ from typing import Tuple, TypeVar, Union
 import astropy.units as u
 import numpy as np
 import numpy.typing as npt
-from astropy.coordinates import Angle, Longitude
+from astropy.coordinates import Angle, Longitude  # type: ignore
 
 T = TypeVar('T')
 U = TypeVar('U')
@@ -58,8 +58,8 @@ class Altitude:
 
         """
 
-        dec = np.asarray(dec.to_value(u.rad).data) * u.rad
-        ha = np.asarray(ha.to_value(u.rad)) * u.rad
+        dec = np.asarray(dec.to_value(u.rad).data) * u.rad  # type: ignore
+        ha = np.asarray(ha.to_value(u.rad)) * u.rad  # type: ignore
         scalar_input = False
         if dec.ndim == 0 and ha.ndim == 0:
             scalar_input = True

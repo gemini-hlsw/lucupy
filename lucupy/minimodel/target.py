@@ -2,14 +2,14 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from abc import ABC
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum, IntEnum, auto
-from typing import FrozenSet
+from typing import FrozenSet, NoReturn
 
 import numpy.typing as npt
 
-from .magnitude import Magnitude
 from ..decorators import immutable
+from .magnitude import Magnitude
 
 TargetName = str
 
@@ -74,11 +74,11 @@ class Target(ABC):
     magnitudes: FrozenSet[Magnitude]
     type: TargetType
 
-    def guide_speed(self) -> GuideSpeed:
+    def guide_speed(self) -> NoReturn:
         """
         Calculate the guide speed for this target.
         """
-        ...
+        raise NotImplementedError
 
 
 @immutable
