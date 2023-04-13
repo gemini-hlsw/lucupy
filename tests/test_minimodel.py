@@ -5,8 +5,8 @@ from datetime import date
 
 import numpy as np
 
-from lucupy.minimodel import (CloudCover, Conditions, ImageQuality,
-                              Semester, SemesterHalf, SkyBackground, WaterVapor)
+from lucupy.minimodel import (CloudCover, Conditions, ImageQuality, Semester,
+                              SemesterHalf, SkyBackground, WaterVapor)
 
 
 def test_most_restrictive_conditions1():
@@ -92,4 +92,3 @@ def test_semesterhalf_b_lookup1():
     semester = Semester.find_semester_from_date(d)
     assert semester.year == 2021
     assert semester.half == SemesterHalf.B
-

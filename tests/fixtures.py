@@ -5,8 +5,8 @@ from datetime import timedelta
 
 import astropy.units as u
 import pytest
-from astropy.coordinates import EarthLocation, SkyCoord
-from astropy.time import Time
+from astropy.coordinates import EarthLocation, SkyCoord  # type: ignore
+from astropy.time import Time  # type: ignore
 
 from lucupy.minimodel import (AndGroup, AndOption, Observation,
                               ObservationClass, ObservationStatus, Priority,

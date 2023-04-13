@@ -8,7 +8,7 @@
 from enum import Enum
 from typing import Optional
 
-import astropy.coordinates
+import astropy.coordinates  # type: ignore
 import pytz
 
 

@@ -4,8 +4,9 @@
 import astropy.units as u
 import numpy as np
 import pytest
-from astropy.coordinates import Angle, EarthLocation, PrecessedGeocentric
-from astropy.time import Time
+from astropy.coordinates import (Angle, EarthLocation,  # type: ignore
+                                 PrecessedGeocentric)
+from astropy.time import Time  # type: ignore
 
 from lucupy.sky.utils import (current_geocent_frame, hour_angle_to_angle,
                               local_sidereal_time, min_max_alt, true_airmass,

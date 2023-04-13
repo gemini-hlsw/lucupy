@@ -6,8 +6,8 @@ from typing import Final
 
 from lucupy.minimodel import Observation
 
-from .geminiproperties import GeminiProperties
 from ...types import ZeroTime
+from .geminiproperties import GeminiProperties
 
 _IGRINS_CAL_TIME: Final[timedelta] = timedelta(minutes=10)
 

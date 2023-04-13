@@ -1,12 +1,11 @@
 # Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from datetime import timedelta
 from enum import Enum, EnumMeta
-from typing import FrozenSet, Optional
+from typing import FrozenSet
 
 import astropy.units as u
-from astropy.time import Time
+from astropy.time import Time  # type: ignore
 
 from lucupy.minimodel import ObservationMode, Resource
 from lucupy.observatory.abstract import ObservatoryProperties
@@ -19,8 +18,8 @@ class GeminiProperties(ObservatoryProperties):
     class _InstrumentsMeta(EnumMeta):
         """Meta class for the Instruments Class below.
         """
-        def __contains__(cls, r: Resource) -> bool:
-            return any(inst.value.id in r.id for inst in cls.__members__.values())
+        def __contains__(cls, r: Resource) -> bool:  # type: ignore[override]
+            return any(inst.value.id in r.id for inst in cls.__members__.values())  # type: ignore[var-annotated]
 
     class Instruments(Enum, metaclass=_InstrumentsMeta):
         """ Gemini-specific instruments.
@@ -87,7 +86,7 @@ class GeminiProperties(ObservatoryProperties):
         return resource in GeminiProperties.Instruments
 
     @staticmethod
-    def acquisition_time(resource, observation_mode) -> Optional[timedelta]:
+    def acquisition_time(resource, observation_mode) -> None:
         """_summary_
 
         Args:

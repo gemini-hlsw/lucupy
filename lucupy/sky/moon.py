@@ -7,7 +7,7 @@
 # Copyright John Thorstensen, 2018, who graciously has allowed Gemini to use this code under the BSD-3 Clause license.
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from typing import NoReturn, Optional, Tuple
+from typing import Optional, Tuple
 
 import astropy.units as u
 import numpy as np
@@ -16,7 +16,7 @@ from astropy.coordinates import (Angle, Distance, EarthLocation,
 from astropy.time import Time, TimeDelta
 
 from .altitude import Altitude
-from .constants import EQUAT_RAD, JYEAR, JYEAR_100, J2000
+from .constants import EQUAT_RAD, J2000, JYEAR, JYEAR_100
 from .utils import (current_geocent_frame, geocentric_coors,
                     hour_angle_to_angle, local_sidereal_time)
 
@@ -71,7 +71,7 @@ class Moon:
 
         return self
 
-    def _low_precision_calculations(self) -> NoReturn:
+    def _low_precision_calculations(self) -> None:
         """Compute low precision values for the moon location method calculations.
         """
         t = (self.time_jd - J2000) / JYEAR_100  # jul cent. since J2000.0
@@ -97,7 +97,7 @@ class Moon:
                + 0.0028 * np.cos(np.deg2rad(269.9 + 954397.70 * t)))
         self.pie = np.deg2rad(pie)
 
-    def _high_precision_calculations(self) -> NoReturn:
+    def _high_precision_calculations(self) -> None:
         """Compute accurate precession values for the moon location method calculations.
         """
         t = (self.time_ttjd - 2415020.) / JYEAR_100  # this based around 1900 ... */

@@ -4,7 +4,7 @@
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import IntEnum, auto
-from typing import FrozenSet, List, Mapping, NoReturn, Optional
+from typing import FrozenSet, List, Mapping, Optional
 
 from lucupy.observatory.abstract import ObservatoryProperties
 
@@ -153,7 +153,8 @@ class Observation:
     belongs_to: ProgramID
 
     # Some observations do not have constraints, e.g. GN-208A-FT-103-6.
-    constraints: Optional[Constraints]
+    # to mypy complae we should have an EmptyContraints
+    constraints: Constraints
 
     too_type: Optional[TooType] = None
 
@@ -169,7 +170,11 @@ class Observation:
         Returns:
             Get the base target for this Observation if it has one, and None otherwise.
         """
-        return next(filter(lambda t: t.type == TargetType.BASE, self.targets), None)
+        def filter_by_type(t: Optional[Target]):
+            if t is not None:
+                return t.type == TargetType.BASE
+
+        return next(filter(lambda t: filter_by_type(t), self.targets), None)
 
     def exec_time(self) -> timedelta:
         """
@@ -199,7 +204,11 @@ class Observation:
         Returns:
             A resource that is an instrument, if one exists. There should be only one.
         """
-        return next(filter(lambda r: ObservatoryProperties.is_instrument(r),
+        def check_instrument(r: Optional[Resource]):
+            if r is not None:
+                ObservatoryProperties.is_instrument(r)
+
+        return next(filter(lambda r: check_instrument(r),
                            self.required_resources()), None)
 
     def wavelengths(self) -> FrozenSet[float]:
@@ -256,7 +265,7 @@ class Observation:
 
         return min(qastates, default=None)
 
-    def show(self, depth: int = 1) -> NoReturn:
+    def show(self, depth: int = 1) -> None:
         """Print content of the Observation.
 
         Args:
@@ -276,7 +285,7 @@ class Observation:
         """
         return 1
 
-    def __eq__(self, other: 'Observation') -> bool:
+    def __eq__(self, other: 'Observation') -> bool:  # type: ignore[override]
         """
         We override the equality checker created by @dataclass to temporarily skip sequence
         comparison in test cases until the atom creation process is finish.
