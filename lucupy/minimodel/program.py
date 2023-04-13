@@ -6,14 +6,14 @@ from datetime import datetime, timedelta
 from enum import Enum, IntEnum, auto
 from typing import ClassVar, FrozenSet, List, Optional
 
-from ..decorators import immutable
-from ..types import ZeroTime
-from .group import ROOT_GROUP_ID, AndGroup, Group
-from .ids import GroupID, ProgramID
+from .group import AndGroup, Group, ROOT_GROUP_ID
+from .ids import ProgramID, GroupID
 from .observation import Observation
 from .semester import Semester
 from .timeallocation import TimeAllocation
 from .too import TooType
+from ..decorators import immutable
+from ..types import ZeroTime
 
 
 class Band(IntEnum):
@@ -103,7 +103,7 @@ class Program:
 
     def __post_init__(self):
         if self.root_group.id != ROOT_GROUP_ID:
-            raise ValueError(f"A Program's root group should be named {ROOT_GROUP_ID}, received: "
+            raise ValueError(f"Program {self.id}: root group should be named {ROOT_GROUP_ID}, but received "
                              f'"{self.root_group.id}".')
 
     def program_awarded(self) -> timedelta:
@@ -143,7 +143,7 @@ class Program:
         def aux(group: Group) -> Optional[Group]:
             if group.id == group_id:
                 return group
-            elif not isinstance(group.children, Observation):
+            elif group.is_scheduling_group():
                 for subgroup in group.children:
                     retval = aux(subgroup)
                     if retval is not None:
