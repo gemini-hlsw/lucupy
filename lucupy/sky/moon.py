@@ -110,12 +110,12 @@ class Moon:
         f = 11.250889 + 483202.0251 * t - 0.003211 * t_2 - 0.0000003 * t_3
         om = 259.183275 - 1934.1420 * t + 0.002078 * t_2 + 0.0000022 * t_3
 
-        lpr = lpr % 360.
-        mpr = mpr % 360.
-        m = m % 360.
-        d = d % 360.
-        f = f % 360.
-        om = om % 360.
+        lpr %= 360.
+        mpr %= 360.
+        m %= 360.
+        d %= 360.
+        f %= 360.
+        om %= 360.
 
         sinx = np.sin(np.deg2rad(51.2 + 20.2 * t))
         lpr = lpr + 0.000233 * sinx
@@ -364,9 +364,9 @@ class Moon:
         xobs, yobs, zobs = geocentric_coors(local_sidereal_time(self.time, obs), obs.lat, obs.height)
 
         # recenter moon's cartesian coordinates on position of obs
-        x = x - xobs
-        y = y - yobs
-        z = z - zobs
+        x -= xobs
+        y -= yobs
+        z -= zobs
 
         # form the toposcentric ra and dec and bundle them into a skycoord of epoch of date.
         topo_dist = np.sqrt(x ** 2 + y ** 2 + z ** 2)

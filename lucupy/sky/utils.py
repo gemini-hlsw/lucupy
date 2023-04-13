@@ -17,10 +17,10 @@ from astropy.coordinates import (Angle, BaseRADecFrame, EarthLocation,
                                  PrecessedGeocentric)
 from astropy.time import Time
 from astropy.units import Quantity
-from pytz import BaseTzInfo, timezone
+from pytz import timezone
 
 from .altitude import AngleParam
-from .constants import EQUAT_RAD, FLATTEN, J2000, JYEAR, JYEAR_100
+from .constants import EQUAT_RAD, FLATTEN, JYEAR, JYEAR_100, J2000
 
 
 def current_geocent_frame(time: Time) -> BaseRADecFrame:
@@ -99,7 +99,7 @@ def min_max_alt(lat: Angle, dec: AngleParam) -> Tuple[Angle, Angle]:
     # where min and max are the minimum and maximum altitude
     # an object at declination dec reaches at this latitude.
 
-    dec = np.asarray(dec.to_value(u.rad).data)  # type: ignore
+    dec = np.asarray(dec.to_value(u.rad).data)
     scalar_input = False
     if dec.ndim == 0:
         dec = dec[None]
@@ -124,7 +124,7 @@ def min_max_alt(lat: Angle, dec: AngleParam) -> Tuple[Angle, Angle]:
     return Angle(minalt, unit=u.rad), Angle(maxalt, unit=u.rad)
 
 
-def local_midnight_time(time: Time, localtzone: BaseTzInfo) -> Time:
+def local_midnight_time(time: Time, localtzone: timezone) -> Time:
     """Find nearest local midnight (UT).
 
     If it's before noon local time, returns previous midnight;
@@ -258,7 +258,7 @@ def true_airmass(altit: Angle) -> npt.NDArray[float]:
     if len(kk) != 0:
         seczmin1 = ret[kk] - 1.
         coefs = np.array([-4.716679E-5, 1.351167E-3, 3.033104E-3, 2.879465E-3, 0.])
-        ret[kk] = ret[kk] - np.polyval(coefs, seczmin1)
+        ret[kk] -= np.polyval(coefs, seczmin1)
 
     if scalar_input:
         return np.squeeze(ret)
@@ -292,8 +292,8 @@ def hour_angle_to_angle(dec: AngleParam,
     # returns hour angle at which object at dec is at altitude alt for a
     # latitude lat.
 
-    dec = np.asarray(dec.to_value(u.rad).data) * u.rad  # type: ignore
-    alt = np.asarray(alt.to_value(u.rad)) * u.rad  # type: ignore
+    dec = np.asarray(dec.to_value(u.rad).data) * u.rad
+    alt = np.asarray(alt.to_value(u.rad)) * u.rad
 
     scalar_input = False
     if dec.ndim == 0 and alt.ndim == 0:
@@ -304,9 +304,9 @@ def hour_angle_to_angle(dec: AngleParam,
         alt = alt[None]
 
     if len(dec) == 1 and len(alt) > 1:
-        dec = dec * np.ones(len(alt))
+        dec *= np.ones(len(alt))
     elif len(dec) > 1 and len(alt) == 1:
-        alt = alt * np.ones(len(dec))
+        alt *= np.ones(len(dec))
     elif len(dec) != len(alt):
         raise ValueError('Error: dec and alt have incompatible lengths')
 
