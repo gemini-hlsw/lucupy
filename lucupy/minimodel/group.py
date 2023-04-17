@@ -60,22 +60,18 @@ class Group(ABC):
         object.__setattr__(self, 'unique_id', UniqueGroupID(unique_id))
 
     def subgroup_ids(self) -> FrozenSet[GroupID]:
-        """Get the ids for all the subgroups inside.
+        """Get the ids for all the subgroups inside. This should probably not be used.
 
         Returns:
             FrozenSet[GroupID]: Set of GroupID values.
         """
-        if isinstance(self.children, Observation):
-            return frozenset()
-        else:
-            return frozenset(subgroup.id for subgroup in self.children)
+        return _amalgamate_group_ids(self)
 
-    def subgroup_unique_ids(self) -> FrozenSet[ID]:
+    def subgroup_unique_ids(self) -> FrozenSet[UniqueGroupID]:
         """Get all the unique ids for all the subgroups inside.
 
         Returns:
-            FrozenSet[ID]: Consists of UniqueID for Groups, and ObservationID for Observations, which is why
-                           we require the ID superclass here.
+            FrozenSet[UniqueGroupID]: Consists of all the UniqueGroupID for Groups rooted here.
         """
         return _amalgamate_unique_ids(self)
 
@@ -307,7 +303,15 @@ class OrGroup(Group):
         return True
 
 
-def _amalgamate_unique_ids(obj) -> FrozenSet[ID]:  # type: ignore
+def _amalgamate_group_ids(obj: Union[Group, Observation]) -> FrozenSet[GroupID]:
+    match obj:
+        case Group():
+            return frozenset({obj.id}).union({_amalgamate_group_ids(child) for child in obj.children})
+        case Observation():
+            return frozenset()
+
+
+def _amalgamate_unique_ids(obj: Union[Group, Observation]) -> FrozenSet[UniqueGroupID]:
     """
     Private method to amalgamate all the UniqueIDs and ObservationIDs starting at a Group.
     """
@@ -315,4 +319,4 @@ def _amalgamate_unique_ids(obj) -> FrozenSet[ID]:  # type: ignore
         case Group():
             return frozenset({obj.unique_id}).union({_amalgamate_unique_ids(child) for child in obj.children})
         case Observation():
-            return frozenset({obj.id})
+            return frozenset()
