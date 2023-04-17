@@ -9,6 +9,9 @@ from dataclasses import dataclass
 class ID(ABC):
     id: str
 
+    def __repr__(self) -> str:
+        return f'{self.__class__.__name__}(id={self.id})'
+
 
 @dataclass(frozen=True)
 class ProgramID(ID):
