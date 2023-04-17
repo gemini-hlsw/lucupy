@@ -103,7 +103,7 @@ class Program:
 
     def __post_init__(self):
         if self.root_group.id != ROOT_GROUP_ID:
-            raise ValueError(f"Program {self.id} should have root group should named {ROOT_GROUP_ID.id}, received: "
+            raise ValueError(f"Program {self.id.id} should have root group should named {ROOT_GROUP_ID.id}, received: "
                              f'"{self.root_group.id}".')
 
     def program_awarded(self) -> timedelta:
