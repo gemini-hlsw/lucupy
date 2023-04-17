@@ -103,7 +103,7 @@ class Program:
 
     def __post_init__(self):
         if self.root_group.id != ROOT_GROUP_ID:
-            raise ValueError(f"Program {self.id} should have root group should named {ROOT_GROUP_ID}, received: "
+            raise ValueError(f"Program {self.id} should have root group should named {ROOT_GROUP_ID.id}, received: "
                              f'"{self.root_group.id}".')
 
     def program_awarded(self) -> timedelta:
@@ -155,6 +155,6 @@ class Program:
     def show(self):
         """Print content of the Program.
         """
-        print(f'Program: {self.id}')
+        print(f'Program: {self.id.id}')
         # Print the group and atom information.
         self.root_group.show(1)

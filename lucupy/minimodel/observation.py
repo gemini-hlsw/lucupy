@@ -274,7 +274,7 @@ class Observation:
         def sep(indent: int) -> str:
             return '-----' * indent
 
-        print(f'{sep(depth)} Observation: {self.id}')
+        print(f'{sep(depth)} Observation: {self.id.id}')
         for atom in self.sequence:
             print(f'{sep(depth + 1)} {atom}')
 

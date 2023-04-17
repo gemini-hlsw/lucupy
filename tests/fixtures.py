@@ -8,15 +8,15 @@ import pytest
 from astropy.coordinates import EarthLocation, SkyCoord  # type: ignore
 from astropy.time import Time  # type: ignore
 
-from lucupy.minimodel import (AndGroup, AndOption, Observation,
-                              ObservationClass, ObservationStatus, Priority,
-                              SetupTimeType, Site)
+from lucupy.minimodel import (AndGroup, AndOption, GroupID, Observation,
+                              ObservationClass, ObservationStatus, ObservationID, Priority,
+                              ProgramID, SetupTimeType, Site)
 
 
 @pytest.fixture
 def observation():
     return Observation(
-        id='GN-2018B-Q-101-1337',
+        id=ObservationID('GN-2018B-Q-101-1337'),
         internal_id="",
         order=1,
         title='Test observation',
@@ -38,8 +38,8 @@ def observation():
 @pytest.fixture
 def observation_group(observation):
     return AndGroup(
-        id='GN-2018B-Q-101-1337',
-        program_id='GN-2018B-Q-101',
+        id=GroupID('GN-2018B-Q-101-1337'),
+        program_id=ProgramID('GN-2018B-Q-101'),
         group_name='Test observation group',
         number_to_observe=1,
         delay_min=timedelta(),
@@ -52,8 +52,8 @@ def observation_group(observation):
 @pytest.fixture
 def scheduling_group(observation_group):
     return AndGroup(
-        id='10',
-        program_id='GN-2018B-Q-101',
+        id=GroupID('10'),
+        program_id=ProgramID('GN-2018B-Q-101'),
         group_name='Test scheduling group',
         number_to_observe=1,
         delay_min=timedelta(),

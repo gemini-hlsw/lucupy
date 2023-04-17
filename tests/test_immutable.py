@@ -6,9 +6,9 @@ from datetime import datetime, timedelta
 
 from lucupy.minimodel import (ROOT_GROUP_ID, AndGroup, AndOption, Band,
                               CloudCover, Conditions, Constraints,
-                              ElevationType, ImageQuality, Magnitude,
-                              MagnitudeBands, Observation, ObservationClass,
-                              ObservationStatus, Priority, Program,
+                              ElevationType, GroupID, ImageQuality, Magnitude,
+                              MagnitudeBands, Observation, ObservationClass, ObservationID,
+                              ObservationStatus, Priority, Program, ProgramID,
                               ProgramMode, ProgramTypes, Semester,
                               SemesterHalf, SetupTimeType, SiderealTarget,
                               Site, SkyBackground, TargetType,
@@ -17,6 +17,8 @@ from lucupy.minimodel import (ROOT_GROUP_ID, AndGroup, AndOption, Band,
 
 
 def test_immutable_deepcopy():
+    program_id = ProgramID('p1')
+
     m1 = Magnitude(band=MagnitudeBands.R,
                    value=1.)
     m2 = Magnitude(band=MagnitudeBands.B,
@@ -47,7 +49,7 @@ def test_immutable_deepcopy():
                     elevation_max=Constraints.DEFAULT_AIRMASS_ELEVATION_MAX,
                     timing_windows=[tw])
 
-    o = Observation(id='o1',
+    o = Observation(id=ObservationID('o1'),
                     internal_id='3829381',
                     order=0,
                     title='Observation 1',
@@ -62,10 +64,10 @@ def test_immutable_deepcopy():
                     guiding={},
                     sequence=[],
                     constraints=c,
-                    belongs_to='p1')
+                    belongs_to=program_id)
 
-    gp = AndGroup(id='g1',
-                  program_id='p1',
+    gp = AndGroup(id=GroupID('g1'),
+                  program_id=program_id,
                   group_name='Group 1',
                   number_to_observe=1,
                   delay_min=timedelta(),
@@ -74,8 +76,8 @@ def test_immutable_deepcopy():
                   group_option=AndOption.ANYORDER)
 
     root = AndGroup(id=ROOT_GROUP_ID,
-                    program_id='p1',
-                    group_name=ROOT_GROUP_ID,
+                    program_id=program_id,
+                    group_name=ROOT_GROUP_ID.id,
                     number_to_observe=1,
                     delay_min=timedelta(),
                     delay_max=timedelta(),
@@ -91,7 +93,7 @@ def test_immutable_deepcopy():
                         program_used=timedelta(minutes=30),
                         partner_used=timedelta())
 
-    p = Program(id='p1',
+    p = Program(id=program_id,
                 internal_id='223e2332',
                 semester=s,
                 band=Band.BAND2,
