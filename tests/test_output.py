@@ -5,7 +5,7 @@ import io
 import unittest.mock
 from datetime import datetime
 
-from lucupy.minimodel import ROOT_GROUP_ID, AndGroup, Observation, Program
+from lucupy.minimodel import ROOT_GROUP_ID, AndGroup, GroupID, ObservationID, ProgramID, Observation, Program
 
 
 @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
@@ -18,10 +18,10 @@ def test_print_program():
     """
     Test the print_program function.
     """
-    program_id = 'test_program'
+    program_id = ProgramID('test_program')
 
     o = Observation(
-        id='test_observation',
+        id=ObservationID('test_observation'),
         internal_id='acc39a30-97a8-42de-98a6-5e77cc95d3ec',
         order=0,
         title='GMOSN-1',
@@ -42,7 +42,7 @@ def test_print_program():
 
     # Create the trivial AND group containing the gnirs1 observation.
     g1 = AndGroup(
-        id='test_group',
+        id=GroupID('test_group'),
         program_id=program_id,
         group_name='test',
         number_to_observe=1,
@@ -54,13 +54,14 @@ def test_print_program():
 
     g = AndGroup(id=ROOT_GROUP_ID,
                  program_id=program_id,
-                 group_name=ROOT_GROUP_ID,
+                 group_name=ROOT_GROUP_ID.id,
                  number_to_observe=1,
                  delay_min=None,
                  delay_max=None,
                  children=[g1],
                  group_option=None,
                  )
+
     p = Program(
         id=program_id,
         internal_id='c396b9c9-9bdd-4eec-be83-81162090d032',
@@ -78,7 +79,7 @@ def test_print_program():
 
     expected_output = (
         'Program: test_program\n'
-        f'----- Group: {ROOT_GROUP_ID}, unique_id=test_program:{ROOT_GROUP_ID} (Scheduling Group, num_children=1)\n'
+        f'----- Group: {ROOT_GROUP_ID.id}, unique_id=test_program:{ROOT_GROUP_ID.id} (Scheduling Group, num_children=1)\n'
         '---------- Group: test_group, unique_id=test_program:test_group (Observation Group, num_children=1)\n'
         '--------------- Observation: test_observation\n'
     )

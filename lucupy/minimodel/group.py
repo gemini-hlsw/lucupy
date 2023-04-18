@@ -2,7 +2,7 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import timedelta
 from enum import Enum, auto
 from typing import Final, FrozenSet, List, Optional, Union
@@ -11,12 +11,12 @@ from lucupy.helpers import flatten
 
 from ..types import ZeroTime
 from .constraints import Constraints
-from .ids import GroupID, ProgramID, UniqueGroupID
+from .ids import ID, GroupID, ProgramID, UniqueGroupID
 from .observation import Observation
 from .resource import Resource
 from .site import Site
 
-ROOT_GROUP_ID: Final[str] = 'root'
+ROOT_GROUP_ID: Final[GroupID] = GroupID('root')
 
 
 @dataclass
@@ -43,39 +43,37 @@ class Group(ABC):
     number_to_observe: int
     delay_min: timedelta
     delay_max: timedelta
-
-    # Cannot be frozen with gelidum.
     children: Union[List['Group'], Observation]
+
+    # Calculated afterward.
+    unique_id: UniqueGroupID = field(init=False)
 
     def __post_init__(self):
         if self.number_to_observe <= 0:
             msg = f'Group {self.group_name} specifies non-positive {self.number_to_observe} children to be observed.'
             raise ValueError(msg)
 
-    def unique_id(self) -> UniqueGroupID:
-        """Get a unique name for the group.
-        If this is an observation group, it is just the group_id.
-        If this is a scheduling group, since in OCS this is just an integer, we combine with the program_id to
-            make it unique.
-
-        Returns:
-            UniqueGroupID: A unique identifier for the group.
-        """
-        if self.id.startswith(self.program_id):
-            return self.id
+        if self.id.id.startswith(self.program_id.id):
+            unique_id = self.id.id
         else:
-            return f'{self.program_id}:{self.id}'
+            unique_id = f'{self.program_id.id}:{self.id.id}'
+        object.__setattr__(self, 'unique_id', UniqueGroupID(unique_id))
 
     def subgroup_ids(self) -> FrozenSet[GroupID]:
-        """Get the ids for all the subgroups inside.
+        """Get the ids for all the subgroups inside. This should probably not be used.
 
         Returns:
             FrozenSet[GroupID]: Set of GroupID values.
         """
-        if isinstance(self.children, Observation):
-            return frozenset()
-        else:
-            return frozenset(subgroup.id for subgroup in self.children)
+        return _amalgamate_group_ids(self)
+
+    def subgroup_unique_ids(self) -> FrozenSet[UniqueGroupID]:
+        """Get all the unique ids for all the subgroups inside.
+
+        Returns:
+            FrozenSet[UniqueGroupID]: Consists of all the UniqueGroupID for Groups rooted here.
+        """
+        return _amalgamate_unique_ids(self)
 
     def sites(self) -> FrozenSet[Site]:
         """All belonging Sites.
@@ -197,7 +195,7 @@ class Group(ABC):
 
         # Is this a subgroup or an observation?
         group_type = 'Scheduling Group' if self.is_scheduling_group() else 'Observation Group'
-        print(f'{sep(depth)} Group: {self.id}, unique_id={self.unique_id()} '
+        print(f'{sep(depth)} Group: {self.id.id}, unique_id={self.unique_id.id} '
               f'({group_type}, num_children={len(self.children)})')
         if isinstance(self.children, Observation):
             self.children.show(depth + 1)
@@ -303,3 +301,22 @@ class OrGroup(Group):
 
     def is_or_group(self) -> bool:
         return True
+
+
+def _amalgamate_group_ids(obj: Union[Group, Observation]) -> FrozenSet[GroupID]:
+    match obj:
+        case Group():
+            return frozenset({obj.id}).union({_amalgamate_group_ids(child) for child in obj.children})
+        case Observation():
+            return frozenset()
+
+
+def _amalgamate_unique_ids(obj: Union[Group, Observation]) -> FrozenSet[UniqueGroupID]:
+    """
+    Private method to amalgamate all the UniqueIDs and ObservationIDs starting at a Group.
+    """
+    match obj:
+        case Group():
+            return frozenset({obj.unique_id}).union({_amalgamate_unique_ids(child) for child in obj.children})
+        case Observation():
+            return frozenset()

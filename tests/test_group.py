@@ -11,7 +11,7 @@ def test_unique_observation_group_id(observation_group):
     """
     Test a unique ID for an observation group.
     """
-    assert observation_group.unique_id() == observation_group.id
+    assert observation_group.unique_id.id == observation_group.id.id
 
 
 @pytest.mark.usefixtures('scheduling_group')
@@ -19,4 +19,4 @@ def test_unique_scheduling_group_id(scheduling_group):
     """
     Test a unique ID for a scheduling group.
     """
-    assert scheduling_group.unique_id() == f'{scheduling_group.program_id}:{scheduling_group.id}'
+    assert scheduling_group.unique_id.id == f'{scheduling_group.program_id.id}:{scheduling_group.id.id}'
