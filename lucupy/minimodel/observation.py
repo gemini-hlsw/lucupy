@@ -234,7 +234,7 @@ class Observation:
         Returns:
             (timedelta): With the time program used.
         """
-        return sum((atom.prog_time for atom in self.sequence), start=ZeroTime)
+        return sum((atom.program_used for atom in self.sequence), start=ZeroTime)
 
     def partner_used(self) -> timedelta:
         """We roll this information up from the atoms as it will be calculated
@@ -244,12 +244,12 @@ class Observation:
         Returns:
             (timedelta): With the time program used.
         """
-        return sum((atom.part_time for atom in self.sequence), start=ZeroTime)
+        return sum((atom.partner_used for atom in self.sequence), start=ZeroTime)
 
     @staticmethod
     def _select_obsclass(classes: List[ObservationClass]) -> Optional[ObservationClass]:
         """Given a list of non-empty ObservationClasses, determine which occurs with
-        highest precedence in the ObservationClasses enum, i.e. has the lowest index.
+        the highest precedence in the ObservationClasses enum, i.e. has the lowest index.
 
         This will be used when examining the sequence for atoms.
 
