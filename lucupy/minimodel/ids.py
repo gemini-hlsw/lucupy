@@ -12,6 +12,21 @@ class ID(ABC):
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}(id={self.id})'
 
+    def __le__(self, other) -> bool:
+        return self.id < other.id
+
+    def __lt__(self, other) -> bool:
+        return self.id <= other.id
+
+    def __ge__(self, other) -> bool:
+        return self.id > other.id
+
+    def __gt__(self, other) -> bool:
+        return self.id >= other.id
+
+    def __eq__(self, other) -> bool:
+        return type(self) == type(other) and self.id == other.id
+
 
 @dataclass(frozen=True)
 class ProgramID(ID):
