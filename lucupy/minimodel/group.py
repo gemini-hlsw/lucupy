@@ -11,7 +11,7 @@ from lucupy.helpers import flatten
 
 from ..types import ZeroTime
 from .constraints import Constraints
-from .ids import ID, GroupID, ProgramID, UniqueGroupID
+from .ids import ID, GroupID, ObservationID, ProgramID, UniqueGroupID
 from .observation import Observation
 from .resource import Resource
 from .site import Site
@@ -65,7 +65,16 @@ class Group(ABC):
         Returns:
             FrozenSet[GroupID]: Set of GroupID values.
         """
-        return _amalgamate_group_ids(self)
+
+        def aux(group: Group) -> FrozenSet[GroupID]:
+            """
+            Private method to amalgamate all the UniqueIDs starting at a Group.
+            """
+            ids = {group.id}
+            if not isinstance(group.children, Observation):
+                ids |= aux(*[sg for sg in group.children])
+            return frozenset(ids)
+        return aux(self)
 
     def subgroup_unique_ids(self) -> FrozenSet[UniqueGroupID]:
         """Get all the unique ids for all the subgroups inside.
@@ -73,7 +82,15 @@ class Group(ABC):
         Returns:
             FrozenSet[UniqueGroupID]: Consists of all the UniqueGroupID for Groups rooted here.
         """
-        return _amalgamate_unique_ids(self)
+        def aux(group: Group) -> FrozenSet[UniqueGroupID]:
+            """
+            Private method to amalgamate all the UniqueIDs starting at a Group.
+            """
+            ids = {group.unique_id}
+            if not isinstance(group.children, Observation):
+                ids |= aux(*[sg for sg in group.children])
+            return frozenset(ids)
+        return aux(self)
 
     def sites(self) -> FrozenSet[Site]:
         """All belonging Sites.
@@ -139,6 +156,19 @@ class Group(ABC):
             bool: True if the group is a scheduling group, otherwise False.
         """
         return not self.is_observation_group()
+
+    @property
+    def to_observation_id(self) -> ObservationID:
+        """
+        A method that, for observation groups, returns the corresponding ObservationID for the observation contained
+        in the group
+
+        If the group is instead a scheduling group, a TypeError will be raised.
+        """
+        if self.is_observation_group():
+            return self.children.id
+        else:
+            raise TypeError('Cannot get an ObservationID from a scheduling group.')
 
     def exec_time(self) -> timedelta:
         """Total execution time across the children of this group.
@@ -301,22 +331,3 @@ class OrGroup(Group):
 
     def is_or_group(self) -> bool:
         return True
-
-
-def _amalgamate_group_ids(obj: Union[Group, Observation]) -> FrozenSet[GroupID]:
-    match obj:
-        case Group():
-            return frozenset({obj.id}).union({_amalgamate_group_ids(child) for child in obj.children})
-        case Observation():
-            return frozenset()
-
-
-def _amalgamate_unique_ids(obj: Union[Group, Observation]) -> FrozenSet[UniqueGroupID]:
-    """
-    Private method to amalgamate all the UniqueIDs and ObservationIDs starting at a Group.
-    """
-    match obj:
-        case Group():
-            return frozenset({obj.unique_id}).union({_amalgamate_unique_ids(child) for child in obj.children})
-        case Observation():
-            return frozenset()
