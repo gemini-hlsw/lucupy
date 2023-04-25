@@ -45,4 +45,7 @@ class UniqueGroupID(ID):
 
 @dataclass(frozen=True)
 class ObservationID(ID):
-    ...
+    @property
+    def to_unique_group_id(self) -> UniqueGroupID:
+        return UniqueGroupID(self.id)
+

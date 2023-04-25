@@ -9,7 +9,7 @@ from typing import ClassVar, FrozenSet, List, Optional
 from ..decorators import immutable
 from ..types import ZeroTime
 from .group import ROOT_GROUP_ID, AndGroup, Group
-from .ids import GroupID, ProgramID
+from .ids import ProgramID, ObservationID, UniqueGroupID
 from .observation import Observation
 from .semester import Semester
 from .timeallocation import TimeAllocation
@@ -136,12 +136,13 @@ class Program:
     def observations(self) -> List[Observation]:
         return self.root_group.observations()
 
-    def get_group_ids(self) -> FrozenSet[GroupID]:
-        return self.root_group.subgroup_ids()
-
-    def get_group(self, group_id: GroupID) -> Optional[Group]:
+    def get_group(self, group_id: UniqueGroupID) -> Optional[Group]:
+        """
+        Given a UniqueGroupID, find the subgroup with the ID if it exists.
+        Returns None if no such group can be found.
+        """
         def aux(group: Group) -> Optional[Group]:
-            if group.id == group_id:
+            if group.unique_id == group_id:
                 return group
             elif not isinstance(group.children, Observation):
                 for subgroup in group.children:
@@ -150,6 +151,26 @@ class Program:
                         return retval
             return None
 
+        return aux(self.root_group)
+
+    def get_observation(self, observation_id: ObservationID) -> Optional[Observation]:
+        """
+        Given an ObservationID, find the Observation with the ID if it exists.
+        Returns None if no such Observation can be found.
+        """
+        def aux(group: Group) -> Optional[Observation]:
+            match group.children:
+                case Observation():
+                    if group.children.id == observation_id:
+                        return group.children
+                    else:
+                        return None
+                case _:
+                    for subgroup in group.children:
+                        check_subgroup = aux(subgroup)
+                        if check_subgroup is not None:
+                            return check_subgroup
+                    return None
         return aux(self.root_group)
 
     def show(self):

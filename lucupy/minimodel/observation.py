@@ -11,7 +11,7 @@ from lucupy.observatory.abstract import ObservatoryProperties
 from ..types import ZeroTime
 from .atom import Atom
 from .constraints import Constraints
-from .ids import ObservationID, ProgramID
+from .ids import ObservationID, ProgramID, UniqueGroupID
 from .qastate import QAState
 from .resource import Resource
 from .site import Site
@@ -158,10 +158,19 @@ class Observation:
 
     too_type: Optional[TooType] = None
 
-    def unique_id(self):
+    @property
+    def to_unique_group_id(self) -> UniqueGroupID:
         """
-        Unique ID for the Observation to make it treatable as a Group.
-        It is simply the same as the ObservationID.
+        A method to return the UniqueGroupID that contains this observation.
+        """
+        return self.id.to_unique_group_id
+
+    @property
+    def unique_id(self) -> ObservationID:
+        """
+        Unique ID for the Observation to amalgamate all the IDs from Group down to Observation.
+        This way, for any group, group.children will return an ID, giving a mixed list of UniqueGroupID and
+        ObservationID, which will be used to select the top level groups.
         """
         return self.id
 
