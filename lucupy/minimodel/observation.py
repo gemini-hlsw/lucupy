@@ -163,7 +163,7 @@ class Observation:
         """
         A method to return the UniqueGroupID that contains this observation.
         """
-        return UniqueGroupID(self.id.id)
+        return self.id.to_unique_group_id
 
     @property
     def unique_id(self) -> ObservationID:
