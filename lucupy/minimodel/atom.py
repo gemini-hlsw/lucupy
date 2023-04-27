@@ -19,9 +19,11 @@ class Atom:
     Attributes:
 
         id (int): GPP atom `id`. In other case is given by the Provider
-        exec_time (timedelta): Total time of execution.
-        prog_time (timedelta): Program time.
-        part_time (timedelta): Partner time.
+        exec_time (timedelta): Total planned time of execution.
+        prog_time (timedelta): Planned program time.
+        part_time (timedelta): Planned partner time.
+        program_used (timedelta): Used (charged) program time.
+        partner_used (timedelta): Used (charged) partner time.
         observed (bool): True if the STATUS is already observed.
         qa_state (QAState):
         guide_state (bool): True if a state exists.
@@ -33,6 +35,8 @@ class Atom:
     exec_time: timedelta = field(hash=False, compare=False)
     prog_time: timedelta = field(hash=False, compare=False)
     part_time: timedelta = field(hash=False, compare=False)
+    program_used: timedelta = field(hash=False, compare=False)
+    partner_used: timedelta = field(hash=False, compare=False)
     observed: bool
     qa_state: QAState
     guide_state: bool
