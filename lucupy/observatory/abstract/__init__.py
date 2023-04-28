@@ -7,8 +7,6 @@ from typing import FrozenSet, Optional, Union
 
 from astropy.time import Time  # type: ignore
 
-from lucupy.minimodel import Resource
-
 
 class ObservatoryProperties(ABC):
     """Observatory-specific methods.
@@ -70,7 +68,7 @@ class ObservatoryProperties(ABC):
             raise ValueError('Properties have not been set.')
 
     @staticmethod
-    def is_instrument(resource: Resource) -> bool:
+    def is_instrument(resource) -> bool:  # type: ignore
         """Determine if the given resource is an instrument or not.
 
         Args:
@@ -85,7 +83,7 @@ class ObservatoryProperties(ABC):
             raise ValueError('Properties have not been set.')
 
     @staticmethod
-    def acquisition_time(resource: Resource, observation_mode) -> Optional[timedelta]:
+    def acquisition_time(resource, observation_mode) -> Optional[timedelta]:  # type: ignore
         """Given a resource, check if it is an instrument, and if so, lookup the
            acquisition time for the specified mode.
 
