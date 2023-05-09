@@ -215,7 +215,7 @@ class Observation:
         """
         def check_instrument(r: Optional[Resource]):
             if r is not None:
-                ObservatoryProperties.is_instrument(r)
+                return ObservatoryProperties.is_instrument(r)
 
         return next(filter(lambda r: check_instrument(r),
                            self.required_resources()), None)
