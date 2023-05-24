@@ -98,7 +98,7 @@ class ObservationClass(IntEnum):
     ACQ = auto()
     ACQCAL = auto()
     DAYCAL = auto()
-
+    NONE = auto()
 
 @dataclass
 class Observation:

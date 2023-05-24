@@ -8,6 +8,7 @@ from enum import Enum, auto
 from typing import Final, FrozenSet, List, Optional, Union
 
 from lucupy.helpers import flatten
+from lucupy.minimodel.observation import ObservationClass
 
 from ..types import ZeroTime
 from .constraints import Constraints
@@ -213,6 +214,18 @@ class Group(ABC):
             return self.children.total_used()
         else:
             return sum((child.total_used() for child in self.children), timedelta())
+
+    def obs_class(self) -> ObservationClass:
+        """
+        Determine a group 'obs_class' for observation groups
+        """
+        obs_class = ObservationClass.NONE
+        if self.is_and_group():
+            if isinstance(self.children, Observation):
+                obs_class = self.children.obs_class
+            else:
+                obs_class = min([child.obs_class() for child in self.children])
+        return obs_class
 
     def show(self, depth: int = 1) -> None:
         """Print content of the Group.
