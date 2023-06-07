@@ -1,11 +1,14 @@
 # Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
+import bisect
 from collections.abc import Iterable
-from typing import Optional
+from enum import Enum
+from typing import Optional, Type
 
 import astropy.units as u
 import numpy as np
+import numpy.typing as npt
 from astropy.time import Time
 
 
@@ -200,3 +203,46 @@ def angular_distance(ra1: float, dec1: float, ra2: float, dec2: float) -> float:
     delta_lambda = ra2 - ra1
     a = np.sin(delta_phi / 2) ** 2 + np.cos(phi_1) * np.cos(phi_2) * np.sin(delta_lambda / 2) ** 2
     return 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
+
+
+def lerp_enum(enum_class: Type[Enum], first_value: float, last_value: float, n: int) -> npt.NDArray[float]:
+    """
+    Given an Enum of float, a first_value, a last_value, and a number of slots, interpolate over the Enum
+    to create a numpy array of slots, where
+    Args:
+        enum_class: an Enum with float values
+        first_value: a value in the Enum
+        last_value: a value in the Enum
+        n: the number of slots to interpolate over.
+
+    Returns:
+        A numpy array of length n that linearly interpolates between first_value and last_value only containing
+        values from enum_class.
+    """
+    # Create the linspace array. In order to properly interpolate, we have to add 2 to n and then cut off the first
+    # and last values.
+    interp_values = np.linspace(first_value, last_value, n + 2)[1:-1]
+
+    # Sort the Enum values.
+    sorted_values = sorted(o.value for o in enum_class)
+
+    # Interpolate over the Enum.
+    if first_value <= last_value:
+        result = [sorted_values[bisect.bisect_right(sorted_values, x) - 1] for x in interp_values]
+    else:
+        result = [sorted_values[bisect.bisect_left(sorted_values, x) - 1] for x in interp_values]
+    # if first_value <= last_value:
+    #     result = [min(sorted_values, key=lambda x: x - value) for value in interp_values]
+    # else:
+    #     result = [min(sorted_values, key=lambda x: value - x) for value in interp_values]
+    return np.array(result)
+
+
+if __name__ == '__main__':
+    from lucupy.minimodel import CloudCover
+    print(lerp_enum(CloudCover, 0.5, 1.0, 5))
+    print(lerp_enum(CloudCover, 0.5, 1.0, 6))
+    print(lerp_enum(CloudCover, 1.0, 0.5, 5))
+    print(lerp_enum(CloudCover, 1.0, 0.5, 6))
+    print(lerp_enum(CloudCover, 0.5, 1.0, 1))
+    print(lerp_enum(CloudCover, 1.0, 0.5, 1))
