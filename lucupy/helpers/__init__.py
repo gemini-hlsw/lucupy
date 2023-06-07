@@ -231,18 +231,4 @@ def lerp_enum(enum_class: Type[Enum], first_value: float, last_value: float, n: 
         result = [sorted_values[bisect.bisect_right(sorted_values, x) - 1] for x in interp_values]
     else:
         result = [sorted_values[bisect.bisect_left(sorted_values, x) - 1] for x in interp_values]
-    # if first_value <= last_value:
-    #     result = [min(sorted_values, key=lambda x: x - value) for value in interp_values]
-    # else:
-    #     result = [min(sorted_values, key=lambda x: value - x) for value in interp_values]
     return np.array(result)
-
-
-if __name__ == '__main__':
-    from lucupy.minimodel import CloudCover
-    print(lerp_enum(CloudCover, 0.5, 1.0, 5))
-    print(lerp_enum(CloudCover, 0.5, 1.0, 6))
-    print(lerp_enum(CloudCover, 1.0, 0.5, 5))
-    print(lerp_enum(CloudCover, 1.0, 0.5, 6))
-    print(lerp_enum(CloudCover, 0.5, 1.0, 1))
-    print(lerp_enum(CloudCover, 1.0, 0.5, 1))
