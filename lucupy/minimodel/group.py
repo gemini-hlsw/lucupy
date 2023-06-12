@@ -182,6 +182,28 @@ class Group(ABC):
         else:
             return sum((child.exec_time() for child in self.children), timedelta())
 
+    def prog_time(self) -> timedelta:
+        """Program time planned across the group.
+
+        Returns:
+            prog_time (timedelta): Sum of all prog_time planned times across children of this group.
+        """
+        if isinstance(self.children, Observation):
+            return self.children.prog_time()
+        else:
+            return sum((child.prog_time() for child in self.children), timedelta())
+
+    def part_time(self) -> timedelta:
+        """Partner time planned across the group.
+
+        Returns:
+            part_time (timedelta): Sum of all `part_time` (planned times) across the children of this group.
+        """
+        if isinstance(self.children, Observation):
+            return self.children.part_time()
+        else:
+            return sum((child.part_time() for child in self.children), timedelta())
+
     def program_used(self) -> timedelta:
         """Program time used across the group.
 
@@ -197,7 +219,7 @@ class Group(ABC):
         """Partner time used across the group.
 
         Returns:
-            partner_time (timedelta): Sum of all `partner_used` across the children of this group.
+            partner_used (timedelta): Sum of all `partner_used` across the children of this group.
         """
         if isinstance(self.children, Observation):
             return self.children.partner_used()
