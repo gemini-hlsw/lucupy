@@ -228,7 +228,7 @@ def lerp_enum(enum_class: Type[Enum], first_value: float, last_value: float, n: 
 
     # Interpolate over the Enum.
     if first_value <= last_value:
-        result = [sorted_values[bisect.bisect_right(sorted_values, x) - 1] for x in interp_values]
+        result = [sorted_values[bisect.bisect_left(sorted_values, x)] for x in interp_values]
     else:
-        result = [sorted_values[bisect.bisect_left(sorted_values, x) - 1] for x in interp_values]
+        result = [sorted_values[bisect.bisect_right(sorted_values, x)] for x in interp_values]
     return np.array(result)
