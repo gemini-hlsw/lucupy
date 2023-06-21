@@ -205,6 +205,13 @@ def angular_distance(ra1: float, dec1: float, ra2: float, dec2: float) -> float:
     return 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
 
 
+def lerp(start_value: float, end_value: float, n: int) -> npt.NDArray[float]:
+    """
+    Perform a linear interpolation for n points between start_value and end_value.
+    """
+    return np.linspace(start_value, end_value, n + 2)[1:-1]
+
+
 def lerp_enum(enum_class: Type[Enum], first_value: float, last_value: float, n: int) -> npt.NDArray[float]:
     """
     Given an Enum of float, a first_value, a last_value, and a number of slots, interpolate over the Enum
@@ -232,3 +239,25 @@ def lerp_enum(enum_class: Type[Enum], first_value: float, last_value: float, n: 
     else:
         result = [sorted_values[bisect.bisect_right(sorted_values, x)] for x in interp_values]
     return np.array(result)
+
+
+def lerp_radians(start_value: float, end_value: float, n: int) -> npt.NDArray[float]:
+    """
+    Perform a linear interpolation for n points between start_value radians and end_value radians.
+    """
+    # Normalize start and end values to the range [0, 2pi]
+    start_value = start_value % (2 * np.pi)
+    end_value = end_value % (2 * np.pi)
+
+    # Calculate distances
+    direct_clockwise_distance = (end_value - start_value) % (2 * np.pi)
+    direct_counterclockwise_distance = (start_value - end_value) % (2 * np.pi)
+
+    # Choose the direction with the shortest distance
+    if direct_clockwise_distance < direct_counterclockwise_distance:
+        shortest_distance = direct_clockwise_distance
+    else:
+        shortest_distance = -direct_counterclockwise_distance
+
+    # Generate the lerp.
+    return (start_value + shortest_distance * lerp(0, 1, n)) % (2 * np.pi)
