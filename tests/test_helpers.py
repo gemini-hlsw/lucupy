@@ -1,11 +1,16 @@
 # Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
+from datetime import timedelta
+
+import astropy.units as u
+from astropy.time import TimeDelta
 import pytest
 import numpy as np
 
 from lucupy.minimodel import CloudCover
-from lucupy.helpers import lerp, lerp_enum, lerp_radians, lerp_degrees
+from lucupy.helpers import (lerp, lerp_enum, lerp_radians, lerp_degrees,
+                            timedelta_astropy_to_python, time_delta_astropy_to_minutes)
 
 
 @pytest.mark.parametrize('first_value, last_value, n, expected',
@@ -41,9 +46,42 @@ def test_lerp_radians(first_value, last_value, n, expected):
 @pytest.mark.parametrize('first_value, last_value, n, expected',
                          [(90, 270, 4, np.array([54, 18, 342, 306])),
                           (90, -90, 4, np.array([54, 18, 342, 306])),
+                          (270, 90, 4, np.array([234, 198, 162, 126])),
+                          (-90, 90, 4, np.array([234, 198, 162, 126])),
                           (90 + 1e-8, 270, 4, np.array([126, 162, 198, 234])),
                           (90 + 1e-8, -90, 4, np.array([126, 162, 198, 234])),
                           (60, 300, 3, np.array([30, 0, 330])),
                           (60, -60, 3, np.array([30, 0, 330]))])
 def test_lerp_degrees(first_value, last_value, n, expected):
     assert np.allclose(lerp_degrees(first_value, last_value, n), expected)
+
+
+@pytest.mark.parametrize('time_delta',
+                         [TimeDelta([1.0, 2.0] * u.minute),
+                          TimeDelta([])])
+def test_time_delta_astropy_to_python_exception(time_delta):
+    with pytest.raises(ValueError):
+        timedelta_astropy_to_python(time_delta)
+
+
+@pytest.mark.parametrize('time_delta, expected',
+                         [(TimeDelta(1.0 * u.minute), timedelta(seconds=60)),
+                          (TimeDelta(1.5 * u.minute), timedelta(seconds=90))])
+def test_time_delta_astropy_to_python(time_delta, expected):
+    assert timedelta_astropy_to_python(time_delta) == expected
+
+
+@pytest.mark.parametrize('time_delta',
+                         [TimeDelta([1.0, 2.0] * u.minute),
+                          # TimeDelta([]),
+                          TimeDelta(1.5 * u.minute)])
+def test_time_delta_astropy_to_minutes(time_delta):
+    with pytest.raises(ValueError):
+        time_delta_astropy_to_minutes(time_delta)
+
+
+@pytest.mark.parametrize('time_delta, expected',
+                         [(TimeDelta(1.0 * u.minute), 1),
+                          (TimeDelta(2.0 * u.minute), 2)])
+def test_time_delta_astropy_to_minutes(time_delta, expected):
+    assert time_delta_astropy_to_minutes(time_delta) == expected

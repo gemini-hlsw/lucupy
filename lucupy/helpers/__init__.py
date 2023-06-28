@@ -3,10 +3,12 @@
 
 import bisect
 from collections.abc import Iterable
+from datetime import timedelta
 from enum import Enum
 from typing import Optional, Type
 
 import astropy.units as u
+from astropy.time import TimeDelta
 import numpy as np
 import numpy.typing as npt
 from astropy.time import Time
@@ -205,29 +207,40 @@ def angular_distance(ra1: float, dec1: float, ra2: float, dec2: float) -> float:
     return 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
 
 
-def lerp(start_value: float, end_value: float, n: int) -> npt.NDArray[float]:
+def lerp(first_value: float, last_value: float, n: int) -> npt.NDArray[float]:
     """
-    Perform a linear interpolation for n points between start_value and end_value.
+    Perform linear interpolation for n points between start_value and end_value.
+
+    Args:
+        first_value: a float value from which to start
+        last_value: a float value at which to end
+        n: the number of points to interpolate over
+
+    Returns:
+        A numpy array of length n that linearly interpolates exclusively between start_value and end_value.
     """
-    return np.linspace(start_value, end_value, n + 2)[1:-1]
+    # Create the linspace array. In order to properly interpolate, we have to add 2 to n and then cut off the first
+    # and last values, which will be first_value and last_value.
+    return np.linspace(first_value, last_value, n + 2)[1:-1]
 
 
 def lerp_enum(enum_class: Type[Enum], first_value: float, last_value: float, n: int) -> npt.NDArray[float]:
     """
     Given an Enum of float, a first_value, a last_value, and a number of slots, interpolate over the Enum
-    to create a numpy array of slots, where
+    to create a numpy array of slots.
+
     Args:
         enum_class: an Enum with float values
         first_value: a value in the Enum
         last_value: a value in the Enum
-        n: the number of slots to interpolate over.
+        n: the number of slots to interpolate over
 
     Returns:
-        A numpy array of length n that linearly interpolates between first_value and last_value only containing
-        values from enum_class.
+        A numpy array of length n that linearly interpolates exclusively between first_value and last_value only
+        containing values from enum_class.
     """
     # Create the linspace array. In order to properly interpolate, we have to add 2 to n and then cut off the first
-    # and last values.
+    # and last values, which will be first_value and last_value.
     interp_values = np.linspace(first_value, last_value, n + 2)[1:-1]
 
     # Sort the Enum values.
@@ -241,33 +254,130 @@ def lerp_enum(enum_class: Type[Enum], first_value: float, last_value: float, n: 
     return np.array(result)
 
 
-def _lerp_circular(start_value: float, end_value: float, n: int, max_val: float) -> npt.NDArray[float]:
+def _lerp_circular(first_value: float, last_value: float, n: int, max_val: float) -> npt.NDArray[float]:
     """
-    Perform a linear interpolation for n points between start_value and end_value.
+    Perform linear interpolation for n points between first_value and last_value.
+    As this is done for a circle, max_value must be specified for the maximum value (exclusive) of measurement.
     For degrees, max_val should be 360.
-    For radians, max_val should be 2pi.
+    For radians, max_val should be 2π.
+
+    Args:
+        first_value: a float value from which to start
+        last_value: a float value at which to end
+        n: the number of points to interpolate over
+        max_val: the maximum value (exclusive) of the units of measurement
+
+    Returns:
+        A numpy array of length n that linearly interpolates exclusively between:
+        (first_value % max_val) and (last_value % max_val)
+        with values in the range [0, max_val), taking the shortest route around the circle.
+
+        If the points are antipodal, and:
+        * (first_value % max_value) < (last_value % max_value), the clockwise direction is taken.
+        * (first value % max_value) > (last_value % max_value), the counter-clockwise direction is taken.
     """
-    # Normalize start and end values to the range [0, max_val)
-    start_value %= max_val
-    end_value %= max_val
+    if max_val <= 0:
+        raise ValueError(f'Circular linear interpolation requires positive maximum value, received: {max_val}.')
 
-    # Calculate distances
-    direct_clockwise_distance = (end_value - start_value) % max_val
-    direct_counterclockwise_distance = (start_value - end_value) % max_val
+    # Normalize start and end values to the range [0, max_val).
+    first_value %= max_val
+    last_value %= max_val
 
-    # Choose the direction with the shortest distance
+    # Calculate distances.
+    direct_clockwise_distance = (last_value - first_value) % max_val
+    direct_counterclockwise_distance = (first_value - last_value) % max_val
+
+    # Choose the direction with the shortest distance.
     if direct_clockwise_distance < direct_counterclockwise_distance:
         shortest_distance = direct_clockwise_distance
     else:
         shortest_distance = -direct_counterclockwise_distance
 
     # Generate the lerp.
-    return (start_value + shortest_distance * lerp(0, 1, n)) % max_val
+    return (first_value + shortest_distance * lerp(0, 1, n)) % max_val
 
 
 def lerp_radians(start_value: float, end_value: float, n: int) -> npt.NDArray[float]:
+    """
+    Perform linear interpolation for n points around a circle in radians.
+
+    Args:
+        start_value: a float value in radians from which to start
+        end_value: a float value in radians at which to end
+        n: the number of points to interpolate over
+
+    Returns:
+        A numpy array of length n that linearly interpolates exclusively between:
+        (first_value % 2π) and (last_value % 2π)
+        in radians, taking the shortest route around the circle.
+
+        If the points are antipodal, i.e. at distance π, and:
+        * (first_value % 2π) < (last_value % 2π), the clockwise direction is taken.
+        * (first value % 2π) > (last_value % 2π), the counter-clockwise direction is taken.
+
+    Raises:
+        ValueError if max_val <= 0.
+    """
     return _lerp_circular(start_value, end_value, n, 2 * np.pi)
 
 
 def lerp_degrees(start_value: float, end_value: float, n: int) -> npt.NDArray[float]:
+    """
+    Perform linear interpolation for n points around a circle in degrees.
+
+    Args:
+        start_value: a float value in degrees from which to start
+        end_value: a float value in degrees at which to end
+        n: the number of points to interpolate over
+
+    Returns:
+        A numpy array of length n that linearly interpolates exclusively between:
+        (first_value % 360) and (last_value % 360)
+        in degrees, taking the shortest route around the circle.
+
+        If the points are antipodal, i.e. at distance 180, and:
+        * (first_value % 360) < (last_value % 360), the clockwise direction is taken.
+        * (first value % 360) > (last_value % 360), the counter-clockwise direction is taken.
+    """
     return _lerp_circular(start_value, end_value, n, 360.0)
+
+
+def timedelta_astropy_to_python(time_delta: TimeDelta) -> timedelta:
+    """
+    Convert an AstroPy TimeDelta to a Python timedelta in seconds.
+
+    Args:
+        time_delta: an AstroPy TimeDelta
+
+    Returns:
+        the equivalent Python timedelta in seconds
+
+    Raises:
+        ValueError if TimeDelta is not a scalar.
+    """
+    if time_delta.ndim != 0:
+        raise ValueError(f'time_slot_length contains multiple values: {len(time_delta.value)}')
+
+    return timedelta(seconds=time_delta.to_value(u.s))
+
+
+def time_delta_astropy_to_minutes(time_delta: TimeDelta) -> int:
+    """
+    Convert an AstroPy TimeDelta
+    Args:
+        time_delta: an AstroPy TimeDelta
+
+    Returns:
+        An int representing the number of minutes in the AstroPy TimeDelta.
+
+    Raises:
+        ValueError if TimeDelta is not a scalar in minutes.
+    """
+    if time_delta.ndim != 0:
+        raise ValueError(f'time_slot_length contains multiple values: {len(time_delta.value)}')
+    minutes = time_delta.to_value(u.minute)
+
+    if int(minutes) != minutes:
+        raise ValueError(f'time_slot_length is not a multiple of minutes: {minutes} minutes.')
+
+    return int(minutes)
