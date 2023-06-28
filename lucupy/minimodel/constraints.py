@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass, field
@@ -238,8 +238,6 @@ class Variant:
     wind_speed should be in m / s.
 
     Attributes:
-
-        start_time (datetime): Time of the variant.
         iq (Union[npt.NDArray[ImageQuality], ImageQuality]): Image quality.
         cc (Union[npt.NDArray[CloudCover], CloudCover]): Cloud Cover.
         wind_dir (Angle): Wind direction.
@@ -249,7 +247,6 @@ class Variant:
     # TODO: No idea what time blocks are. Note this could be a list or a single value.
     # TODO: Because of this, we cannot hash Variants, which is problematic.
 
-    start_time: datetime
     iq: Union[npt.NDArray[ImageQuality], ImageQuality]
     cc: Union[npt.NDArray[CloudCover], CloudCover]
     wind_dir: Angle
