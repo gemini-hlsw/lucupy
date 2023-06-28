@@ -5,7 +5,7 @@ import pytest
 import numpy as np
 
 from lucupy.minimodel import CloudCover
-from lucupy.helpers import lerp, lerp_enum, lerp_radians
+from lucupy.helpers import lerp, lerp_enum, lerp_radians, lerp_degrees
 
 
 @pytest.mark.parametrize('first_value, last_value, n, expected',
@@ -30,9 +30,20 @@ def test_lerp_enum(first_value, last_value, n, expected):
 @pytest.mark.parametrize('first_value, last_value, n, expected',
                          [(np.pi/2, 3*np.pi/2, 4, np.array([0.9424778, 0.31415927, 5.96902604, 5.34070751])),
                           (np.pi/2, -np.pi/2, 4, np.array([0.9424778, 0.31415927, 5.96902604, 5.34070751])),
-                          (np.pi/2 + 1e3, 3*np.pi/2, 4, np.array([2.97794378, 3.41155508, 3.84516638, 4.27877768])),
-                          (np.pi/2 + 1e3, -np.pi/2, 4, np.array([2.97794378, 3.41155508, 3.84516638, 4.27877768])),
+                          (np.pi/2 + 1e-3, 3*np.pi/2, 4, np.array([2.19991486, 2.82803339, 3.45615192, 4.08427045])),
+                          (np.pi/2 + 1e-3, -np.pi/2, 4, np.array([2.19991486, 2.82803339, 3.45615192, 4.08427045])),
                           (np.pi/4, -np.pi/4, 3, np.array([0.39269908, 0, 5.89048623])),
                           (-np.pi/4, np.pi/4, 3, np.array([5.89048623, 0, 0.39269908]))])
 def test_lerp_radians(first_value, last_value, n, expected):
     assert np.allclose(lerp_radians(first_value, last_value, n), expected)
+
+
+@pytest.mark.parametrize('first_value, last_value, n, expected',
+                         [(90, 270, 4, np.array([54, 18, 342, 306])),
+                          (90, -90, 4, np.array([54, 18, 342, 306])),
+                          (90 + 1e-8, 270, 4, np.array([126, 162, 198, 234])),
+                          (90 + 1e-8, -90, 4, np.array([126, 162, 198, 234])),
+                          (60, 300, 3, np.array([30, 0, 330])),
+                          (60, -60, 3, np.array([30, 0, 330]))])
+def test_lerp_degrees(first_value, last_value, n, expected):
+    assert np.allclose(lerp_degrees(first_value, last_value, n), expected)
