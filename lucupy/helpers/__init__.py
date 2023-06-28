@@ -241,17 +241,19 @@ def lerp_enum(enum_class: Type[Enum], first_value: float, last_value: float, n: 
     return np.array(result)
 
 
-def lerp_radians(start_value: float, end_value: float, n: int) -> npt.NDArray[float]:
+def _lerp_circular(start_value: float, end_value: float, n: int, max_val: float) -> npt.NDArray[float]:
     """
-    Perform a linear interpolation for n points between start_value radians and end_value radians.
+    Perform a linear interpolation for n points between start_value and end_value.
+    For degrees, max_val should be 360.
+    For radians, max_val should be 2pi.
     """
-    # Normalize start and end values to the range [0, 2pi]
-    start_value = start_value % (2 * np.pi)
-    end_value = end_value % (2 * np.pi)
+    # Normalize start and end values to the range [0, max_val)
+    start_value %= max_val
+    end_value %= max_val
 
     # Calculate distances
-    direct_clockwise_distance = (end_value - start_value) % (2 * np.pi)
-    direct_counterclockwise_distance = (start_value - end_value) % (2 * np.pi)
+    direct_clockwise_distance = (end_value - start_value) % max_val
+    direct_counterclockwise_distance = (start_value - end_value) % max_val
 
     # Choose the direction with the shortest distance
     if direct_clockwise_distance < direct_counterclockwise_distance:
@@ -260,4 +262,12 @@ def lerp_radians(start_value: float, end_value: float, n: int) -> npt.NDArray[fl
         shortest_distance = -direct_counterclockwise_distance
 
     # Generate the lerp.
-    return (start_value + shortest_distance * lerp(0, 1, n)) % (2 * np.pi)
+    return (start_value + shortest_distance * lerp(0, 1, n)) % max_val
+
+
+def lerp_radians(start_value: float, end_value: float, n: int) -> npt.NDArray[float]:
+    return _lerp_circular(start_value, end_value, n, 2 * np.pi)
+
+
+def lerp_degrees(start_value: float, end_value: float, n: int) -> npt.NDArray[float]:
+    return _lerp_circular(start_value, end_value, n, 360.0)
