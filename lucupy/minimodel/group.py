@@ -237,6 +237,30 @@ class Group(ABC):
         else:
             return sum((child.total_used() for child in self.children), timedelta())
 
+    def program_observations(self) -> List:
+        """Return the list of program (science + program calibration) observations in the group"""
+        observations = []
+        for obs in self.observations():
+            if obs.obs_class in [ObservationClass.SCIENCE, ObservationClass.PROGCAL]:
+                observations.append(obs)
+        return observations
+
+    def partner_observations(self) -> List:
+        """Return the list of partner calibration observations in the group"""
+        observations = []
+        for obs in self.observations():
+            if obs.obs_class == ObservationClass.PARTNERCAL:
+                observations.append(obs)
+        return observations
+
+    def daycal_observations(self) -> List:
+        """Return the list of daytime calibration observations in the group"""
+        observations = []
+        for obs in self.observations():
+            if obs.obs_class == ObservationClass.DAYCAL:
+                observations.append(obs)
+        return observations
+
     def obs_class(self) -> ObservationClass:
         """
         Determine a group 'obs_class' for observation groups
