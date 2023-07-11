@@ -98,7 +98,7 @@ class ObservationClass(IntEnum):
     ACQ = auto()
     ACQCAL = auto()
     DAYCAL = auto()
-
+    NONE = auto()
 
 @dataclass
 class Observation:
@@ -242,9 +242,25 @@ class Observation:
         from the OCS, which is used to populate the time allocation.
 
         Returns:
-            (timedelta): With the time program used.
+            (timedelta): With the time partner used.
         """
         return sum((atom.partner_used for atom in self.sequence), start=ZeroTime)
+
+    def prog_time(self) -> timedelta:
+        """We roll this information up from the atoms.
+
+        Returns:
+            (timedelta): With the total planned program time.
+        """
+        return sum((atom.prog_time for atom in self.sequence), start=ZeroTime)
+
+    def part_time(self) -> timedelta:
+        """We roll this information up from the atoms.
+
+        Returns:
+            (timedelta): With the total planned partner time.
+        """
+        return sum((atom.part_time for atom in self.sequence), start=ZeroTime)
 
     @staticmethod
     def _select_obsclass(classes: List[ObservationClass]) -> Optional[ObservationClass]:

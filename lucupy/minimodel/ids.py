@@ -49,3 +49,6 @@ class ObservationID(ID):
     def to_unique_group_id(self) -> UniqueGroupID:
         return UniqueGroupID(self.id)
 
+    def program_id(self) -> ProgramID:
+        """Return program ID string from observation ID string"""
+        return ProgramID(self.id[0:self.id.rfind('-')])

@@ -8,6 +8,7 @@ from enum import Enum, auto
 from typing import Final, FrozenSet, List, Optional, Union
 
 from lucupy.helpers import flatten
+from lucupy.minimodel.observation import ObservationClass
 
 from ..types import ZeroTime
 from .constraints import Constraints
@@ -181,6 +182,28 @@ class Group(ABC):
         else:
             return sum((child.exec_time() for child in self.children), timedelta())
 
+    def prog_time(self) -> timedelta:
+        """Program time planned across the group.
+
+        Returns:
+            prog_time (timedelta): Sum of all prog_time planned times across children of this group.
+        """
+        if isinstance(self.children, Observation):
+            return self.children.prog_time()
+        else:
+            return sum((child.prog_time() for child in self.children), timedelta())
+
+    def part_time(self) -> timedelta:
+        """Partner time planned across the group.
+
+        Returns:
+            part_time (timedelta): Sum of all `part_time` (planned times) across the children of this group.
+        """
+        if isinstance(self.children, Observation):
+            return self.children.part_time()
+        else:
+            return sum((child.part_time() for child in self.children), timedelta())
+
     def program_used(self) -> timedelta:
         """Program time used across the group.
 
@@ -196,7 +219,7 @@ class Group(ABC):
         """Partner time used across the group.
 
         Returns:
-            partner_time (timedelta): Sum of all `partner_used` across the children of this group.
+            partner_used (timedelta): Sum of all `partner_used` across the children of this group.
         """
         if isinstance(self.children, Observation):
             return self.children.partner_used()
@@ -213,6 +236,42 @@ class Group(ABC):
             return self.children.total_used()
         else:
             return sum((child.total_used() for child in self.children), timedelta())
+
+    def program_observations(self) -> List:
+        """Return the list of program (science + program calibration) observations in the group"""
+        observations = []
+        for obs in self.observations():
+            if obs.obs_class in [ObservationClass.SCIENCE, ObservationClass.PROGCAL]:
+                observations.append(obs)
+        return observations
+
+    def partner_observations(self) -> List:
+        """Return the list of partner calibration observations in the group"""
+        observations = []
+        for obs in self.observations():
+            if obs.obs_class == ObservationClass.PARTNERCAL:
+                observations.append(obs)
+        return observations
+
+    def daycal_observations(self) -> List:
+        """Return the list of daytime calibration observations in the group"""
+        observations = []
+        for obs in self.observations():
+            if obs.obs_class == ObservationClass.DAYCAL:
+                observations.append(obs)
+        return observations
+
+    def obs_class(self) -> ObservationClass:
+        """
+        Determine a group 'obs_class' for observation groups
+        """
+        obs_class = ObservationClass.NONE
+        if self.is_and_group():
+            if isinstance(self.children, Observation):
+                obs_class = self.children.obs_class
+            else:
+                obs_class = min([child.obs_class() for child in self.children])
+        return obs_class
 
     def show(self, depth: int = 1) -> None:
         """Print content of the Group.
