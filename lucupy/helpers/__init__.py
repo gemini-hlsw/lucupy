@@ -5,13 +5,12 @@ import bisect
 from collections.abc import Iterable
 from datetime import timedelta
 from enum import Enum
-from typing import Optional, Type
+from typing import List, Optional, Type
 
 import astropy.units as u
-from astropy.time import TimeDelta
 import numpy as np
 import numpy.typing as npt
-from astropy.time import Time
+from astropy.time import Time, TimeDelta
 
 
 def flatten(lst):  # type: ignore
@@ -80,7 +79,7 @@ def dmsstr2deg(s: str) -> float:
         ValueError: wrong format
 
     Returns:
-        float: value in decimal degress
+        float: value in decimal degrees
 
     """
     if not s:
@@ -95,6 +94,7 @@ def dmsstr2deg(s: str) -> float:
     if len(result) != 3:
         raise ValueError(f'Illegal DMS string: {s}')
     return dms2deg(int(result[0]), int(result[1]), float(result[2]), sign)
+
 
 def dms2deg(d: int, m: int, s: float, sign: str) -> float:
     """Degrees, minutes, seconds to decimal degrees
@@ -381,3 +381,45 @@ def time_delta_astropy_to_minutes(time_delta: TimeDelta) -> int:
         raise ValueError(f'time_slot_length is not a multiple of minutes: {minutes} minutes.')
 
     return int(minutes)
+
+
+def first_nonzero_time(inlist: List[timedelta]) -> Optional[int]:
+    """Find the index of the first nonzero timedelta in inlist
+       Designed to work with the output from cumulative_seq_exec_times
+       Args:
+           inlist (List[timedelta]): a list of cumulative timedelta objects
+
+       Returns:
+          Optional[int]: return the index for the first non-zero, if it does
+          not exist return None
+    """
+    for i, td in enumerate(inlist):
+        if td != timedelta(0):
+            return i
+    return None
+
+
+def standards_for_nir(exec_sci: timedelta,
+                      wavelengths: Optional[List[float]] = None,
+                      mode: str = 'spectroscopy') -> int:
+    """
+    Calculated the number of NIR standards from the length of the NIR science and the mode
+    Args:
+        exec_sci(timedelta): execution time for science
+        wavelengths (List[float]): list of wavelengths values
+        mode (str): mode for the NIR observation
+    """
+
+    # TODO: need mode or other info to distinguish imaging from spectroscopy
+    if mode == 'imaging':
+        time_per_standard = timedelta(hours=2.0)
+    else:
+        if wavelengths:
+            if all(wave <= 2.5 for wave in wavelengths):
+                time_per_standard = timedelta(hours=1.5)
+            else:
+                time_per_standard = timedelta(hours=1.0)
+        else:
+            raise ValueError("Wrong mode: spectroscpy expect wavelengths list")
+
+    return max(1, int(exec_sci // time_per_standard))  # TODO: confirm this

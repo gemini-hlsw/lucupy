@@ -6,6 +6,8 @@ from datetime import timedelta
 from enum import IntEnum, auto
 from typing import FrozenSet, List, Mapping, Optional
 
+import numpy as np
+
 from lucupy.observatory.abstract import ObservatoryProperties
 
 from ..types import ZeroTime
@@ -261,6 +263,13 @@ class Observation:
             (timedelta): With the total planned partner time.
         """
         return sum((atom.part_time for atom in self.sequence), start=ZeroTime)
+
+    def cumulative_exec_times(self) -> List[timedelta]:
+        """Cumulative series of execution times for the unobserved atoms
+        in a sequence, excluding acquisition time."""
+        cum_seq = [atom.exec_time.total_seconds() if not atom.observed else 0 for atom in self.sequence]
+        np_cum_seq = np.cumsum(np.array(cum_seq))
+        return list(map(lambda x: timedelta(x), np_cum_seq))
 
     @staticmethod
     def _select_obsclass(classes: List[ObservationClass]) -> Optional[ObservationClass]:
