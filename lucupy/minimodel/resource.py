@@ -1,8 +1,8 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import FrozenSet, Optional
 
 from ..decorators import immutable
 
@@ -31,3 +31,10 @@ class Resource:
 
     def __repr__(self):
         return f"Resource(id='{self.id}')"
+
+
+NIR_INSTRUMENTS: FrozenSet[Resource] = frozenset([Resource('Flamingos2'),
+                                                  Resource('GNIRS'),
+                                                  Resource('NIRI'),
+                                                  Resource('NIFS'),
+                                                  Resource('IGRINS')])

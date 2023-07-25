@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass
@@ -15,7 +15,7 @@ from .atom import Atom
 from .constraints import Constraints
 from .ids import ObservationID, ProgramID, UniqueGroupID
 from .qastate import QAState
-from .resource import Resource
+from .resource import NIR_INSTRUMENTS, Resource
 from .site import Site
 from .target import Target, TargetType
 from .too import TooType
@@ -155,7 +155,7 @@ class Observation:
     belongs_to: ProgramID
 
     # Some observations do not have constraints, e.g. GN-208A-FT-103-6.
-    # to mypy complae we should have an EmptyContraints
+    # to mypy complaince we should have an EmptyConstraints
     constraints: Constraints
 
     too_type: Optional[TooType] = None
@@ -222,6 +222,11 @@ class Observation:
         return next(filter(lambda r: check_instrument(r),
                            self.required_resources()), None)
 
+    def is_nir(self) -> bool:
+        """Define if the observation is a NIR observation or not."""
+        inst_req = self.instrument()
+        return any(inst_req == nir_ins for nir_ins in NIR_INSTRUMENTS)
+
     def wavelengths(self) -> FrozenSet[float]:
         """
         Returns:
@@ -267,9 +272,8 @@ class Observation:
     def cumulative_exec_times(self) -> List[timedelta]:
         """Cumulative series of execution times for the unobserved atoms
         in a sequence, excluding acquisition time."""
-        cum_seq = [atom.exec_time.total_seconds() if not atom.observed else 0 for atom in self.sequence]
-        np_cum_seq = np.cumsum(np.array(cum_seq))
-        return list(map(lambda x: timedelta(x), np_cum_seq))
+        cum_seq = [atom.exec_time if not atom.observed else timedelta() for atom in self.sequence]
+        return np.cumsum(cum_seq)
 
     @staticmethod
     def _select_obsclass(classes: List[ObservationClass]) -> Optional[ObservationClass]:
