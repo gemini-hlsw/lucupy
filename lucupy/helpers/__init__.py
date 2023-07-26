@@ -13,6 +13,20 @@ import numpy.typing as npt
 from astropy.time import Time, TimeDelta
 
 
+def is_contiguous(iterable: Iterable) -> bool:
+    """
+    Determine if a sortable iterable contains contiguous elements.
+    Args:
+        iterable: an iterable collection that can be sorted
+
+    Returns:
+        True if the elements are contiguous, and False otherwise
+    """
+    s = sorted(iterable)
+    diffs = np.diff(s)
+    return np.all(diffs == 1)
+
+
 def flatten(lst):  # type: ignore
     """Flattens any iterable, no matter how irregular.
        Deliberately left untyped to allow for maximum type usage.

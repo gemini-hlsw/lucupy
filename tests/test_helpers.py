@@ -9,7 +9,7 @@ import pytest
 import numpy as np
 
 from lucupy.minimodel import CloudCover
-from lucupy.helpers import (lerp, lerp_enum, lerp_radians, lerp_degrees,
+from lucupy.helpers import (is_contiguous, lerp, lerp_enum, lerp_radians, lerp_degrees,
                             timedelta_astropy_to_python, time_delta_astropy_to_minutes)
 
 
@@ -85,3 +85,15 @@ def test_time_delta_astropy_to_minutes(time_delta):
                           (TimeDelta(2.0 * u.minute), 2)])
 def test_time_delta_astropy_to_minutes(time_delta, expected):
     assert time_delta_astropy_to_minutes(time_delta) == expected
+
+
+@pytest.mark.parametrize('iterable, expected',
+                         [((1, 3, 2), True),
+                          ([1, 5, 3, 2, 4], True),
+                          ({1, 4, 2, 3}, True),
+                          ({1: 'a', 2: 'b', 4: 'c', 3: 'd'}, True),
+                          (np.array([1]), True),
+                          (np.array([5, 3, 2, 1, 4]), True),
+                          (np.array([5, 4, 1]), False)])
+def test_is_contiguous(iterable, expected):
+    assert is_contiguous(iterable) == expected
