@@ -167,7 +167,10 @@ class Group(ABC):
         If the group is instead a scheduling group, a TypeError will be raised.
         """
         if self.is_observation_group():
-            return self.children.id
+            if isinstance(self.children, Observation):
+                return self.children.id
+            else:
+                raise TypeError('Failed is_observation_group method')
         else:
             raise TypeError('Cannot get an ObservationID from a scheduling group.')
 

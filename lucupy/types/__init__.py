@@ -15,3 +15,5 @@ TimeScalarOrNDArray = Union[Time, npt.NDArray[float]]
 ListOrNDArray = Union[List[T], npt.NDArray[T]]
 
 ZeroTime: Final[timedelta] = timedelta()
+# Convenient type alias for Interval
+Interval = npt.NDArray[int]
