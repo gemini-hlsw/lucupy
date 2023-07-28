@@ -1,6 +1,8 @@
 # Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import date
 from enum import Enum
@@ -35,7 +37,7 @@ class SemesterHalf(str, Enum):
         return _semester_half_months[self][-1]
 
     @staticmethod
-    def determine_half(month: int) -> 'SemesterHalf':
+    def determine_half(month: int) -> SemesterHalf:
         """
         Given a month, return the SemesterHalf this falls in.
 
@@ -92,7 +94,7 @@ class Semester:
         return date(year=end_year, month=self.half.end_month(), day=self.half.end_day())
 
     @staticmethod
-    def find_semester_from_date(lookup_date: date) -> 'Semester':
+    def find_semester_from_date(lookup_date: date) -> Semester:
         """
         Given a date, return the Semester in which it occurs.
 

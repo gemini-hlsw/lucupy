@@ -1,8 +1,9 @@
 # Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
-from datetime import datetime
 from enum import Enum, IntEnum, auto
 from typing import ClassVar, List, Optional, Sequence, Union
 
@@ -149,7 +150,7 @@ class Conditions:
 
     # Least restrictive conditions.
     @classmethod
-    def least_restrictive(cls) -> 'Conditions':
+    def least_restrictive(cls) -> Conditions:
         """
         Return the least possible restrictive conditions.
         """
@@ -173,7 +174,7 @@ class Conditions:
                 raise ValueError(f'Conditions have a variable number of array sizes: {self}')
 
     @staticmethod
-    def most_restrictive_conditions(conditions: Sequence['Conditions']) -> 'Conditions':
+    def most_restrictive_conditions(conditions: Sequence[Conditions]) -> Conditions:
         """
         Given an iterable of conditions, find the most restrictive amongst the set.
         If no conditions are given, return the most flexible conditions possible.
