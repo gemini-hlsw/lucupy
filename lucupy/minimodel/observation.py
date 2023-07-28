@@ -1,6 +1,8 @@
 # Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import IntEnum, auto
@@ -102,6 +104,7 @@ class ObservationClass(IntEnum):
     DAYCAL = auto()
     NONE = auto()
 
+
 @dataclass
 class Observation:
     """Representation of an observation.
@@ -123,7 +126,7 @@ class Observation:
             with the base being in the first position
         guiding (Mapping[Resource, Target]): is a map between guide probe resources and their targets.
         sequence (List[Atom]): Sequence of Atoms that describe the observation.
-        belongs_to (ProgramID): Id for the program the observation belongs to.
+        belongs_to (ProgramID): ID for the program the observation belongs to.
         constraints (Constraints, optional): Some observations do not have constraints, e.g. GN-208A-FT-103-6.
         too_type (TooType, optional): Default to None.
 
@@ -292,7 +295,7 @@ class Observation:
     @staticmethod
     def _select_qastate(qastates: List[QAState]) -> Optional[QAState]:
         """
-        Given a list of non-empty QAStates, determine which occurs with
+        Given a list of non-empty QAStates, determine which occurs with the
         highest precedence in the QAStates enum, i.e. has the lowest index.
 
         Returns:
@@ -323,7 +326,7 @@ class Observation:
         """
         return 1
 
-    def __eq__(self, other: 'Observation') -> bool:  # type: ignore[override]
+    def __eq__(self, other: Observation) -> bool:  # type: ignore[override]
         """
         We override the equality checker created by @dataclass to temporarily skip sequence
         comparison in test cases until the atom creation process is finish.
