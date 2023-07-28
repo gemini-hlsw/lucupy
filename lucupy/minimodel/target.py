@@ -1,15 +1,15 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from abc import ABC
 from dataclasses import dataclass
 from enum import Enum, IntEnum, auto
-from typing import FrozenSet, NoReturn
+from typing import NoReturn
 
 import numpy.typing as npt
 
 from ..decorators import immutable
-from .magnitude import Magnitude
+from .magnitude import Magnitudes
 
 TargetName = str
 
@@ -67,11 +67,11 @@ class Target(ABC):
 
     Attributes:
         - name: TargetName
-        - magnitudes: Set[Magnitude]
+        - magnitudes: Magnitudes
         - type: TargetType
     """
     name: TargetName
-    magnitudes: FrozenSet[Magnitude]
+    magnitudes: Magnitudes
     type: TargetType
 
     def guide_speed(self) -> NoReturn:

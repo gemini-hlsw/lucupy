@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import IntEnum, auto
-from typing import FrozenSet, List, Mapping, Optional
+from typing import List, Mapping, Optional
 
 import numpy as np
 
@@ -17,10 +17,11 @@ from .atom import Atom
 from .constraints import Constraints
 from .ids import ObservationID, ProgramID, UniqueGroupID
 from .qastate import QAState
-from .resource import NIR_INSTRUMENTS, Resource
+from .resource import NIR_INSTRUMENTS, Resource, Resources
 from .site import Site
 from .target import Target, TargetType
 from .too import TooType
+from .wavelength import Wavelengths
 
 
 class ObservationStatus(IntEnum):
@@ -204,7 +205,7 @@ class Observation:
         """
         return self.program_used() + self.partner_used()
 
-    def required_resources(self) -> FrozenSet[Resource]:
+    def required_resources(self) -> Resources:
         """
         Returns:
             The required resources for an observation based on the sequence's needs.
@@ -230,12 +231,12 @@ class Observation:
         inst_req = self.instrument()
         return any(inst_req == nir_ins for nir_ins in NIR_INSTRUMENTS)
 
-    def wavelengths(self) -> FrozenSet[float]:
+    def wavelengths(self) -> Wavelengths:
         """
         Returns:
             The set of wavelengths included in the sequence.
         """
-        return frozenset((w for c in self.sequence for w in c.wavelengths))
+        return Wavelengths((w for c in self.sequence for w in c.wavelengths))
 
     def program_used(self) -> timedelta:
         """We roll this information up from the atoms as it will be calculated

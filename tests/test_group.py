@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 import pytest
@@ -51,5 +51,5 @@ def test_observation_ids(observation_group, observation):
 @pytest.mark.usefixtures('scheduling_group')
 def test_schedule_group_to_obsid_raises_exception(scheduling_group):
     with pytest.raises(TypeError) as exc_info:
-        no = scheduling_group.to_observation_id
+        _ = scheduling_group.to_observation_id
     assert str(exc_info.value) == 'Cannot get an ObservationID from a scheduling group.'

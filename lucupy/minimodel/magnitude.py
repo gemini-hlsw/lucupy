@@ -1,9 +1,9 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Optional
+from typing import FrozenSet, Optional
 
 from ..decorators import immutable
 
@@ -89,3 +89,6 @@ class Magnitude:
     band: MagnitudeBands
     value: float
     error: Optional[float] = None
+
+
+Magnitudes = FrozenSet[Magnitude]

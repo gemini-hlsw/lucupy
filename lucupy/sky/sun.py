@@ -91,6 +91,7 @@ class Sun:
             alt: Desired altitude. If array, then must be the same length as time_guess.
             time_guess: Is a Time approximating the answer.
             location: EarthLocation
+            timestep: The timestep to use.
 
         Raises:
             ValueError: Different lengths for Altitude and time_guess
@@ -112,7 +113,7 @@ class Sun:
         if len(time_guess) == 1 and len(alt) > 1:
             time_guess = Time(time_guess.jd * np.ones(len(alt)), format='jd')
         elif len(time_guess) > 1 and len(alt) == 1:
-            alt = alt * np.ones(len(time_guess))
+            alt *= np.ones(len(time_guess))
         elif len(time_guess) != len(alt):
             raise ValueError('Error: alt and time_guess have incompatible lengths')
 
@@ -124,7 +125,7 @@ class Sun:
         ha = local_sidereal_time(time_guess, location) - sun_pos.ra
         alt2, az, parang = Altitude.above(sun_pos.dec, Angle(ha, unit=u.hourangle), location.lat)
 
-        time_guess = time_guess + delta
+        time_guess += delta
         sun_pos = Sun.at(time_guess)
 
         alt3, az, parang = Altitude.above(sun_pos.dec,
@@ -142,7 +143,7 @@ class Sun:
                                                           local_sidereal_time(time_guess[kk], location) - sun_pos.ra,
                                                           location.lat)
             err[kk] = alt3[kk] - alt[kk]
-            kount[kk] = kount[kk] + 1
+            kount[kk] += 1
             ii = np.where(kount >= 9)[0][:]
             if len(ii) != 0:
                 raise ArithmeticError("Sunrise, set, or twilight calculation not converging.")

@@ -4,13 +4,14 @@
 from datetime import timedelta
 
 import astropy.units as u
-from astropy.time import TimeDelta
-import pytest
 import numpy as np
+import pytest
+from astropy.time import TimeDelta
 
+from lucupy.helpers import (is_contiguous, lerp, lerp_degrees, lerp_enum,
+                            lerp_radians, time_delta_astropy_to_minutes,
+                            timedelta_astropy_to_python)
 from lucupy.minimodel import CloudCover
-from lucupy.helpers import (is_contiguous, lerp, lerp_enum, lerp_radians, lerp_degrees,
-                            timedelta_astropy_to_python, time_delta_astropy_to_minutes)
 
 
 @pytest.mark.parametrize('first_value, last_value, n, expected',
@@ -73,9 +74,8 @@ def test_time_delta_astropy_to_python(time_delta, expected):
 
 @pytest.mark.parametrize('time_delta',
                          [TimeDelta([1.0, 2.0] * u.minute),
-                          # TimeDelta([]),
                           TimeDelta(1.5 * u.minute)])
-def test_time_delta_astropy_to_minutes(time_delta):
+def test_time_delta_astropy_to_minutes_exceptions(time_delta):
     with pytest.raises(ValueError):
         time_delta_astropy_to_minutes(time_delta)
 

@@ -9,7 +9,7 @@ from typing import ClassVar, FrozenSet, List, Optional
 from ..decorators import immutable
 from ..types import ZeroTime
 from .group import ROOT_GROUP_ID, AndGroup, Group
-from .ids import ProgramID, ObservationID, UniqueGroupID
+from .ids import ObservationID, ProgramID, UniqueGroupID
 from .observation import Observation
 from .semester import Semester
 from .timeallocation import TimeAllocation

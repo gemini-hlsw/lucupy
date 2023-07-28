@@ -18,8 +18,8 @@ of the planets, used in predicting apparent magnitude. See code.
 from typing import Final
 
 import astropy.units as u
-from astropy.coordinates.distances import Distance  # type: ignore
-from astropy.time import Time  # type: ignore
+from astropy.coordinates.distances import Distance
+from astropy.time import Time
 
 PI: Final[float] = 3.14159265358979
 TWOPI: Final[float] = 6.28318530717959

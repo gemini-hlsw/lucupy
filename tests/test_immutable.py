@@ -7,11 +7,11 @@ from datetime import datetime, timedelta
 from lucupy.minimodel import (ROOT_GROUP_ID, AndGroup, AndOption, Band,
                               CloudCover, Conditions, Constraints,
                               ElevationType, GroupID, ImageQuality, Magnitude,
-                              MagnitudeBands, Observation, ObservationClass, ObservationID,
-                              ObservationStatus, Priority, Program, ProgramID,
-                              ProgramMode, ProgramTypes, Semester,
-                              SemesterHalf, SetupTimeType, SiderealTarget,
-                              Site, SkyBackground, TargetType,
+                              MagnitudeBands, Observation, ObservationClass,
+                              ObservationID, ObservationStatus, Priority,
+                              Program, ProgramID, ProgramMode, ProgramTypes,
+                              Semester, SemesterHalf, SetupTimeType,
+                              SiderealTarget, Site, SkyBackground, TargetType,
                               TimeAccountingCode, TimeAllocation, TimingWindow,
                               WaterVapor)
 

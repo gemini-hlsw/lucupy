@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 """A small version of GPP data model"
@@ -19,6 +19,7 @@ from .target import *
 from .timeallocation import *
 from .timingwindow import *
 from .too import *
+from .wavelength import *
 
 # Type alias for a night index.
 NightIndex = int

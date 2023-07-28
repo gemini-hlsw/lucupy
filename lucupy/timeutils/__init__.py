@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 import sys
@@ -37,8 +37,8 @@ def sex2dec(stime: str,
         x = float(val)
         if x < 0.0:
             sign = -1.
-        result = result + abs(x) / 60. ** exp
-        exp = exp + 1
+        result += abs(x) / 60. ** exp
+        exp += 1
     return sign * f * result
 
 
@@ -109,7 +109,7 @@ def dec2sex(d: float,
     maxdg = 360.
 
     if tohour:
-        l_d = l_d / 15.0
+        l_d /= 15.0
         hour = True
 
     if hour and (abs(l_d) > 24.):
@@ -143,7 +143,7 @@ def dec2sex(d: float,
 
     if sc >= 60.0:
         sc -= 60.0
-        mn = mn + 1
+        mn += 1
 
     if cutsec:
         if round_min and sc >= 30.:
@@ -153,10 +153,10 @@ def dec2sex(d: float,
 
     if mn >= 60:
         mn -= 60
-        dg = dg + 1
+        dg += 1
 
     if dg >= int(maxdg):
-        dg = dg - int(maxdg)
+        dg -= int(maxdg)
 
     if cutsec and sc == 0.0:
         fmt = '{:1s}{:' + sldg + 'd}' + sep + '{:02d}'
