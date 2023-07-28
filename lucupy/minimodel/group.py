@@ -124,7 +124,7 @@ class Group(ABC):
         if isinstance(self.children, Observation):
             return self.children.wavelengths()
         else:
-            return Wavelengths(w for c in self.children for w in c.wavelengths())
+            return frozenset(w for c in self.children for w in c.wavelengths())
 
     def constraints(self) -> FrozenSet[Constraints]:
         """
