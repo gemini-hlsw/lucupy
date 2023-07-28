@@ -1,21 +1,23 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
+from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import timedelta
 from enum import Enum, auto
-from typing import Final, FrozenSet, List, Optional, Union
+from typing import Final, FrozenSet, List, Optional
 
 from lucupy.helpers import flatten
 from lucupy.minimodel.observation import ObservationClass
 
-from ..types import ZeroTime
 from .constraints import Constraints
-from .ids import ID, GroupID, ObservationID, ProgramID, UniqueGroupID
+from .ids import GroupID, ObservationID, ProgramID, UniqueGroupID
 from .observation import Observation
-from .resource import Resource
+from .resource import Resources
 from .site import Site
+from .wavelength import Wavelengths
 
 ROOT_GROUP_ID: Final[GroupID] = GroupID('root')
 
@@ -44,7 +46,7 @@ class Group(ABC):
     number_to_observe: int
     delay_min: timedelta
     delay_max: timedelta
-    children: Union[List['Group'], Observation]
+    children: List[Group] | Observation
 
     # Calculated afterward.
     unique_id: UniqueGroupID = field(init=False)
@@ -104,25 +106,25 @@ class Group(ABC):
         else:
             return frozenset.union(*[s.sites() for s in self.children])
 
-    def required_resources(self) -> FrozenSet[Resource]:
+    def required_resources(self) -> Resources:
         """
         Returns:
-            FrozenSet[Resource]: A set of Resources.
+            Resources: A set of Resources.
         """
         if isinstance(self.children, Observation):
             return self.children.required_resources()
         else:
             return frozenset(r for c in self.children for r in c.required_resources())
 
-    def wavelengths(self) -> FrozenSet[float]:
+    def wavelengths(self) -> Wavelengths:
         """
         Returns:
-            FrozenSet[float]: A set of wavelengths.
+            Wavelengths: A set of wavelengths.
         """
         if isinstance(self.children, Observation):
             return self.children.wavelengths()
         else:
-            return frozenset(w for c in self.children for w in c.wavelengths())
+            return Wavelengths(w for c in self.children for w in c.wavelengths())
 
     def constraints(self) -> FrozenSet[Constraints]:
         """
@@ -137,7 +139,7 @@ class Group(ABC):
     def observations(self) -> List[Observation]:
         """
         Returns:
-            List[Observation]: A set of Observations.
+            List[Observation]: A list of Observations.
         """
         if isinstance(self.children, Observation):
             return [self.children]
@@ -358,10 +360,10 @@ class AndGroup(Group):
     def is_or_group(self) -> bool:
         return False
 
-    def instruments(self) -> FrozenSet[Resource]:
+    def instruments(self) -> Resources:
         """
         Returns:
-            instruments (FrozenSet[Resource]): A set of all instruments used in this group.
+            instruments (Resources): A set of all instruments used in this group.
         """
         if isinstance(self.children, Observation):
             instrument = self.children.instrument()

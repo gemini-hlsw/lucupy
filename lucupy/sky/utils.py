@@ -17,7 +17,7 @@ from astropy.coordinates import (Angle, BaseRADecFrame, EarthLocation,
                                  PrecessedGeocentric)
 from astropy.time import Time
 from astropy.units import Quantity
-from pytz import BaseTzInfo, timezone
+from pytz import BaseTzInfo
 
 from .altitude import AngleParam
 from .constants import EQUAT_RAD, FLATTEN, J2000, JYEAR, JYEAR_100
@@ -258,7 +258,7 @@ def true_airmass(altit: Angle) -> npt.NDArray[float]:
     if len(kk) != 0:
         seczmin1 = ret[kk] - 1.
         coefs = np.array([-4.716679E-5, 1.351167E-3, 3.033104E-3, 2.879465E-3, 0.])
-        ret[kk] = ret[kk] - np.polyval(coefs, seczmin1)
+        ret[kk] -= np.polyval(coefs, seczmin1)
 
     if scalar_input:
         return np.squeeze(ret)
@@ -304,9 +304,9 @@ def hour_angle_to_angle(dec: AngleParam,
         alt = alt[None]
 
     if len(dec) == 1 and len(alt) > 1:
-        dec = dec * np.ones(len(alt))
+        dec *= np.ones(len(alt))
     elif len(dec) > 1 and len(alt) == 1:
-        alt = alt * np.ones(len(dec))
+        alt *= np.ones(len(dec))
     elif len(dec) != len(alt):
         raise ValueError('Error: dec and alt have incompatible lengths')
 

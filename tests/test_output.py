@@ -5,7 +5,8 @@ import io
 import unittest.mock
 from datetime import datetime
 
-from lucupy.minimodel import ROOT_GROUP_ID, AndGroup, GroupID, ObservationID, ProgramID, Observation, Program
+from lucupy.minimodel import (ROOT_GROUP_ID, AndGroup, GroupID, Observation,
+                              ObservationID, Program, ProgramID)
 
 
 @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)

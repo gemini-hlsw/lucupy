@@ -33,8 +33,10 @@ class Resource:
         return f"Resource(id='{self.id}')"
 
 
-NIR_INSTRUMENTS: FrozenSet[Resource] = frozenset([Resource('Flamingos2'),
-                                                  Resource('GNIRS'),
-                                                  Resource('NIRI'),
-                                                  Resource('NIFS'),
-                                                  Resource('IGRINS')])
+Resources = FrozenSet[Resource]
+
+NIR_INSTRUMENTS: Resources = frozenset([Resource('Flamingos2'),
+                                        Resource('GNIRS'),
+                                        Resource('NIRI'),
+                                        Resource('NIFS'),
+                                        Resource('IGRINS')])

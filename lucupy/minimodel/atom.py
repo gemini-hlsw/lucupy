@@ -1,12 +1,12 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass, field
 from datetime import timedelta
-from typing import FrozenSet
 
 from .qastate import QAState
-from .resource import Resource
+from .resource import Resources
+from .wavelength import Wavelengths
 
 
 @dataclass
@@ -27,8 +27,8 @@ class Atom:
         observed (bool): True if the STATUS is already observed.
         qa_state (QAState):
         guide_state (bool): True if a state exists.
-        resources (FrozenSet[Resource]): Resources needed (Instrument, FPU, etc).
-        wavelengths (FrozenSet[float]): Set of wavelengths.
+        resources (Resources): Resources needed (Instrument, FPU, etc).
+        wavelengths (Wavelengths): Set of wavelengths.
 
     """
     id: int
@@ -40,5 +40,5 @@ class Atom:
     observed: bool
     qa_state: QAState
     guide_state: bool
-    resources: FrozenSet[Resource]
-    wavelengths: FrozenSet[float]
+    resources: Resources
+    wavelengths: Wavelengths

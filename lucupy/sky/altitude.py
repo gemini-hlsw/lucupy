@@ -12,7 +12,7 @@ from typing import Tuple, TypeVar, Union
 import astropy.units as u
 import numpy as np
 import numpy.typing as npt
-from astropy.coordinates import Angle, Longitude  # type: ignore
+from astropy.coordinates import Angle, Longitude
 
 T = TypeVar('T')
 U = TypeVar('U')

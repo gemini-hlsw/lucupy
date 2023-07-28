@@ -5,12 +5,13 @@ from datetime import timedelta
 
 import astropy.units as u
 import pytest
-from astropy.coordinates import EarthLocation, SkyCoord  # type: ignore
-from astropy.time import Time  # type: ignore
+from astropy.coordinates import EarthLocation, SkyCoord
+from astropy.time import Time
 
 from lucupy.minimodel import (AndGroup, AndOption, GroupID, Observation,
-                              ObservationClass, ObservationStatus, ObservationID, Priority,
-                              ProgramID, SetupTimeType, Site)
+                              ObservationClass, ObservationID,
+                              ObservationStatus, Priority, ProgramID,
+                              SetupTimeType, Site)
 
 
 @pytest.fixture

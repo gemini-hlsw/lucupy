@@ -1,11 +1,17 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
+from __future__ import annotations
 
 from abc import ABC
 from datetime import timedelta
-from typing import FrozenSet, Optional, Union
+from typing import Optional
 
-from astropy.time import Time  # type: ignore
+from astropy.time import Time
+
+from lucupy.minimodel.observationmode import ObservationMode, ObservationModes
+from lucupy.minimodel.resource import Resource, Resources
+from lucupy.minimodel.wavelength import Wavelengths
 
 
 class ObservatoryProperties(ABC):
@@ -15,7 +21,7 @@ class ObservatoryProperties(ABC):
        structures, and allow computations to be implemented in one place.
 
     """
-    _properties: Optional[Union[None, 'ObservatoryProperties']] = None
+    _properties: Optional[ObservatoryProperties] = None
 
     @staticmethod
     def set_properties(cls) -> None:
@@ -41,16 +47,16 @@ class ObservatoryProperties(ABC):
             raise ValueError('Properties have not been set.')
 
     @staticmethod
-    def determine_standard_time(resources: FrozenSet,
-                                wavelengths: FrozenSet[float],
-                                modes: FrozenSet,
+    def determine_standard_time(resources: Resources,
+                                wavelengths: Wavelengths,
+                                modes: ObservationModes,
                                 cal_length: int) -> Time:
         """Determine standard time for a specific Observatory
 
         Args:
-            resources (FrozenSet): Set of Resources(instruments, mask, etc).
-            wavelengths (FrozenSet[float]): An array of Wavelengths to be observed.
-            modes (FrozenSet): The different modes of observation.
+            resources (Resources): Set of Resources(instruments, mask, etc).
+            wavelengths (Wavelengths): An array of Wavelengths to be observed.
+            modes (ObservationModes): The different modes of observation.
             cal_length (int): The length (in seconds) of a calibration.
 
         Returns:
@@ -68,7 +74,7 @@ class ObservatoryProperties(ABC):
             raise ValueError('Properties have not been set.')
 
     @staticmethod
-    def is_instrument(resource) -> bool:  # type: ignore
+    def is_instrument(resource: Resource) -> bool:  # type: ignore
         """Determine if the given resource is an instrument or not.
 
         Args:
@@ -83,7 +89,8 @@ class ObservatoryProperties(ABC):
             raise ValueError('Properties have not been set.')
 
     @staticmethod
-    def acquisition_time(resource, observation_mode) -> Optional[timedelta]:  # type: ignore
+    def acquisition_time(resource: Resource,
+                         observation_mode: ObservationMode) -> Optional[timedelta]:
         """Given a resource, check if it is an instrument, and if so, lookup the
            acquisition time for the specified mode.
 

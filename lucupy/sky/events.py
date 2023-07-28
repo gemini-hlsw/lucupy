@@ -11,9 +11,9 @@ from typing import Tuple
 
 import astropy.units as u
 import numpy as np
-from astropy.coordinates import Angle, EarthLocation  # type: ignore
-from astropy.time import Time  # type: ignore
-from pytz import BaseTzInfo, timezone
+from astropy.coordinates import Angle, EarthLocation
+from astropy.time import Time
+from pytz import BaseTzInfo
 
 from lucupy.types import TimeScalarOrNDArray
 
@@ -24,12 +24,12 @@ from .utils import local_midnight_time
 
 
 def night_events(time: Time, location: EarthLocation, localtzone: BaseTzInfo) -> Tuple[Time,
-                                                                                     TimeScalarOrNDArray,
-                                                                                     TimeScalarOrNDArray,
-                                                                                     TimeScalarOrNDArray,
-                                                                                     TimeScalarOrNDArray,
-                                                                                     TimeScalarOrNDArray,
-                                                                                     TimeScalarOrNDArray]:
+                                                                                       TimeScalarOrNDArray,
+                                                                                       TimeScalarOrNDArray,
+                                                                                       TimeScalarOrNDArray,
+                                                                                       TimeScalarOrNDArray,
+                                                                                       TimeScalarOrNDArray,
+                                                                                       TimeScalarOrNDArray]:
     """Compute phenomena for a given night.
     This is mostly a testbed that prints results directly.
 
