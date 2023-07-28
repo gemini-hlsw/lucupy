@@ -236,7 +236,7 @@ class Observation:
         Returns:
             The set of wavelengths included in the sequence.
         """
-        return Wavelengths((w for c in self.sequence for w in c.wavelengths))
+        return frozenset(w for c in self.sequence for w in c.wavelengths)
 
     def program_used(self) -> timedelta:
         """We roll this information up from the atoms as it will be calculated
