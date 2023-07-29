@@ -10,14 +10,13 @@ from enum import Enum, auto
 from typing import Final, FrozenSet, List, Optional
 
 from lucupy.helpers import flatten
-from lucupy.minimodel.observation import ObservationClass
-
-from .constraints import Constraints
-from .ids import GroupID, ObservationID, ProgramID, UniqueGroupID
-from .observation import Observation
-from .resource import Resources
-from .site import Site
-from .wavelength import Wavelengths
+from lucupy.minimodel.constraints import Constraints
+from lucupy.minimodel.ids import (GroupID, ObservationID, ProgramID,
+                                  UniqueGroupID)
+from lucupy.minimodel.observation import Observation, ObservationClass
+from lucupy.minimodel.resource import Resources
+from lucupy.minimodel.site import Site
+from lucupy.minimodel.wavelength import Wavelengths
 
 ROOT_GROUP_ID: Final[GroupID] = GroupID('root')
 
@@ -242,7 +241,7 @@ class Group(ABC):
         else:
             return sum((child.total_used() for child in self.children), timedelta())
 
-    def program_observations(self) -> List:
+    def program_observations(self) -> List[Observation]:
         """Return the list of program (science + program calibration) observations in the group"""
         observations = []
         for obs in self.observations():
@@ -250,7 +249,7 @@ class Group(ABC):
                 observations.append(obs)
         return observations
 
-    def partner_observations(self) -> List:
+    def partner_observations(self) -> List[Observation]:
         """Return the list of partner calibration observations in the group"""
         observations = []
         for obs in self.observations():
@@ -258,7 +257,7 @@ class Group(ABC):
                 observations.append(obs)
         return observations
 
-    def daycal_observations(self) -> List:
+    def daycal_observations(self) -> List[Observation]:
         """Return the list of daytime calibration observations in the group"""
         observations = []
         for obs in self.observations():
