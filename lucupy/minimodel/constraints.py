@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum, IntEnum, auto
-from typing import ClassVar, List, Optional, Sequence, Union
+from typing import ClassVar, List, Optional, Sequence
 
 import numpy as np
 import numpy.typing as npt
@@ -248,8 +248,8 @@ class Variant:
     # TODO: No idea what time blocks are. Note this could be a list or a single value.
     # TODO: Because of this, we cannot hash Variants, which is problematic.
 
-    iq: Union[npt.NDArray[ImageQuality], ImageQuality]
-    cc: Union[npt.NDArray[CloudCover], CloudCover]
+    iq: npt.NDArray[ImageQuality] | ImageQuality
+    cc: npt.NDArray[CloudCover] | CloudCover
     wind_dir: Angle
     wind_spd: Quantity
 

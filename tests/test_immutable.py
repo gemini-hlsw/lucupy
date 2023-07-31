@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from copy import deepcopy
@@ -11,9 +11,9 @@ from lucupy.minimodel import (ROOT_GROUP_ID, AndGroup, AndOption, Band,
                               ObservationID, ObservationStatus, Priority,
                               Program, ProgramID, ProgramMode, ProgramTypes,
                               Semester, SemesterHalf, SetupTimeType,
-                              SiderealTarget, Site, SkyBackground, TargetType,
-                              TimeAccountingCode, TimeAllocation, TimingWindow,
-                              WaterVapor)
+                              SiderealTarget, Site, SkyBackground, TargetName,
+                              TargetType, TimeAccountingCode, TimeAllocation,
+                              TimingWindow, WaterVapor)
 
 
 def test_immutable_deepcopy():
@@ -24,7 +24,7 @@ def test_immutable_deepcopy():
     m2 = Magnitude(band=MagnitudeBands.B,
                    value=2.)
 
-    t = SiderealTarget(name='t',
+    t = SiderealTarget(name=TargetName('t'),
                        magnitudes=frozenset({m1, m2}),
                        type=TargetType.BASE,
                        ra=0.,
@@ -94,7 +94,7 @@ def test_immutable_deepcopy():
                         partner_used=timedelta())
 
     p = Program(id=program_id,
-                internal_id='223e2332',
+                internal_id=TargetName('223e2332'),
                 semester=s,
                 band=Band.BAND2,
                 thesis=False,
