@@ -4,14 +4,14 @@
 from abc import ABC
 from dataclasses import dataclass
 from enum import Enum, IntEnum, auto
-from typing import NoReturn
+from typing import NewType, NoReturn
 
 import numpy.typing as npt
 
 from ..decorators import immutable
 from .magnitude import Magnitudes
 
-TargetName = str
+TargetName = NewType('TargetName', str)
 
 
 class TargetType(Enum):

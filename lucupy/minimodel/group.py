@@ -37,7 +37,7 @@ class Group(ABC):
                                  considered complete.
         delay_min(timedelta): used in cadences.
         delay_max(timedelta): used in cadences.
-        children (Union[List['Group'], Observation]): member(s) of the group
+        children (Union[List[Group], Observation]): member(s) of the group
     """
     id: GroupID
     program_id: ProgramID
