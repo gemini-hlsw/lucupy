@@ -217,7 +217,6 @@ class Constraints:
 
     """
     conditions: Conditions
-    # constrast: Constrast
     elevation_type: ElevationType
     elevation_min: float
     elevation_max: float
