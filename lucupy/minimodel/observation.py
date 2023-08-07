@@ -219,6 +219,7 @@ class Observation:
         """
         def check_instrument(r: Optional[Resource]):
             if r is not None:
+                # To avoid a circular import.
                 from lucupy.observatory.abstract import ObservatoryProperties
                 return ObservatoryProperties.is_instrument(r)
 

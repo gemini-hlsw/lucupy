@@ -37,7 +37,7 @@ class ObservatoryProperties(ABC):
 
     @staticmethod
     def _check() -> ObservatoryProperties:
-        """ Check if any properties are set
+        """ Check if the properties have been set.
 
         Raises:
             ValueError: Properties have not been set.
