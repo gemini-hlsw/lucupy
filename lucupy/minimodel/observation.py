@@ -10,8 +10,6 @@ from typing import List, Mapping, Optional
 
 import numpy as np
 
-from lucupy.observatory.abstract import ObservatoryProperties
-
 from ..types import ZeroTime
 from .atom import Atom
 from .constraints import Constraints
@@ -221,6 +219,7 @@ class Observation:
         """
         def check_instrument(r: Optional[Resource]):
             if r is not None:
+                from lucupy.observatory.abstract import ObservatoryProperties
                 return ObservatoryProperties.is_instrument(r)
 
         return next(filter(lambda r: check_instrument(r),
