@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from abc import ABC
 from datetime import timedelta
-from typing import Optional
+from typing import Optional, cast
 
 from astropy.time import Time
 
@@ -36,15 +36,15 @@ class ObservatoryProperties(ABC):
         ObservatoryProperties._properties = cls()
 
     @staticmethod
-    def _check_properties() -> None:
-        """ Check if any properties are set
+    def _check() -> ObservatoryProperties:
+        """ Check if the properties have been set.
 
         Raises:
             ValueError: Properties have not been set.
-
         """
         if ObservatoryProperties._properties is None:
-            raise ValueError('Properties have not been set.')
+            raise ValueError('Observatory properties have not been set.')
+        return cast(ObservatoryProperties, ObservatoryProperties._properties)
 
     @staticmethod
     def determine_standard_time(resources: Resources,
@@ -62,19 +62,15 @@ class ObservatoryProperties(ABC):
         Returns:
             Time: Value(s) of standard time
         """
-        if ObservatoryProperties._properties is not None:
-            ObservatoryProperties._check_properties()
-            return ObservatoryProperties._properties.determine_standard_time(
-                resources,
-                wavelengths,
-                modes,
-                cal_length
-            )
-        else:
-            raise ValueError('Properties have not been set.')
+        return ObservatoryProperties._check().determine_standard_time(
+            resources,
+            wavelengths,
+            modes,
+            cal_length
+        )
 
     @staticmethod
-    def is_instrument(resource: Resource) -> bool:  # type: ignore
+    def is_instrument(resource: Resource) -> bool:
         """Determine if the given resource is an instrument or not.
 
         Args:
@@ -83,10 +79,7 @@ class ObservatoryProperties(ABC):
         Returns:
             bool: True is the resource is an instrument of the Observatory, otherwise False.
         """
-        if ObservatoryProperties._properties is not None:
-            return ObservatoryProperties._properties.is_instrument(resource)
-        else:
-            raise ValueError('Properties have not been set.')
+        return ObservatoryProperties._check().is_instrument(resource)
 
     @staticmethod
     def acquisition_time(resource: Resource,
@@ -101,7 +94,4 @@ class ObservatoryProperties(ABC):
         Returns:
             Optional[timedelta]: The acquisition time for the instrument in that specific mode.
         """
-        if ObservatoryProperties._properties is not None:
-            return ObservatoryProperties._properties.acquisition_time(resource, observation_mode)
-        else:
-            raise ValueError('Properties have not been set.')
+        return ObservatoryProperties._check().acquisition_time(resource, observation_mode)
