@@ -20,7 +20,7 @@ from .site import Site
 from .target import Target, TargetType
 from .too import TooType
 from .wavelength import Wavelengths
-
+from .observationmode import ObservationMode
 
 class ObservationStatus(IntEnum):
     """
@@ -102,7 +102,6 @@ class ObservationClass(IntEnum):
     ACQCAL = auto()
     DAYCAL = auto()
     NONE = auto()
-
 
 @dataclass
 class Observation:
@@ -306,6 +305,9 @@ class Observation:
         # TODO: Remove from Bryan's atomizer.
 
         return min(qastates, default=None)
+
+    def obs_mode(self) -> ObservationMode:
+        return self.sequence[0].obs_mode
 
     def show(self, depth: int = 1) -> None:
         """Print content of the Observation.

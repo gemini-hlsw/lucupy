@@ -7,7 +7,7 @@ from datetime import timedelta
 from .qastate import QAState
 from .resource import Resources
 from .wavelength import Wavelengths
-
+from .observationmode import ObservationMode
 
 @dataclass
 class Atom:
@@ -42,3 +42,4 @@ class Atom:
     guide_state: bool
     resources: Resources
     wavelengths: Wavelengths
+    obs_mode: ObservationMode
