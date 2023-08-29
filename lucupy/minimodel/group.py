@@ -17,6 +17,7 @@ from lucupy.minimodel.observation import Observation, ObservationClass
 from lucupy.minimodel.resource import Resources
 from lucupy.minimodel.site import Site
 from lucupy.minimodel.wavelength import Wavelengths
+from .observationmode import ObservationMode
 
 ROOT_GROUP_ID: Final[GroupID] = GroupID('root')
 
@@ -276,6 +277,20 @@ class Group(ABC):
             else:
                 obs_class = min([child.obs_class() for child in self.children])
         return obs_class
+
+    def obs_mode(self) -> ObservationMode:
+        """
+        Return an observation mode based on those of the children
+        TODO: Consider the case of mixed imaging and spectroscopy groups, maybe this should return a list
+        :return:
+        """
+        obs_mode = ObservationMode.UNKNOWN
+        if self.is_and_group():
+            if isinstance(self.children, Observation):
+                obs_mode = self.children.obs_mode()
+            else:
+                obs_mode = max([child.obs_mode() for child in self.children])
+        return obs_mode
 
     def show(self, depth: int = 1) -> None:
         """Print content of the Group.
