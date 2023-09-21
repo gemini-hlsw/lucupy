@@ -17,6 +17,7 @@ from lucupy.minimodel.observation import Observation, ObservationClass
 from lucupy.minimodel.resource import Resources
 from lucupy.minimodel.site import Site
 from lucupy.minimodel.wavelength import Wavelengths
+
 from .observationmode import ObservationMode
 
 ROOT_GROUP_ID: Final[GroupID] = GroupID('root')
