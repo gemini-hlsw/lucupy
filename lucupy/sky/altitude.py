@@ -69,9 +69,9 @@ class Altitude:
             ha = ha[None]
 
         if len(dec) == 1 and len(ha) > 1:
-            dec = dec * np.ones(len(ha))
+            dec *= np.ones(len(ha))
         elif len(dec) > 1 and len(ha) == 1:
-            ha = ha * np.ones(len(dec))
+            ha *= np.ones(len(dec))
         elif len(dec) != len(ha):
             raise ValueError('Error: dec and ha have incompatible lengths')
 

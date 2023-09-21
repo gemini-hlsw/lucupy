@@ -21,7 +21,7 @@ from .utils import (current_geocent_frame, hour_angle_to_angle,
 
 
 class Sun:
-    """A interface to calculate different night events regarding the Sun.
+    """An interface to calculate different night events regarding the Sun.
 
     To use this is required to chain the `at` method at the beginning.
     If not unhandled errors would happen.
@@ -98,7 +98,7 @@ class Sun:
             ArithmeticError: Sunrise, set, or twilight calculation not converging
 
         Returns:
-            Time if convergent None if non-convergent
+            Time if convergent, None if non-convergent
         """
         time_guess = Time(np.asarray(time_guess.jd), format='jd')
         alt = Angle(np.asarray(alt.to_value(u.rad)), unit=u.rad)

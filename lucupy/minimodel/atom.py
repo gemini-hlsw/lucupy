@@ -4,10 +4,11 @@
 from dataclasses import dataclass, field
 from datetime import timedelta
 
+from .observationmode import ObservationMode
 from .qastate import QAState
 from .resource import Resources
 from .wavelength import Wavelengths
-from .observationmode import ObservationMode
+
 
 @dataclass
 class Atom:

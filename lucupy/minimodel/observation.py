@@ -9,18 +9,20 @@ from enum import IntEnum, auto
 from typing import List, Mapping, Optional
 
 import numpy as np
+import numpy.typing as npt
 
 from ..types import ZeroTime
 from .atom import Atom
 from .constraints import Constraints
 from .ids import ObservationID, ProgramID, UniqueGroupID
+from .observationmode import ObservationMode
 from .qastate import QAState
 from .resource import NIR_INSTRUMENTS, Resource, Resources
 from .site import Site
 from .target import Target, TargetType
 from .too import TooType
 from .wavelength import Wavelengths
-from .observationmode import ObservationMode
+
 
 class ObservationStatus(IntEnum):
     """
@@ -102,6 +104,7 @@ class ObservationClass(IntEnum):
     ACQCAL = auto()
     DAYCAL = auto()
     NONE = auto()
+
 
 @dataclass
 class Observation:
@@ -272,7 +275,7 @@ class Observation:
         """
         return sum((atom.part_time for atom in self.sequence), start=ZeroTime)
 
-    def cumulative_exec_times(self) -> List[timedelta]:
+    def cumulative_exec_times(self) -> npt.NDArray[timedelta]:
         """Cumulative series of execution times for the unobserved atoms
         in a sequence, excluding acquisition time."""
         cum_seq = [atom.exec_time if not atom.observed else timedelta() for atom in self.sequence]
