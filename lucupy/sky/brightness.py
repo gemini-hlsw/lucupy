@@ -63,8 +63,8 @@ def calculate_sky_brightness(moon_phase_angle: Angle,
 
     # Correction for twilight
     i = np.where(sun_alt > -18.5 * u.deg)[0][:]
-    if len(i) != 0:
-        v_zen[i] -= ztwilight(sun_alt[i])
+    if len(i):
+        v_zen[i] = v_zen[i] - ztwilight(sun_alt[i])
 
     # zenith sky brightness
     b_zen = 0.263 * a ** (q - v_zen)
@@ -175,7 +175,7 @@ def calculate_sky_brightness_qpt(moon_phase_angle: Quantity,
     v_zen = np.ones(len(target_zenith_distang)) * 21.587
     # correction for twilight
     ii = np.where(sun_alt > -18.5 * u.deg)[0][:]
-    v_zen[ii] -= ztwilight(sun_alt[ii])
+    v_zen[ii] = v_zen[ii] - ztwilight(sun_alt[ii])
 
     # zenith sky brightness
     b_zen = 0.263 * a ** (q - v_zen)
