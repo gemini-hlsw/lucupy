@@ -278,7 +278,7 @@ class Observation:
     def cumulative_exec_times(self) -> npt.NDArray[timedelta]:
         """Cumulative series of execution times for the unobserved atoms
         in a sequence, excluding acquisition time."""
-        cum_seq = [atom.exec_time if not atom.observed else timedelta() for atom in self.sequence]
+        cum_seq = [atom.exec_time if not atom.observed else ZeroTime for atom in self.sequence]
         return np.cumsum(cum_seq)
 
     @staticmethod
