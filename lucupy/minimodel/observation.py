@@ -265,7 +265,11 @@ class Observation:
         Returns:
             (timedelta): With the total planned program time.
         """
-        return sum((atom.prog_time for atom in self.sequence), start=ZeroTime)
+        acq_time = ZeroTime
+        if self.obs_class in [ObservationClass.SCIENCE, ObservationClass.PROGCAL]:
+            acq_time = self.acq_overhead
+
+        return sum((atom.prog_time for atom in self.sequence), start=acq_time)
 
     def part_time(self) -> timedelta:
         """We roll this information up from the atoms.
@@ -273,7 +277,11 @@ class Observation:
         Returns:
             (timedelta): With the total planned partner time.
         """
-        return sum((atom.part_time for atom in self.sequence), start=ZeroTime)
+        acq_time = ZeroTime
+        if self.obs_class in [ObservationClass.PARTNERCAL]:
+            acq_time = self.acq_overhead
+
+        return sum((atom.part_time for atom in self.sequence), start=acq_time)
 
     def cumulative_exec_times(self) -> npt.NDArray[timedelta]:
         """Cumulative series of execution times for the unobserved atoms
@@ -321,7 +329,7 @@ class Observation:
         def sep(indent: int) -> str:
             return '-----' * indent
 
-        print(f'{sep(depth)} Observation: {self.id.id}')
+        print(f'{sep(depth)} Observation: {self.id.id} {self.status.name}')
         for atom in self.sequence:
             print(f'{sep(depth + 1)} {atom}')
 
