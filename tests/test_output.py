@@ -6,7 +6,8 @@ import unittest.mock
 from datetime import datetime
 
 from lucupy.minimodel import (ROOT_GROUP_ID, AndGroup, GroupID, Observation,
-                              ObservationID, Program, ProgramID)
+                              ObservationID, ObservationStatus, Program,
+                              ProgramID)
 
 
 @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
@@ -27,7 +28,7 @@ def test_print_program():
         order=0,
         title='GMOSN-1',
         site=None,
-        status=None,
+        status=ObservationStatus.READY,
         active=True,
         priority=None,
         setuptime_type=None,
@@ -82,6 +83,6 @@ def test_print_program():
         'Program: test_program\n'
         f'----- Group: {ROOT_GROUP_ID.id}, unique_id=test_program:{ROOT_GROUP_ID.id} (Scheduling Group, num_children=1)\n'
         '---------- Group: test_group, unique_id=test_program:test_group (Observation Group, num_children=1)\n'
-        '--------------- Observation: test_observation\n'
+        f'--------------- Observation: test_observation {o.status.name}\n'
     )
     assert_stdout(p, expected_output)
