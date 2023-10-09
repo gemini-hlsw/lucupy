@@ -24,8 +24,10 @@ from .timingwindow import *
 from .too import *
 from .wavelength import *
 
-# Type alias for a night index.
+# Type alias for a night index and night indices.
 NightIndex = NewType('NightIndex', int)
-
-# Type alias for multiple night indices.
 NightIndices = npt.NDArray[NightIndex]
+
+# Type alias for a time slot index and time slot indices.
+TimeslotIndex = NewType('TimeslotIndex', int)
+TimeslotIndices = npt.NDArray[TimeslotIndex]

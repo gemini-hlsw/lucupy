@@ -434,6 +434,6 @@ def standards_for_nir(exec_sci: timedelta,
             else:
                 time_per_standard = timedelta(hours=1.0)
         else:
-            raise ValueError("Wrong mode: spectroscpy expect wavelengths list")
+            raise ValueError("Wrong mode: spectroscopy expects a non-empty wavelengths list.")
 
     return max(1, int(exec_sci // time_per_standard))  # TODO: confirm this
