@@ -28,6 +28,6 @@ from .wavelength import *
 NightIndex = NewType('NightIndex', int)
 NightIndices = npt.NDArray[NightIndex]
 
-# Type alias for a time slot index.
+# Type alias for a time slot index and time slot indices.
 TimeslotIndex = NewType('TimeslotIndex', int)
 TimeslotIndices = npt.NDArray[TimeslotIndex]
