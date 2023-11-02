@@ -1,10 +1,10 @@
 [[package]]
 name = "astropy"
-version = "5.2.1"
+version = "5.2.2"
 description = "Astronomy and astrophysics core library"
 category = "main"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.12"
 
 [package.dependencies]
 numpy = ">=1.20"
