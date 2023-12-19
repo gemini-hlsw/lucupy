@@ -1,7 +1,8 @@
 # Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from datetime import datetime
+from datetime import datetime, timedelta
+from math import ceil
 from typing import Tuple
 
 
@@ -145,3 +146,22 @@ def dec2sex(
         result_format += f'{separator}{seconds}'
 
     return result_format
+
+
+def time2slots(time_slot_length: timedelta, time_quantity: timedelta) -> int:
+    """
+    Convert time_quantity into the number of time slots given the time slot length.
+    This takes the ceil, so it ensures that the time_quantity supplied fits into
+    the number of time slots returned.
+
+    Notes:
+        The units in the actual time_quantities are unimportant: the return type is without unit.
+
+    Args:
+        time_slot_length: the length of a time slot as a timedelta
+        time_quantity: the amount of time as a timedelta that we want to know in terms of time slots
+
+    Returns:
+        the ceiling of the number of time slots required to accommodate the time quantity (unitless)
+    """
+    return ceil(time_quantity / time_slot_length)
