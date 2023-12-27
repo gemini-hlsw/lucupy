@@ -212,7 +212,7 @@ class Observation:
         """
         # TODO: For now, we do not return guiding keys amongst the resources.
         # return frozenset(self.guiding.keys() | {r for a in self.sequence for r in a.resources})
-        return frozenset((r for a in self.sequence for r in a.resources))
+        return frozenset({self.site.resource} | {r for a in self.sequence for r in a.resources})
 
     def instrument(self) -> Optional[Resource]:
         """
