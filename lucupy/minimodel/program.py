@@ -133,6 +133,9 @@ class Program:
     def total_used(self) -> timedelta:
         return self.root_group.total_used()
 
+    def not_charged(self) -> timedelta:
+        return self.root_group.not_charged()
+
     def observations(self) -> List[Observation]:
         return self.root_group.observations()
 

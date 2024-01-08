@@ -243,6 +243,17 @@ class Group(ABC):
         else:
             return sum((child.total_used() for child in self.children), timedelta())
 
+    def not_charged(self) -> timedelta:
+        """not_charged time across the group.
+
+        Returns:
+            not_charged (timedelta): Sum of all `not_charged` across the children of this group.
+        """
+        if isinstance(self.children, Observation):
+            return self.children.not_charged()
+        else:
+            return sum((child.not_charged() for child in self.children), timedelta())
+
     def program_observations(self) -> List[Observation]:
         """Return the list of program (science + program calibration) observations in the group"""
         observations = []
