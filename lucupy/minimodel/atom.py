@@ -25,6 +25,7 @@ class Atom:
         part_time (timedelta): Planned partner time.
         program_used (timedelta): Used (charged) program time.
         partner_used (timedelta): Used (charged) partner time.
+        not_charged (timedelta): Not charged time (e.g. have to repeat)
         observed (bool): True if the STATUS is already observed.
         qa_state (QAState):
         guide_state (bool): True if a state exists.
@@ -38,6 +39,7 @@ class Atom:
     part_time: timedelta = field(hash=False, compare=False)
     program_used: timedelta = field(hash=False, compare=False)
     partner_used: timedelta = field(hash=False, compare=False)
+    not_charged: timedelta = field(hash=False, compare=False)
     observed: bool
     qa_state: QAState
     guide_state: bool

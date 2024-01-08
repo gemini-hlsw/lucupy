@@ -289,6 +289,10 @@ class Observation:
         cum_seq = [atom.exec_time if not atom.observed else ZeroTime for atom in self.sequence]
         return np.cumsum(cum_seq)
 
+    def not_charged(self) -> timedelta:
+        """not_charged time rolled up from atoms"""
+        return sum((atom.not_charged for atom in self.sequence), start=ZeroTime)
+
     @staticmethod
     def _select_obsclass(classes: List[ObservationClass]) -> Optional[ObservationClass]:
         """Given a list of non-empty ObservationClasses, determine which occurs with
