@@ -4,7 +4,10 @@
 """
 A small version of GPP data model
 """
+
 from typing import NewType
+
+import numpy.typing as npt
 
 from .atom import *
 from .constraints import *
