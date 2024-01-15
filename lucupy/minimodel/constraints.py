@@ -234,19 +234,14 @@ class Constraints:
 @immutable
 @dataclass(frozen=True)
 class Variant:
-    """A weather variant.
-    wind_speed should be in m / s.
-
+    """
+    A weather variant.
     Attributes:
         iq (Union[npt.NDArray[ImageQuality], ImageQuality]): Image quality.
         cc (Union[npt.NDArray[CloudCover], CloudCover]): Cloud Cover.
-        wind_dir (Angle): Wind direction.
-        wind_spd (Quantity): Wind speed.
-
+        wind_dir (Angle): Wind direction (degrees).
+        wind_spd (Quantity): Wind speed (m/s).
     """
-    # TODO: No idea what time blocks are. Note this could be a list or a single value.
-    # TODO: Because of this, we cannot hash Variants, which is problematic.
-
     iq: npt.NDArray[ImageQuality] | ImageQuality
     cc: npt.NDArray[CloudCover] | CloudCover
     wind_dir: Angle
@@ -269,3 +264,23 @@ class Variant:
             uniform_lengths = len(array_lengths) == 1
         if not uniform_lengths:
             raise ValueError(f'Variant has a variable number of array sizes: {self}')
+
+
+@immutable
+@dataclass(frozen=True)
+class VariantChange:
+    """
+    A weather variant change.
+    wind_dir should be in degrees.
+    wind_speed should be in m / s.
+
+    Attributes:
+        iq (ImageQuality): Image quality.
+        cc (CloudCover): Cloud cover.
+        wind_dir (Angle): Wind direction (in degrees).
+        wind_spd (Quantity): Wind speed (in m/s).
+    """
+    iq: ImageQuality
+    cc: CloudCover
+    wind_dir: Optional[Angle] = None
+    wind_spd: Optional[Quantity] = None
