@@ -11,7 +11,7 @@ from typing import List, Mapping, Optional
 import numpy as np
 import numpy.typing as npt
 
-from lucupy.lucutypes import ZeroTime
+from lucupy.types import ZeroTime
 
 from .atom import Atom
 from .constraints import Constraints

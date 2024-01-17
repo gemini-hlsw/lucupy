@@ -7,7 +7,7 @@ from enum import Enum, IntEnum, auto
 from typing import ClassVar, FrozenSet, List, Optional
 
 from lucupy.decorators import immutable
-from lucupy.lucutypes import ZeroTime
+from lucupy.types import ZeroTime
 
 from .group import ROOT_GROUP_ID, AndGroup, Group
 from .ids import ObservationID, ProgramID, UniqueGroupID

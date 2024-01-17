@@ -15,7 +15,7 @@ import numpy as np
 from astropy.coordinates import Angle, EarthLocation
 from astropy.time import Time
 
-from lucupy.lucutypes import TimeScalarOrNDArray
+from lucupy.types import TimeScalarOrNDArray
 
 from .constants import EQUAT_RAD
 from .moon import Moon
