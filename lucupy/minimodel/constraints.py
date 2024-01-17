@@ -13,7 +13,7 @@ from astropy.coordinates import Angle
 from astropy.units import Quantity
 
 from lucupy.helpers import flatten
-from lucupy.types import ScalarOrNDArray
+from lucupy.lucutypes import ScalarOrNDArray
 
 from ..decorators import immutable
 from .timingwindow import TimingWindow
