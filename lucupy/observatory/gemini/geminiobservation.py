@@ -4,10 +4,9 @@
 from datetime import timedelta
 from typing import Final
 
+from lucupy.lucutypes import ZeroTime
 from lucupy.minimodel import Observation
-
-from ...types import ZeroTime
-from .geminiproperties import GeminiProperties
+from lucupy.observatory.gemini.geminiproperties import GeminiProperties
 
 _IGRINS_CAL_TIME: Final[timedelta] = timedelta(minutes=10)
 

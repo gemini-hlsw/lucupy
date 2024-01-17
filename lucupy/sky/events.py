@@ -8,14 +8,14 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from typing import Tuple
+from zoneinfo import ZoneInfo
 
 import astropy.units as u
 import numpy as np
 from astropy.coordinates import Angle, EarthLocation
 from astropy.time import Time
-from pytz import BaseTzInfo
 
-from lucupy.types import TimeScalarOrNDArray
+from lucupy.lucutypes import TimeScalarOrNDArray
 
 from .constants import EQUAT_RAD
 from .moon import Moon
@@ -23,13 +23,13 @@ from .sun import Sun
 from .utils import local_midnight_time
 
 
-def night_events(time: Time, location: EarthLocation, localtzone: BaseTzInfo) -> Tuple[Time,
-                                                                                       TimeScalarOrNDArray,
-                                                                                       TimeScalarOrNDArray,
-                                                                                       TimeScalarOrNDArray,
-                                                                                       TimeScalarOrNDArray,
-                                                                                       TimeScalarOrNDArray,
-                                                                                       TimeScalarOrNDArray]:
+def night_events(time: Time, location: EarthLocation, localtzone: ZoneInfo) -> Tuple[Time,
+                                                                                     TimeScalarOrNDArray,
+                                                                                     TimeScalarOrNDArray,
+                                                                                     TimeScalarOrNDArray,
+                                                                                     TimeScalarOrNDArray,
+                                                                                     TimeScalarOrNDArray,
+                                                                                     TimeScalarOrNDArray]:
     """Compute phenomena for a given night.
     This is mostly a testbed that prints results directly.
 

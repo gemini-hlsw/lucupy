@@ -9,6 +9,7 @@
 
 from datetime import datetime, timedelta
 from typing import Tuple
+from zoneinfo import ZoneInfo
 
 import astropy.units as u
 import numpy as np
@@ -17,7 +18,6 @@ from astropy.coordinates import (Angle, BaseRADecFrame, EarthLocation,
                                  PrecessedGeocentric)
 from astropy.time import Time
 from astropy.units import Quantity
-from pytz import BaseTzInfo
 
 from .altitude import AngleParam
 from .constants import EQUAT_RAD, FLATTEN, J2000, JYEAR, JYEAR_100
@@ -124,7 +124,7 @@ def min_max_alt(lat: Angle, dec: AngleParam) -> Tuple[Angle, Angle]:
     return Angle(minalt, unit=u.rad), Angle(maxalt, unit=u.rad)
 
 
-def local_midnight_time(time: Time, localtzone: BaseTzInfo) -> Time:
+def local_midnight_time(time: Time, localtzone: ZoneInfo) -> Time:
     """Find nearest local midnight (UT).
 
     If it's before noon local time, returns previous midnight;
@@ -156,7 +156,7 @@ def local_midnight_time(time: Time, localtzone: BaseTzInfo) -> Time:
         # if before midnight, add 12 hours
         if datet.hour >= 12:
             datet = datet + timedelta(hours=12.)
-        datetmid.append(localtzone.localize(datetime(datet.year, datet.month, datet.day, 0, 0, 0)))
+        datetmid.append(datetime(datet.year, datet.month, datet.day, 0, 0, 0, tzinfo=localtzone))
 
     if scalar_input:
         result = Time(datetmid[0])

@@ -7,8 +7,8 @@
 
 from enum import Enum
 from typing import Optional, final
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-import pytz
 from astropy.coordinates import EarthLocation, UnknownSiteException
 
 from lucupy.decorators import immutable
@@ -32,7 +32,7 @@ class Site(Enum):
                  coordinate_center: str,
                  *,
                  location: Optional[EarthLocation] = None,
-                 timezone: Optional[pytz.BaseTzInfo] = None,
+                 timezone: Optional[ZoneInfo] = None,
                  resource: Optional[Resource] = None):
         """
         Perform the necessary initialization for a Site object, which is also a Resource.
@@ -40,7 +40,7 @@ class Site(Enum):
             site_name: the name of the site
             coordinate_center: the coordinate center of the site (probably not needed)
             location: the EarthLocation of the site, which, if not provided, will be looked up by the site_name
-            timezone: the pytz timezone at the location which, if not provided, will be looked up by location
+            timezone: the ZoneInfo timezone at the location which, if not provided, will be looked up by location
             resource: a Resource representing the site, which, if not provided, will be created with id site_name
 
         Note: if outdated information is found during lookups (e.g. time zone information is not what one would expect),
@@ -66,9 +66,9 @@ class Site(Enum):
         else:
             timezone_name = self.location.info.meta['timezone']
             try:
-                self.timezone = pytz.timezone(timezone_name)
-            except pytz.UnknownTimeZoneError as e:
-                msg = f'pytz cannot resolve time zone lookup: {timezone_name}.'
+                self.timezone = ZoneInfo(timezone_name)
+            except ZoneInfoNotFoundError as e:
+                msg = f'zoneinfo cannot resolve time zone lookup: {timezone_name}.'
                 raise ValueError(e, msg)
 
         if resource is not None:

@@ -6,8 +6,9 @@ from datetime import datetime, timedelta
 from enum import Enum, IntEnum, auto
 from typing import ClassVar, FrozenSet, List, Optional
 
-from ..decorators import immutable
-from ..types import ZeroTime
+from lucupy.decorators import immutable
+from lucupy.lucutypes import ZeroTime
+
 from .group import ROOT_GROUP_ID, AndGroup, Group
 from .ids import ObservationID, ProgramID, UniqueGroupID
 from .observation import Observation

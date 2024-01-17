@@ -1,9 +1,10 @@
 # Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
+from zoneinfo import ZoneInfo
+
 import numpy.testing as nptest
 import pytest
-import pytz
 from astropy.time import Time
 
 from lucupy.sky.events import night_events
@@ -16,7 +17,7 @@ def test_night_events(midnight, location):
     """
     Test that the night events are calculated correctly.
     """
-    hst = pytz.timezone('Pacific/Honolulu')
+    hst = ZoneInfo('US/Hawaii')
     _, sunset, sunrise, even_12twi, morn_12twi, moonrise, moonset = night_events(midnight, location, hst)
 
     nptest.assert_almost_equal(sunset.jd, Time('2020-07-01 05:15:04.172').jd, decimal=2)
