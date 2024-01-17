@@ -37,7 +37,6 @@ mkdocstrings = {extras = ["python"], version = "^0.19.0"}
 [tool.poetry.dependencies]
 python = "^3.10"
 astropy = "^5.1"
-pytz = "^2022.7"
 gelidum = "^0.5.8"
 matplotlib = "^3.7.2"
 

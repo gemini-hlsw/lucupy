@@ -18,7 +18,6 @@ repos:
         rev: v1.4.1  # Use the sha / tag you want to point at
         hooks:
         -   id: mypy
-            additional_dependencies: ["types-pytz"]
     -   repo: https://github.com/PyCQA/autoflake
         rev: v2.2.0
         hooks:
