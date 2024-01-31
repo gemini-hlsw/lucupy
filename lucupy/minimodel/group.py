@@ -76,7 +76,8 @@ class Group(ABC):
             """
             ids = {group.id}
             if not isinstance(group.children, Observation):
-                ids |= aux(*[sg for sg in group.children])
+                for sg in group.children:
+                    ids |= aux(sg)
             return frozenset(ids)
         return aux(self)
 
@@ -92,7 +93,8 @@ class Group(ABC):
             """
             ids = {group.unique_id}
             if not isinstance(group.children, Observation):
-                ids |= aux(*[sg for sg in group.children])
+                for sg in group.children:
+                    ids |= aux(sg)
             return frozenset(ids)
         return aux(self)
 
