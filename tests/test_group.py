@@ -27,8 +27,7 @@ def test_subgroup_unique_ids(scheduling_group, observation_group):
     """
     Test the subgroup_unique_ids method.
     """
-    assert (scheduling_group.subgroup_unique_ids()
-            == frozenset({scheduling_group.unique_id, observation_group.unique_id}))
+    assert (scheduling_group.subgroup_unique_ids() == frozenset({observation_group.unique_id}))
 
 
 @pytest.mark.usefixtures('scheduling_group', 'observation_group')
@@ -36,7 +35,7 @@ def test_subgroup_ids(scheduling_group, observation_group):
     """
     Test the subgroup_ids method.
     """
-    assert scheduling_group.subgroup_ids() == frozenset({scheduling_group.id, observation_group.id})
+    assert scheduling_group.subgroup_ids() == frozenset({observation_group.id})
 
 
 @pytest.mark.usefixtures('observation_group', 'observation')

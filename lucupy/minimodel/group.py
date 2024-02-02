@@ -67,34 +67,31 @@ class Group(ABC):
         """Get the ids for all the subgroups inside. This should probably not be used.
 
         Returns:
-            FrozenSet[GroupID]: Set of GroupID values.
+            FrozenSet[GroupID]: Consists of all the GroupID for Groups (exclusive) rooted here.
         """
+        if isinstance(self.children, Observation):
+            return frozenset()
 
-        def aux(group: Group) -> FrozenSet[GroupID]:
-            """
-            Private method to amalgamate all the UniqueIDs starting at a Group.
-            """
-            ids = {group.id}
-            if not isinstance(group.children, Observation):
-                ids |= aux(*[sg for sg in group.children])
-            return frozenset(ids)
-        return aux(self)
+        # Add the IDs of the children and traverse the tree.
+        ids = set()
+        for sg in self.children:
+            ids |= {sg.id} | sg.subgroup_ids()
+        return frozenset(ids)
 
     def subgroup_unique_ids(self) -> FrozenSet[UniqueGroupID]:
         """Get all the unique ids for all the subgroups inside.
 
         Returns:
-            FrozenSet[UniqueGroupID]: Consists of all the UniqueGroupID for Groups rooted here.
+            FrozenSet[UniqueGroupID]: Consists of all the UniqueGroupID for Groups (exclusive) rooted here.
         """
-        def aux(group: Group) -> FrozenSet[UniqueGroupID]:
-            """
-            Private method to amalgamate all the UniqueIDs starting at a Group.
-            """
-            ids = {group.unique_id}
-            if not isinstance(group.children, Observation):
-                ids |= aux(*[sg for sg in group.children])
-            return frozenset(ids)
-        return aux(self)
+        if isinstance(self.children, Observation):
+            return frozenset()
+
+        # Add the IDs of the children and traverse the tree.
+        ids = set()
+        for sg in self.children:
+            ids |= {sg.unique_id} | sg.subgroup_unique_ids()
+        return frozenset(ids)
 
     def sites(self) -> FrozenSet[Site]:
         """All belonging Sites.
