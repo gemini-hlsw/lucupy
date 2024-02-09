@@ -35,6 +35,7 @@ class ObservationStatus(IntEnum):
         - PROPOSED
         - APPROVED
         - FOR_REVIEW: Not in original mini-model description, but returned by OCS.
+        - IN_REVIEW
         - ON_HOLD
         - READY
         - ONGOING
@@ -47,6 +48,7 @@ class ObservationStatus(IntEnum):
     PROPOSED = auto()
     APPROVED = auto()
     FOR_REVIEW = auto()
+    IN_REVIEW = auto()
     ON_HOLD = auto()
     READY = auto()
     ONGOING = auto()
