@@ -3,12 +3,32 @@
 
 from dataclasses import dataclass
 from typing import FrozenSet, Optional
+from enum import IntEnum, auto
 
 from lucupy.decorators import immutable
 
 
+class ResourceType(IntEnum):
+    """A Resource's type
+
+    Members:
+        - SITE
+        - WFS
+        - INSTRUMENT
+        - FPU
+        - DISPERSER
+    """
+    NONE = auto()
+    SITE = auto()
+    WFS = auto()
+    INSTRUMENT = auto()
+    FPU = auto()
+    DISPERSER = auto()
+
+
 @immutable
 @dataclass(frozen=True)
+# @define
 class Resource:
     """This is a general observatory resource.
     It can consist of
@@ -28,6 +48,7 @@ class Resource:
     """
     id: str
     description: Optional[str] = None
+    type: Optional[int] = ResourceType.NONE
 
     def __post_init__(self):
         if self.id is None or 'NONE' in self.id.upper():
@@ -46,4 +67,5 @@ NIR_INSTRUMENTS: Resources = frozenset([Resource('Flamingos2'),
                                         Resource('GNIRS'),
                                         Resource('NIRI'),
                                         Resource('NIFS'),
+                                        Resource('Phoenix'),
                                         Resource('IGRINS')])
