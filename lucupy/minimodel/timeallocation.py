@@ -1,11 +1,18 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import Enum
+from typing import final
+
+__all__ = [
+    'TimeAccountingCode',
+    'TimeAllocation',
+]
 
 
+@final
 class TimeAccountingCode(str, Enum):
     """
     The time accounting codes for the possible partner submissions or internal program
@@ -35,6 +42,7 @@ class TimeAccountingCode(str, Enum):
     XCHK = 'Keck Exchange'
 
 
+@final
 @dataclass
 class TimeAllocation:
     """

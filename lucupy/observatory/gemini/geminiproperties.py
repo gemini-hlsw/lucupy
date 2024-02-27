@@ -1,7 +1,8 @@
-# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from enum import Enum, EnumMeta
+from typing import final
 
 import astropy.units as u
 from astropy.time import Time
@@ -10,7 +11,12 @@ from lucupy.minimodel import (ObservationMode, ObservationModes, Resource,
                               Resources, Wavelengths)
 from lucupy.observatory.abstract import ObservatoryProperties
 
+__all__ = [
+    'GeminiProperties',
+]
 
+
+@final
 class GeminiProperties(ObservatoryProperties):
     """Implementation of ObservatoryCalculations specific to Gemini.
     """

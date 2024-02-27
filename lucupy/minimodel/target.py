@@ -1,19 +1,31 @@
-# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from abc import ABC
 from dataclasses import dataclass
 from enum import Enum, IntEnum, auto
-from typing import NewType, NoReturn
+from typing import NewType, NoReturn, final
 
 import numpy.typing as npt
 
 from ..decorators import immutable
 from .magnitude import Magnitudes
 
+__all__ = [
+    'GuideSpeed',
+    'NonsiderealTarget',
+    'SiderealTarget',
+    'Target',
+    'TargetName',
+    'TargetTag',
+    'TargetType',
+]
+
+
 TargetName = NewType('TargetName', str)
 
 
+@final
 class TargetType(Enum):
     """The type associated with a target in an observation.
 
@@ -35,6 +47,7 @@ class TargetType(Enum):
     OTHER = auto()
 
 
+@final
 class GuideSpeed(IntEnum):
     """
     How quickly a guider can guide on a guide star.
@@ -50,6 +63,7 @@ class GuideSpeed(IntEnum):
     FAST = auto()
 
 
+@final
 class TargetTag(Enum):
     """
     A tag used by nonsidereal targets to indicate their type.
@@ -81,6 +95,7 @@ class Target(ABC):
         raise NotImplementedError
 
 
+@final
 @immutable
 @dataclass(frozen=True)
 class SiderealTarget(Target):
@@ -109,6 +124,7 @@ class SiderealTarget(Target):
     epoch: float
 
 
+@final
 @immutable
 @dataclass(frozen=True)
 class NonsiderealTarget(Target):

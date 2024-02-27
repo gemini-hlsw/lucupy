@@ -7,19 +7,27 @@
 # Copyright John Thorstensen, 2018, who graciously has allowed Gemini to use this code under the BSD-3 Clause license.
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from typing import Tuple, TypeVar, Union
+from typing import Tuple, TypeAlias, TypeVar, final
 
 import astropy.units as u
 import numpy as np
 import numpy.typing as npt
 from astropy.coordinates import Angle, Longitude
 
+__all__ = [
+    'Altitude',
+    'AngleParam',
+    'ScalarOrArray',
+]
+
+
 T = TypeVar('T')
 U = TypeVar('U')
-ScalarOrArray = Union[T, U, npt.NDArray[U]]
-AngleParam = ScalarOrArray[Angle, float]
+ScalarOrArray: TypeAlias = T | U | npt.NDArray[U]
+AngleParam: TypeAlias = ScalarOrArray[Angle, float]
 
 
+@final
 class Altitude:
     def __init__(self):
         raise NotImplementedError('Use static method Altitude.above.')

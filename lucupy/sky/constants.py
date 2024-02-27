@@ -15,18 +15,44 @@ The planet-coefs are for series expansions for the phase functions
 of the planets, used in predicting apparent magnitude. See code.
 """
 
+from math import pi
 from typing import Final
 
 import astropy.units as u
 from astropy.coordinates.distances import Distance
 from astropy.time import Time
 
-PI: Final[float] = 3.14159265358979
-TWOPI: Final[float] = 6.28318530717959
-PI_OVER_2: Final[float] = 1.57079632679490
-ARCSEC_IN_RADIAN: Final[float] = 206264.8062471
-DEG_IN_RADIAN: Final[float] = 57.2957795130823
-HRS_IN_RADIAN: Final[float] = 3.819718634205
+__all__ = [
+    'PI',
+    'TWOPI',
+    'PI_OVER_2',
+    'ARCSEC_IN_RADIAN',
+    'DEG_IN_RADIAN',
+    'HRS_IN_RADIAN',
+    'KMS_AUDAY',
+    'SPEED_OF_LIGHT',
+    'SS_MASS',
+    'J2000',
+    'J2000_Time',
+    'JYEAR',
+    'JYEAR_100',
+    'SEC_IN_DAY',
+    'FLATTEN',
+    'EQUAT_RAD',
+    'EARTHRAD_IN_AU',
+    'ASTRO_UNIT',
+    'RSUN',
+    'RMOON',
+    'PLANET_TOL',
+    'KZEN',
+]
+
+PI: Final[float] = pi
+TWOPI: Final[float] = 2 * PI
+PI_OVER_2: Final[float] = PI / 2
+ARCSEC_IN_RADIAN: Final[float] = 360 * 60 * 60 / (2 * PI)
+DEG_IN_RADIAN: Final[float] = 180 / PI
+HRS_IN_RADIAN: Final[float] = 24 / (2 * PI)
 KMS_AUDAY: Final[float] = 1731.45683633  # km per sec in 1 AU/day
 SPEED_OF_LIGHT: Final[float] = 299792.458  # in km per sec ... exact.
 SS_MASS: Final[float] = 1.00134198  # solar system mass in solar units

@@ -7,7 +7,7 @@
 # Copyright John Thorstensen, 2018, who graciously has allowed Gemini to use this code under the BSD-3 Clause license.
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from typing import Optional, Tuple
+from typing import Optional, Tuple, final
 
 import astropy.units as u
 import numpy as np
@@ -20,7 +20,12 @@ from .constants import EQUAT_RAD, J2000, JYEAR, JYEAR_100
 from .utils import (current_geocent_frame, geocentric_coors,
                     hour_angle_to_angle, local_sidereal_time)
 
+__all__ = [
+    'Moon',
+]
 
+
+@final
 class Moon:
     """Interface for night events for the moon on other calculations.
 

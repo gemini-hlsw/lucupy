@@ -1,10 +1,10 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum, IntEnum, auto
-from typing import ClassVar, FrozenSet, List, Optional
+from typing import ClassVar, FrozenSet, List, Optional, final
 
 from lucupy.decorators import immutable
 from lucupy.types import ZeroTime
@@ -16,7 +16,16 @@ from .semester import Semester
 from .timeallocation import TimeAllocation
 from .too import TooType
 
+__all__ = [
+    'Band',
+    'Program',
+    'ProgramMode',
+    'ProgramType',
+    'ProgramTypes',
+]
 
+
+@final
 class Band(IntEnum):
     """
     Program band.
@@ -27,6 +36,7 @@ class Band(IntEnum):
     BAND4 = 4
 
 
+@final
 class ProgramMode(IntEnum):
     """
     Main operational mode, which is one of:
@@ -39,6 +49,7 @@ class ProgramMode(IntEnum):
     PV = auto()
 
 
+@final
 @immutable
 @dataclass(frozen=True)
 class ProgramType:
@@ -57,6 +68,7 @@ class ProgramType:
     is_science: bool = True
 
 
+@final
 class ProgramTypes(Enum):
     """
     A complete list of the ProgramType instances used by Gemini.
@@ -75,6 +87,7 @@ class ProgramTypes(Enum):
     SV = ProgramType('SV', 'System Verification')
 
 
+@final
 @dataclass
 class Program:
     """

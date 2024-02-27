@@ -1,11 +1,11 @@
-# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum, IntEnum, auto
-from typing import ClassVar, List, Optional, Sequence
+from typing import ClassVar, List, Optional, Sequence, final
 
 import numpy as np
 import numpy.typing as npt
@@ -18,7 +18,21 @@ from lucupy.types import ScalarOrNDArray
 from ..decorators import immutable
 from .timingwindow import TimingWindow
 
+__all__ = [
+    'CloudCover',
+    'Conditions',
+    'Constraints',
+    'ElevationType',
+    'ImageQuality',
+    'SkyBackground',
+    'Strehl',
+    'Variant',
+    'VariantChange',
+    'WaterVapor',
+]
 
+
+@final
 class SkyBackground(float, Enum):
     """
     Bins for observation sky background requirements or current conditions.
@@ -36,6 +50,7 @@ class SkyBackground(float, Enum):
     SBANY = 1.0
 
 
+@final
 class CloudCover(float, Enum):
     """
     Bins for observation cloud cover requirements or current conditions.
@@ -52,6 +67,7 @@ class CloudCover(float, Enum):
     CCANY = 1.0
 
 
+@final
 class ImageQuality(float, Enum):
     """
     Bins for observation image quality requirements or current conditions.
@@ -69,6 +85,7 @@ class ImageQuality(float, Enum):
     IQANY = 1.0
 
 
+@final
 class WaterVapor(float, Enum):
     """
     Bins for observation water vapor requirements or current conditions.
@@ -86,6 +103,7 @@ class WaterVapor(float, Enum):
     WVANY = 1.0
 
 
+@final
 class Strehl(float, Enum):
     """
     The Strehl ratio is a measure of the quality of optical image formation.
@@ -110,6 +128,7 @@ class Strehl(float, Enum):
     S10 = 1.0
 
 
+@final
 class ElevationType(IntEnum):
     """
     The type of elevation constraints in the observing conditions.
@@ -124,6 +143,7 @@ class ElevationType(IntEnum):
     AIRMASS = auto()
 
 
+@final
 @immutable
 @dataclass(frozen=True)
 class Conditions:
@@ -195,6 +215,7 @@ class Conditions:
         return len(self.cc) if isinstance(self.cc, np.ndarray) else 1
 
 
+@final
 @immutable
 @dataclass(frozen=True)
 class Constraints:
@@ -231,6 +252,7 @@ class Constraints:
     DEFAULT_AIRMASS_ELEVATION_MAX: ClassVar[float] = field(init=False, default=2.3, repr=False, compare=False)
 
 
+@final
 @immutable
 @dataclass(frozen=True)
 class Variant:
@@ -266,6 +288,7 @@ class Variant:
             raise ValueError(f'Variant has a variable number of array sizes: {self}')
 
 
+@final
 @immutable
 @dataclass(frozen=True)
 class VariantChange:

@@ -13,6 +13,10 @@ from lucupy.minimodel.observationmode import ObservationMode, ObservationModes
 from lucupy.minimodel.resource import Resource, Resources
 from lucupy.minimodel.wavelength import Wavelengths
 
+__all__ = [
+    'ObservatoryProperties',
+]
+
 
 class ObservatoryProperties(ABC):
     """Observatory-specific methods.

@@ -1,8 +1,17 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from abc import ABC
 from dataclasses import dataclass
+from typing import final
+
+__all__ = [
+    'ID',
+    'GroupID',
+    'ObservationID',
+    'ProgramID',
+    'UniqueGroupID',
+]
 
 
 @dataclass(frozen=True)
@@ -28,21 +37,25 @@ class ID(ABC):
         return type(self) == type(other) and self.id == other.id
 
 
+@final
 @dataclass(frozen=True)
 class ProgramID(ID):
     ...
 
 
+@final
 @dataclass(frozen=True)
 class GroupID(ID):
     ...
 
 
+@final
 @dataclass(frozen=True)
 class UniqueGroupID(ID):
     ...
 
 
+@final
 @dataclass(frozen=True)
 class ObservationID(ID):
     @property

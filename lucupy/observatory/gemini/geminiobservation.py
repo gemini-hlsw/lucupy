@@ -1,12 +1,18 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from datetime import timedelta
-from typing import Final
+from typing import Final, final
 
 from lucupy.minimodel import Observation
 from lucupy.observatory.gemini.geminiproperties import GeminiProperties
 from lucupy.types import ZeroTime
+
+__all__ = [
+    'GeminiObservation',
+    'with_igrins_cal',
+]
+
 
 _IGRINS_CAL_TIME: Final[timedelta] = timedelta(minutes=10)
 
@@ -21,6 +27,7 @@ def with_igrins_cal(func):
     return add_calibration
 
 
+@final
 class GeminiObservation(Observation):
     """A Gemini-specific extension of the Observation class.
     """

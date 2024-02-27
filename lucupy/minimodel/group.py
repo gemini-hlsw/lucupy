@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from __future__ import annotations
@@ -19,6 +19,14 @@ from lucupy.minimodel.site import Site
 from lucupy.minimodel.wavelength import Wavelengths
 
 from .observationmode import ObservationMode
+
+__all__ = [
+    'AndGroup',
+    'AndOption',
+    'Group',
+    'OrGroup',
+    'ROOT_GROUP_ID',
+]
 
 ROOT_GROUP_ID: Final[GroupID] = GroupID('root')
 

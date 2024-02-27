@@ -1,11 +1,7 @@
-# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-"""
-A small version of GPP data model
-"""
-
-from typing import NewType
+from typing import NewType, TypeAlias
 
 import numpy.typing as npt
 
@@ -29,8 +25,8 @@ from .wavelength import *
 
 # Type alias for a night index and night indices.
 NightIndex = NewType('NightIndex', int)
-NightIndices = npt.NDArray[NightIndex]
+NightIndices: TypeAlias = npt.NDArray[NightIndex]
 
 # Type alias for a time slot index and time slot indices.
 TimeslotIndex = NewType('TimeslotIndex', int)
-TimeslotIndices = npt.NDArray[TimeslotIndex]
+TimeslotIndices: TypeAlias = npt.NDArray[TimeslotIndex]
