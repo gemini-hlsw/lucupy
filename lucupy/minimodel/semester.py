@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from __future__ import annotations
@@ -6,13 +6,19 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date
 from enum import Enum
-from typing import Dict, List
+from typing import Dict, List, final
 
 from gelidum import freeze
 
 from ..decorators import immutable
 
+__all__ = [
+    'Semester',
+    'SemesterHalf',
+]
 
+
+@final
 class SemesterHalf(str, Enum):
     """Gemini typically schedules programs for two semesters per year, namely A and B.
     For other observatories, this logic might have to be substantially changed.
@@ -62,6 +68,7 @@ _semester_half_months: Dict[SemesterHalf, List[int]] = freeze({
 })
 
 
+@final
 @immutable
 @dataclass(frozen=True, order=True)
 class Semester:

@@ -1,13 +1,21 @@
-# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass
-from typing import FrozenSet, Optional
 from enum import IntEnum, auto
+from typing import FrozenSet, Optional, TypeAlias, final
 
 from lucupy.decorators import immutable
 
+__all__ = [
+    'NIR_INSTRUMENTS',
+    'Resource',
+    'Resources',
+    'ResourceType',
+]
 
+
+@final
 class ResourceType(IntEnum):
     """A Resource's type
 
@@ -26,6 +34,7 @@ class ResourceType(IntEnum):
     DISPERSER = auto()
 
 
+@final
 @immutable
 @dataclass(frozen=True)
 # @define
@@ -61,7 +70,7 @@ class Resource:
         return f"Resource(id='{self.id}')"
 
 
-Resources = FrozenSet[Resource]
+Resources: TypeAlias = FrozenSet[Resource]
 
 NIR_INSTRUMENTS: Resources = frozenset([Resource('Flamingos2'),
                                         Resource('GNIRS'),

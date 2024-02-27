@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from __future__ import annotations
@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import IntEnum, auto
-from typing import List, Mapping, Optional
+from typing import List, Mapping, Optional, final
 
 import numpy as np
 import numpy.typing as npt
@@ -24,7 +24,17 @@ from .target import Target, TargetType
 from .too import TooType
 from .wavelength import Wavelengths
 
+__all__ = [
+    'Observation',
+    'ObservationClass',
+    'ObservationMode',
+    'ObservationStatus',
+    'Priority',
+    'SetupTimeType',
+]
 
+
+@final
 class ObservationStatus(IntEnum):
     """
     The status of an observation as indicated in the Observing Tool / ODB.
@@ -57,6 +67,7 @@ class ObservationStatus(IntEnum):
     PHASE2 = auto()
 
 
+@final
 class Priority(IntEnum):
     """An observation's priority.
     Note that these are ordered specifically so that we can compare them.
@@ -71,6 +82,7 @@ class Priority(IntEnum):
     HIGH = auto()
 
 
+@final
 class SetupTimeType(IntEnum):
     """The setup time type for an observation.
 
@@ -84,6 +96,7 @@ class SetupTimeType(IntEnum):
     FULL = auto()
 
 
+@final
 class ObservationClass(IntEnum):
     """The class of an observation.
 

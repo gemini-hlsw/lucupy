@@ -1,3 +1,6 @@
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
+# For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
 from typing import List, Optional, Tuple
 
 import matplotlib.pyplot as plt
@@ -6,6 +9,12 @@ import numpy.typing as npt
 
 from lucupy.minimodel.ids import ObservationID
 from lucupy.minimodel.site import Site
+
+__all__ = [
+    'airmass',
+    'interval',
+    'timelines',
+]
 
 
 def airmass(obs_airmass: npt.NDArray[float],

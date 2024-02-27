@@ -7,7 +7,7 @@
 # Copyright John Thorstensen, 2018, who graciously has allowed Gemini to use this code under the BSD-3 Clause license.
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from typing import Optional, Tuple
+from typing import Optional, Tuple, final
 
 import astropy.units as u
 import numpy as np
@@ -19,7 +19,12 @@ from .constants import J2000
 from .utils import (current_geocent_frame, hour_angle_to_angle,
                     local_sidereal_time)
 
+__all__ = [
+    'Sun',
+]
 
+
+@final
 class Sun:
     """An interface to calculate different night events regarding the Sun.
 

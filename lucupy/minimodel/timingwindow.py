@@ -3,11 +3,16 @@
 
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import ClassVar, Optional
+from typing import ClassVar, Optional, final
 
 from ..decorators import immutable
 
+__all__ = [
+    'TimingWindow',
+]
 
+
+@final
 @immutable
 @dataclass(frozen=True)
 class TimingWindow:

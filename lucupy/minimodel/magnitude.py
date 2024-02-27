@@ -1,13 +1,22 @@
-# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import FrozenSet, Optional
+from typing import FrozenSet, Optional, TypeAlias, final
 
 from ..decorators import immutable
 
+__all__ = [
+    'MagnitudeBand',
+    'MagnitudeBands',
+    'Magnitude',
+    'Magnitudes',
+    'MagnitudeSystem',
+]
 
+
+@final
 class MagnitudeSystem(Enum):
     """
     List of magnitude systems associated with magnitude bands.
@@ -22,6 +31,7 @@ class MagnitudeSystem(Enum):
     JY = auto()
 
 
+@final
 @immutable
 @dataclass(frozen=True)
 class MagnitudeBand:
@@ -34,7 +44,7 @@ class MagnitudeBand:
         name (str):
         center (float):
         width (float):
-        system (MagnitudeSystem): Default to MagnitudeSystem.VEGA .
+        system (MagnitudeSystem): Default to MagnitudeSystem.VEGA
         description (str, optional): Default to None.
 
     """
@@ -45,6 +55,7 @@ class MagnitudeBand:
     description: Optional[str] = None
 
 
+@final
 class MagnitudeBands(Enum):
     """
     It is unconventional to use lowercase characters in an enum, but to differentiate
@@ -76,6 +87,7 @@ class MagnitudeBands(Enum):
     AP = MagnitudeBand('AP', 0.550, 0.085, description='apparent')
 
 
+@final
 @immutable
 @dataclass(frozen=True)
 class Magnitude:
@@ -91,4 +103,4 @@ class Magnitude:
     error: Optional[float] = None
 
 
-Magnitudes = FrozenSet[Magnitude]
+Magnitudes: TypeAlias = FrozenSet[Magnitude]

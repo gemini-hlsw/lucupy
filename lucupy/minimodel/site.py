@@ -1,4 +1,4 @@
-# Copyright (c) 2016-2022 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 """This will have to be customized by a given observatory if used independently
@@ -6,13 +6,18 @@
 """
 
 from enum import Enum
-from typing import Optional, final
+from typing import Final, FrozenSet, Optional, final
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from astropy.coordinates import EarthLocation, UnknownSiteException
 
 from lucupy.decorators import immutable
 from lucupy.minimodel.resource import Resource
+
+__all__ = [
+    'Site',
+    'ALL_SITES',
+]
 
 
 @final
@@ -78,4 +83,4 @@ class Site(Enum):
 
 
 # A variable to work with all the sites in scheduler components as a frozenset.
-ALL_SITES = frozenset(s for s in Site)
+ALL_SITES: Final[FrozenSet[Site]] = frozenset(s for s in Site)

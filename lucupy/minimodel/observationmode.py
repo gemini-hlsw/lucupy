@@ -1,13 +1,19 @@
-# Copyright (c) 2016-2023 Association of Universities for Research in Astronomy, Inc. (AURA)
+# Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from __future__ import annotations
 
 # This has to be outside of Observation to avoid circular imports.
 from enum import Enum
-from typing import FrozenSet
+from typing import FrozenSet, TypeAlias, final
+
+__all__ = [
+    'ObservationMode',
+    'ObservationModes',
+]
 
 
+@final
 class ObservationMode(str, Enum):
     # TODO: This is not stored anywhere and is only used temporarily in the atom code in the
     # TODO: OcsProgramExtractor. Should it be stored anywhere or is it only used in intermediate
@@ -22,4 +28,4 @@ class ObservationMode(str, Enum):
     NRM = 'nrm'
 
 
-ObservationModes = FrozenSet[ObservationMode]
+ObservationModes: TypeAlias = FrozenSet[ObservationMode]

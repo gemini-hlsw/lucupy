@@ -22,6 +22,10 @@ from .moon import Moon
 from .sun import Sun
 from .utils import local_midnight_time
 
+__all__ = [
+    'night_events',
+]
+
 
 def night_events(time: Time, location: EarthLocation, localtzone: ZoneInfo) -> Tuple[Time,
                                                                                      TimeScalarOrNDArray,
