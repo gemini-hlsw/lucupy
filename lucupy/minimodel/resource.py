@@ -15,6 +15,7 @@ __all__ = [
 ]
 
 
+# TODO: Not sure why this is an IntEnum and not just an Enum.
 @final
 class ResourceType(IntEnum):
     """A Resource's type
@@ -37,7 +38,6 @@ class ResourceType(IntEnum):
 @final
 @immutable
 @dataclass(frozen=True)
-# @define
 class Resource:
     """This is a general observatory resource.
     It can consist of
@@ -57,7 +57,7 @@ class Resource:
     """
     id: str
     description: Optional[str] = None
-    type: Optional[int] = ResourceType.NONE
+    type: Optional[ResourceType] = ResourceType.NONE
 
     def __post_init__(self):
         if self.id is None or 'NONE' in self.id.upper():
