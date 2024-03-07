@@ -72,9 +72,9 @@ class Resource:
 
 Resources: TypeAlias = FrozenSet[Resource]
 
-NIR_INSTRUMENTS: Resources = frozenset([Resource('Flamingos2'),
-                                        Resource('GNIRS'),
-                                        Resource('NIRI'),
-                                        Resource('NIFS'),
-                                        Resource('Phoenix'),
-                                        Resource('IGRINS')])
+NIR_INSTRUMENTS: Resources = frozenset([Resource('Flamingos2', type=ResourceType.INSTRUMENT),
+                                        Resource('GNIRS', type=ResourceType.INSTRUMENT),
+                                        Resource('NIRI', type=ResourceType.INSTRUMENT),
+                                        Resource('NIFS', type=ResourceType.INSTRUMENT),
+                                        Resource('Phoenix', type=ResourceType.INSTRUMENT),
+                                        Resource('IGRINS', type=ResourceType.INSTRUMENT)])
