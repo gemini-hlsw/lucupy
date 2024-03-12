@@ -13,6 +13,7 @@ TimeScalarOrNDArray: TypeAlias = Time | npt.NDArray[float]
 ListOrNDArray: TypeAlias = List[T] | npt.NDArray[T]
 
 ZeroTime: Final[timedelta] = timedelta()
+Day: Final[timedelta] = timedelta(days=1)
 
 # Convenient type alias for Interval
 Interval: TypeAlias = npt.NDArray[int]
