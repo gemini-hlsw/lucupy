@@ -11,6 +11,7 @@ import numpy as np
 import numpy.typing as npt
 from astropy.coordinates import Angle
 from astropy.units import Quantity
+from astropy import units as u
 
 from lucupy.helpers import flatten
 from lucupy.types import ScalarOrNDArray
@@ -300,10 +301,18 @@ class VariantChange:
     Attributes:
         iq (ImageQuality): Image quality.
         cc (CloudCover): Cloud cover.
-        wind_dir (Angle): Wind direction (in degrees).
-        wind_spd (Quantity): Wind speed (in m/s).
+        wind_dir (Angle): Wind direction (in degrees). Should be scalar.
+        wind_spd (Quantity): Wind speed (in m/s). Should be scalar.
     """
     iq: ImageQuality
     cc: CloudCover
-    wind_dir: Optional[Angle] = None
-    wind_spd: Optional[Quantity] = None
+    wind_dir: Angle
+    wind_spd: Quantity
+
+    def __post_init__(self):
+        if self.wind_dir.size != 1:
+            raise ValueError(f'Wind direction should be scalar, but has size {self.wind_dir.size}.')
+        if self.wind_spd.unit != u.m / u.s:
+            raise ValueError(f'Wind speed should be in m / s, but {self.wind_spd.unit} specified.')
+        if self.wind_spd.size != 1:
+            raise ValueError(f'Wind speed should be scalar, but has size {self.wind_spd.size}.')
