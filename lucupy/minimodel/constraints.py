@@ -28,7 +28,7 @@ __all__ = [
     'SkyBackground',
     'Strehl',
     'Variant',
-    'VariantChange',
+    'VariantSnapshot',
     'WaterVapor',
 ]
 
@@ -292,9 +292,11 @@ class Variant:
 @final
 @immutable
 @dataclass(frozen=True)
-class VariantChange:
+class VariantSnapshot:
     """
-    A weather variant change.
+    A snapshot of a variant: this is used to keep track of weather changes or the current state of
+    the weather at a site.
+
     wind_dir should be in degrees.
     wind_speed should be in m / s.
 
@@ -316,3 +318,19 @@ class VariantChange:
             raise ValueError(f'Wind speed should be in m / s, but {self.wind_spd.unit} specified.')
         if self.wind_spd.size != 1:
             raise ValueError(f'Wind speed should be scalar, but has size {self.wind_spd.size}.')
+
+    def make_variant(self, num_timeslots: int) -> Variant:
+        """
+        Create a Variant object with the specified number of timeslots.
+        """
+        if num_timeslots <= 0:
+            raise ValueError(f'Request to make a Variant for illegal number of timeslots: {num_timeslots}.')
+
+        cc_array = np.array([self.cc] * num_timeslots)
+        iq_array = np.array([self.iq] * num_timeslots)
+        wind_dir_array = Angle(np.full(num_timeslots, self.wind_dir.value), unit=self.wind_dir.unit)
+        wind_spd_array = np.full(num_timeslots, self.wind_spd.value) * self.wind_spd.unit
+        return Variant(iq=iq_array,
+                       cc=cc_array,
+                       wind_dir=wind_dir_array,
+                       wind_spd=wind_spd_array)
