@@ -6,8 +6,11 @@ from datetime import datetime, timedelta
 from enum import Enum, IntEnum, auto
 from typing import ClassVar, FrozenSet, List, Optional, final
 
+import numpy as np
+
 from lucupy.decorators import immutable
 from lucupy.types import ZeroTime
+from lucupy.minimodel import Priority
 
 from .group import ROOT_GROUP_ID, AndGroup, Group
 from .ids import ObservationID, ProgramID, UniqueGroupID
@@ -189,6 +192,14 @@ class Program:
                             return check_subgroup
                     return None
         return aux(self.root_group)
+
+    def effective_priority(self):
+        priorities = []
+        for obs in self.observations():
+            priorities.append(obs.priority.value)
+        mean_priority = np.mean(priorities)
+        eff_priority = int(mean_priority + 0.5)
+        return Priority(eff_priority)
 
     def show(self):
         """Print content of the Program.
