@@ -4,6 +4,7 @@
 from datetime import timedelta
 from typing import Final, final
 
+from lucupy.instruments import NIR_INSTRUMENTS
 from lucupy.minimodel import Observation
 from lucupy.observatory.gemini.geminiproperties import GeminiProperties
 from lucupy.types import ZeroTime
@@ -19,7 +20,7 @@ _IGRINS_CAL_TIME: Final[timedelta] = timedelta(minutes=10)
 
 def with_igrins_cal(func):
     def add_calibration(self):
-        if (GeminiProperties.Instruments.IGRINS in self.required_resources()
+        if (NIR_INSTRUMENTS.IGRINS in self.required_resources()
                 and self.total_used - self.program_time() > ZeroTime):
             return func(self) + _IGRINS_CAL_TIME
         return func(self)
