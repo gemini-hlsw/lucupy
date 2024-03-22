@@ -51,29 +51,6 @@ class ObservatoryProperties(ABC):
         return cast(ObservatoryProperties, ObservatoryProperties._properties)
 
     @staticmethod
-    def determine_standard_time(resources: Resources,
-                                wavelengths: Wavelengths,
-                                modes: ObservationModes,
-                                cal_length: int) -> Time:
-        """Determine standard time for a specific Observatory
-
-        Args:
-            resources (Resources): Set of Resources(instruments, mask, etc).
-            wavelengths (Wavelengths): An array of Wavelengths to be observed.
-            modes (ObservationModes): The different modes of observation.
-            cal_length (int): The length (in seconds) of a calibration.
-
-        Returns:
-            Time: Value(s) of standard time
-        """
-        return ObservatoryProperties._check().determine_standard_time(
-            resources,
-            wavelengths,
-            modes,
-            cal_length
-        )
-
-    @staticmethod
     def is_instrument(resource: Resource) -> bool:
         """Determine if the given resource is an instrument or not.
 
@@ -84,18 +61,3 @@ class ObservatoryProperties(ABC):
             bool: True is the resource is an instrument of the Observatory, otherwise False.
         """
         return ObservatoryProperties._check().is_instrument(resource)
-
-    @staticmethod
-    def acquisition_time(resource: Resource,
-                         observation_mode: ObservationMode) -> Optional[timedelta]:
-        """Given a resource, check if it is an instrument, and if so, lookup the
-           acquisition time for the specified mode.
-
-        Args:
-            resource (Resource): A resource that should be an Instrument.
-            observation_mode (ObservationMode): The observation mode to be used.
-
-        Returns:
-            Optional[timedelta]: The acquisition time for the instrument in that specific mode.
-        """
-        return ObservatoryProperties._check().acquisition_time(resource, observation_mode)

@@ -8,7 +8,6 @@ from typing import FrozenSet, Optional, TypeAlias, final
 from lucupy.decorators import immutable
 
 __all__ = [
-    'NIR_INSTRUMENTS',
     'Resource',
     'Resources',
     'ResourceType',
@@ -66,15 +65,11 @@ class Resource:
     def __eq__(self, other):
         return isinstance(other, Resource) and self.id == other.id
 
+    def __hash__(self):
+        return hash(self.id)
+
     def __repr__(self):
         return f"Resource(id='{self.id}')"
 
 
 Resources: TypeAlias = FrozenSet[Resource]
-
-NIR_INSTRUMENTS: Resources = frozenset([Resource('Flamingos2', type=ResourceType.INSTRUMENT),
-                                        Resource('GNIRS', type=ResourceType.INSTRUMENT),
-                                        Resource('NIRI', type=ResourceType.INSTRUMENT),
-                                        Resource('NIFS', type=ResourceType.INSTRUMENT),
-                                        Resource('Phoenix', type=ResourceType.INSTRUMENT),
-                                        Resource('IGRINS', type=ResourceType.INSTRUMENT)])
