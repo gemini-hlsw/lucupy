@@ -13,6 +13,8 @@ from astropy.coordinates import EarthLocation, UnknownSiteException
 
 from lucupy.decorators import immutable
 from lucupy.minimodel.resource import Resource
+from lucupy.resourcemanager import ResourceManager
+
 
 __all__ = [
     'Site',
@@ -79,7 +81,7 @@ class Site(Enum):
         if resource is not None:
             self.resource = resource
         else:
-            self.resource = Resource(id=site_name)
+            self.resource = ResourceManager().lookup_resource(resource_id=site_name)
 
 
 # A variable to work with all the sites in scheduler components as a frozenset.

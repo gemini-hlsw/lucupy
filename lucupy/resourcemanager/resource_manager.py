@@ -1,9 +1,17 @@
 # Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
+
 from typing import Dict, Optional, final
 
 from lucupy.meta import Singleton
-from lucupy.minimodel import Resource, ResourceType
+
+# This needs to be done to break circular import.
+from lucupy.minimodel.resource import Resource, ResourceType
+
+
+_all__ = [
+    'ResourceManager',
+]
 
 
 @final

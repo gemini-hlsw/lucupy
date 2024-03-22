@@ -13,12 +13,13 @@ import numpy.typing as npt
 
 from lucupy.types import ZeroTime
 
+from ..instruments import NIR_INSTRUMENTS
 from .atom import Atom
 from .constraints import Constraints
 from .ids import ObservationID, ProgramID, UniqueGroupID
 from .observationmode import ObservationMode
 from .qastate import QAState
-from .resource import NIR_INSTRUMENTS, Resource, Resources
+from .resource import Resource, Resources
 from .site import Site
 from .target import Target, TargetType
 from .too import TooType
