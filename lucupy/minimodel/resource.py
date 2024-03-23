@@ -29,6 +29,10 @@ class Resource:
     and is used to determine what observations can be
     performed at a given time based on the resource availability.
 
+    ***NOTE:***
+    Instances of Resource should NEVER be created directly through this dataclass.
+    Resources are flyweight objects, and should ONLY be created through ResourceManager.lookup_resource.
+
     Attributes:
         id (str): Resource id or name.
         description (str): Short description.
