@@ -11,9 +11,9 @@ from typing import List, Mapping, Optional, final
 import numpy as np
 import numpy.typing as npt
 
+from lucupy.observatory.abstract import ObservatoryProperties
 from lucupy.types import ZeroTime
 
-from ..instruments import NIR_INSTRUMENTS
 from .atom import Atom
 from .constraints import Constraints
 from .ids import ObservationID, ProgramID, UniqueGroupID
@@ -248,7 +248,7 @@ class Observation:
     def is_nir(self) -> bool:
         """Define if the observation is a NIR observation or not."""
         inst_req = self.instrument()
-        return any(inst_req == nir_ins for nir_ins in NIR_INSTRUMENTS)
+        return any(inst_req == nir_ins for nir_ins in ObservatoryProperties.nir_instruments())
 
     def wavelengths(self) -> Wavelengths:
         """

@@ -15,6 +15,7 @@ from .observationmode import *
 from .program import *
 from .qastate import *
 from .resource import *
+from .resource_type import *
 from .semester import *
 from .site import *
 from .target import *
