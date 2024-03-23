@@ -4,7 +4,7 @@
 from datetime import timedelta
 from typing import Final, final
 
-from lucupy.observatory.gemini import GeminiProperties
+from lucupy.observatory.gemini.geminiproperties import GeminiProperties
 from lucupy.minimodel import Observation
 from lucupy.types import ZeroTime
 
