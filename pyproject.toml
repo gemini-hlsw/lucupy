@@ -1,6 +1,10 @@
 [tool.poetry]
 name = "lucupy"
+<<<<<<< HEAD
 version = "0.1.78"
+=======
+version = "0.1.79"
+>>>>>>> d0c5f0b (fix_attempt: Trying to get Resource to work well. Last good commit was 50981f2.)
 description = "Lucuma core package for the Gemini Automated Scheduler at: https://github.com/gemini-hlsw/scheduler"
 authors = ["Sergio Troncoso <sergio.troncoso@noirlab.edu>",
            "Sebastian Raaphorst <sebastian.raaphorst@noirlab.edu>",

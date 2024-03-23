@@ -1,7 +1,7 @@
 # Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field, InitVar
 from enum import IntEnum, auto
 from typing import FrozenSet, Optional, TypeAlias, final
 
@@ -57,8 +57,12 @@ class Resource:
     id: str
     description: Optional[str] = None
     type: Optional[ResourceType] = ResourceType.NONE
+    legal_creation: InitVar[bool] = field(default=False)
 
-    def __post_init__(self):
+    def __post_init__(self, legal_creation: bool) -> None:
+        if not legal_creation:
+            raise RuntimeError(f'Resource object {self.id} attempted to be created directly. '
+                               'All resources must be accessed through ResourceManager.lookup_resource.')
         if self.id is None or 'NONE' in self.id.upper():
             raise ValueError('Should not have any Resources equal to None or containing "None"')
 

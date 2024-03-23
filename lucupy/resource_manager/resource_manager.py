@@ -14,6 +14,9 @@ _all__ = [
 ]
 
 
+__all__ = ['ResourceManager']
+
+
 @final
 class ResourceManager(metaclass=Singleton):
     """
@@ -45,8 +48,6 @@ class ResourceManager(metaclass=Singleton):
         if not resource_id:
             return None
         if resource_id not in self._all_resources:
-            self._all_resources[resource_id] = Resource(id=resource_id, description=description, type=resource_type)
-        # Update description (e.g. MDF) if different from the original. For when the description can be changed.
-        # if self._all_resources[resource_id].description != description:
-        #     self._all_resources[resource_id].description = description
+            self._all_resources[resource_id] = Resource(id=resource_id, description=description,
+                                                        type=resource_type, legal_creation=True)
         return self._all_resources[resource_id]

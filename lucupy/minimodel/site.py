@@ -12,9 +12,8 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from astropy.coordinates import EarthLocation, UnknownSiteException
 
 from lucupy.decorators import immutable
-from lucupy.minimodel.resource import Resource
-from lucupy.resourcemanager import ResourceManager
-
+from lucupy.minimodel.resource import ResourceType
+from lucupy.resource_manager import ResourceManager
 
 __all__ = [
     'Site',
@@ -39,8 +38,7 @@ class Site(Enum):
                  coordinate_center: str,
                  *,
                  location: Optional[EarthLocation] = None,
-                 timezone: Optional[ZoneInfo] = None,
-                 resource: Optional[Resource] = None):
+                 timezone: Optional[ZoneInfo] = None):
         """
         Perform the necessary initialization for a Site object, which is also a Resource.
         Args:
@@ -48,7 +46,6 @@ class Site(Enum):
             coordinate_center: the coordinate center of the site (probably not needed)
             location: the EarthLocation of the site, which, if not provided, will be looked up by the site_name
             timezone: the ZoneInfo timezone at the location which, if not provided, will be looked up by location
-            resource: a Resource representing the site, which, if not provided, will be created with id site_name
 
         Note: if outdated information is found during lookups (e.g. time zone information is not what one would expect),
         this may be because AstroPy downloads and caches this data. Clearing the cache to force a re-download may help:
@@ -78,10 +75,8 @@ class Site(Enum):
                 msg = f'zoneinfo cannot resolve time zone lookup: {timezone_name}.'
                 raise ValueError(e, msg)
 
-        if resource is not None:
-            self.resource = resource
-        else:
-            self.resource = ResourceManager().lookup_resource(resource_id=site_name)
+        self.resource = ResourceManager().lookup_resource(resource_id=site_name,
+                                                          resource_type=ResourceType.SITE)
 
 
 # A variable to work with all the sites in scheduler components as a frozenset.
