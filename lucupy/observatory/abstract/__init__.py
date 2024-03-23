@@ -25,6 +25,7 @@ class ObservatoryProperties(ABC):
 
     """
     _properties: Optional[ObservatoryProperties] = None
+
     @staticmethod
     def set_properties(cls) -> None:
         """Set properties for an specific Observatory

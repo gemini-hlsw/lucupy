@@ -45,17 +45,17 @@ class GeminiProperties(ObservatoryProperties):
         GSAOI = rm.lookup_resource(rid='GSAOI', rtype=ResourceType.INSTRUMENT)
         PHOENIX = rm.lookup_resource(rid='Phoenix', rtype=ResourceType.INSTRUMENT)
 
-    STANDARD_INSTRUMENTS = frozenset({Instruments.FLAMINGOS2,
-                                      Instruments.GNIRS,
-                                      Instruments.NIFS,
-                                      Instruments.IGRINS})
+    _STANDARD_INSTRUMENTS = frozenset({Instruments.FLAMINGOS2,
+                                       Instruments.GNIRS,
+                                       Instruments.NIFS,
+                                       Instruments.IGRINS})
 
-    NIR_INSTRUMENTS: Resources = frozenset({Instruments.FLAMINGOS2,
-                                            Instruments.GNIRS,
-                                            Instruments.NIRI,
-                                            Instruments.NIFS,
-                                            Instruments.PHOENIX,
-                                            Instruments.IGRINS})
+    _NIR_INSTRUMENTS: Resources = frozenset({Instruments.FLAMINGOS2,
+                                             Instruments.GNIRS,
+                                             Instruments.NIRI,
+                                             Instruments.NIFS,
+                                             Instruments.PHOENIX,
+                                             Instruments.IGRINS})
 
     """ List: Instruments for which there are set standards.
     """
@@ -82,7 +82,7 @@ class GeminiProperties(ObservatoryProperties):
         """
         if cal_length > 1:
             # Check to see if any of the resources are instruments.
-            if any(resource in GeminiProperties.STANDARD_INSTRUMENTS for resource in resources):
+            if any(resource in GeminiProperties._STANDARD_INSTRUMENTS for resource in resources):
                 if all(wavelength <= 2.5 for wavelength in wavelengths):
                     return 1.5 * u.h
                 else:
@@ -93,18 +93,18 @@ class GeminiProperties(ObservatoryProperties):
 
     @staticmethod
     def instruments() -> Resources:
-        return GeminiProperties.STANDARD_INSTRUMENTS | GeminiProperties.NIR_INSTRUMENTS
+        return GeminiProperties._STANDARD_INSTRUMENTS | GeminiProperties._NIR_INSTRUMENTS
 
     @staticmethod
     def nir_instruments() -> Resources:
-        return GeminiProperties.NIR_INSTRUMENTS
+        return GeminiProperties._NIR_INSTRUMENTS
 
     @staticmethod
     def is_nir_instrument(resource: Resource) -> bool:
         """
         Checks in the specified Resource is a NIR Gemini Instrument.
         """
-        return resource in GeminiProperties.NIR_INSTRUMENTS
+        return resource in GeminiProperties._NIR_INSTRUMENTS
 
     @staticmethod
     def is_instrument(resource: Resource) -> bool:
