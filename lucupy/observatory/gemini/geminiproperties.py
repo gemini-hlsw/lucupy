@@ -34,28 +34,28 @@ class GeminiProperties(ObservatoryProperties):
     class Instruments(Enum, metaclass=_InstrumentsMeta):
         """ Gemini-specific instruments.
         """
-        FLAMINGOS2 = rm.lookup_resource(resource_id='Flamingos2', resource_type=ResourceType.INSTRUMENT)
-        NIFS = rm.lookup_resource(resource_id='NIFS', resource_type=ResourceType.INSTRUMENT)
-        NIRI = rm.lookup_resource(resource_id='NIRI', resource_type=ResourceType.INSTRUMENT)
-        IGRINS = rm.lookup_resource(resource_id='IGRINS', resource_type=ResourceType.INSTRUMENT)
-        GMOS_N = rm.lookup_resource(resource_id='GMOS-N', resource_type=ResourceType.INSTRUMENT)
-        GMOS_S = rm.lookup_resource(resource_id='GMOS-S', resource_type=ResourceType.INSTRUMENT)
-        GNIRS = rm.lookup_resource(resource_id='GNIRS', resource_type=ResourceType.INSTRUMENT)
-        GPI = rm.lookup_resource(resource_id='GPI', resource_type=ResourceType.INSTRUMENT)
-        GSAOI = rm.lookup_resource(resource_id='GSAOI', resource_type=ResourceType.INSTRUMENT)
-        PHOENIX = rm.lookup_resource(resource_id='Phoenix', resource_type=ResourceType.INSTRUMENT)
+        FLAMINGOS2 = rm.lookup_resource(rid='Flamingos2', rtype=ResourceType.INSTRUMENT)
+        NIFS = rm.lookup_resource(rid='NIFS', rtype=ResourceType.INSTRUMENT)
+        NIRI = rm.lookup_resource(rid='NIRI', rtype=ResourceType.INSTRUMENT)
+        IGRINS = rm.lookup_resource(rid='IGRINS', rtype=ResourceType.INSTRUMENT)
+        GMOS_N = rm.lookup_resource(rid='GMOS-N', rtype=ResourceType.INSTRUMENT)
+        GMOS_S = rm.lookup_resource(rid='GMOS-S', rtype=ResourceType.INSTRUMENT)
+        GNIRS = rm.lookup_resource(rid='GNIRS', rtype=ResourceType.INSTRUMENT)
+        GPI = rm.lookup_resource(rid='GPI', rtype=ResourceType.INSTRUMENT)
+        GSAOI = rm.lookup_resource(rid='GSAOI', rtype=ResourceType.INSTRUMENT)
+        PHOENIX = rm.lookup_resource(rid='Phoenix', rtype=ResourceType.INSTRUMENT)
 
-    _STANDARD_INSTRUMENTS = frozenset({Instruments.FLAMINGOS2,
-                                       Instruments.GNIRS,
-                                       Instruments.NIFS,
-                                       Instruments.IGRINS})
+    STANDARD_INSTRUMENTS = frozenset({Instruments.FLAMINGOS2,
+                                      Instruments.GNIRS,
+                                      Instruments.NIFS,
+                                      Instruments.IGRINS})
 
-    _NIR_INSTRUMENTS: Resources = frozenset({Instruments.FLAMINGOS2,
-                                             Instruments.GNIRS,
-                                             Instruments.NIRI,
-                                             Instruments.NIFS,
-                                             Instruments.PHOENIX,
-                                             Instruments.IGRINS})
+    NIR_INSTRUMENTS: Resources = frozenset({Instruments.FLAMINGOS2,
+                                            Instruments.GNIRS,
+                                            Instruments.NIRI,
+                                            Instruments.NIFS,
+                                            Instruments.PHOENIX,
+                                            Instruments.IGRINS})
 
     """ List: Instruments for which there are set standards.
     """
@@ -82,7 +82,7 @@ class GeminiProperties(ObservatoryProperties):
         """
         if cal_length > 1:
             # Check to see if any of the resources are instruments.
-            if any(resource in GeminiProperties._STANDARD_INSTRUMENTS for resource in resources):
+            if any(resource in GeminiProperties.STANDARD_INSTRUMENTS for resource in resources):
                 if all(wavelength <= 2.5 for wavelength in wavelengths):
                     return 1.5 * u.h
                 else:
@@ -92,11 +92,19 @@ class GeminiProperties(ObservatoryProperties):
             return 0.0 * u.h
 
     @staticmethod
+    def instruments() -> Resources:
+        return GeminiProperties.STANDARD_INSTRUMENTS | GeminiProperties.NIR_INSTRUMENTS
+
+    @staticmethod
+    def nir_instruments() -> Resources:
+        return GeminiProperties.NIR_INSTRUMENTS
+
+    @staticmethod
     def is_nir_instrument(resource: Resource) -> bool:
         """
         Checks in the specified Resource is a NIR Gemini Instrument.
         """
-        return resource in GeminiProperties._NIR_INSTRUMENTS
+        return resource in GeminiProperties.NIR_INSTRUMENTS
 
     @staticmethod
     def is_instrument(resource: Resource) -> bool:

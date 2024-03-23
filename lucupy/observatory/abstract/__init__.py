@@ -25,7 +25,6 @@ class ObservatoryProperties(ABC):
 
     """
     _properties: Optional[ObservatoryProperties] = None
-
     @staticmethod
     def set_properties(cls) -> None:
         """Set properties for an specific Observatory
@@ -71,6 +70,14 @@ class ObservatoryProperties(ABC):
             modes,
             cal_length
         )
+
+    @staticmethod
+    def nir_instruments() -> Resources:
+        return ObservatoryProperties._check().nir_instruments()
+
+    @staticmethod
+    def instruments() -> Resources:
+        return ObservatoryProperties._check().instruments()
 
     @staticmethod
     def is_nir_instrument(resource: Resource) -> bool:

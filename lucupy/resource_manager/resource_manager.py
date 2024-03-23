@@ -5,16 +5,12 @@ from typing import Dict, Optional, final
 
 from lucupy.meta import Singleton
 
-# This needs to be done to break circular import.
-from lucupy.minimodel.resource import Resource, ResourceType
-
+from lucupy.minimodel.resource import Resource
+from lucupy.minimodel.resource_type import ResourceType
 
 _all__ = [
     'ResourceManager',
 ]
-
-
-__all__ = ['ResourceManager']
 
 
 @final
@@ -29,9 +25,9 @@ class ResourceManager(metaclass=Singleton):
         self._all_resources: Dict[str, Resource] = {}
 
     def lookup_resource(self,
-                        resource_id: str,
+                        rid: str,
                         description: Optional[str] = None,
-                        resource_type: Optional[ResourceType] = ResourceType.NONE) -> Optional[Resource]:
+                        rtype: Optional[ResourceType] = ResourceType.NONE) -> Optional[Resource]:
         """
         Function to perform Resource caching and minimize the number of Resource objects by attempting to reuse
         Resource objects with the same ID.
@@ -45,9 +41,9 @@ class ResourceManager(metaclass=Singleton):
         Resource equality comparator.
         """
         # The Resource constructor raises an exception for id None or containing any capitalization of "none".
-        if not resource_id:
+        if not rid:
             return None
-        if resource_id not in self._all_resources:
-            self._all_resources[resource_id] = Resource(id=resource_id, description=description,
-                                                        type=resource_type, legal_creation=True)
-        return self._all_resources[resource_id]
+        if rid not in self._all_resources:
+            self._all_resources[rid] = Resource(id=rid, description=description,
+                                                type=rtype, legal_creation=True)
+        return self._all_resources[rid]

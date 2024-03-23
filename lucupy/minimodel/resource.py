@@ -2,36 +2,15 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass, field, InitVar
-from enum import IntEnum, auto
 from typing import FrozenSet, Optional, TypeAlias, final
 
+from .resource_type import ResourceType
 from lucupy.decorators import immutable
 
 __all__ = [
     'Resource',
     'Resources',
-    'ResourceType',
 ]
-
-
-# TODO: Not sure why this is an IntEnum and not just an Enum.
-@final
-class ResourceType(IntEnum):
-    """A Resource's type
-
-    Members:
-        - SITE
-        - WFS
-        - INSTRUMENT
-        - FPU
-        - DISPERSER
-    """
-    NONE = auto()
-    SITE = auto()
-    WFS = auto()
-    INSTRUMENT = auto()
-    FPU = auto()
-    DISPERSER = auto()
 
 
 @final
@@ -66,7 +45,16 @@ class Resource:
         if self.id is None or 'NONE' in self.id.upper():
             raise ValueError('Should not have any Resources equal to None or containing "None"')
 
+    def __hash__(self):
+        """
+        We only want to hash the ID. Resources with identical IDs should be considered identical.
+        """
+        return hash(self.id)
+
     def __eq__(self, other):
+        """
+        Resources are the same if the have the same ID.
+        """
         return isinstance(other, Resource) and self.id == other.id
 
     def __hash__(self):

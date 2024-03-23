@@ -13,7 +13,7 @@ from astropy.coordinates import EarthLocation, UnknownSiteException
 
 from lucupy.decorators import immutable
 from lucupy.minimodel.resource import ResourceType
-from lucupy.resource_manager import ResourceManager
+from lucupy.resource_manager.resource_manager import ResourceManager
 
 __all__ = [
     'Site',
@@ -75,8 +75,8 @@ class Site(Enum):
                 msg = f'zoneinfo cannot resolve time zone lookup: {timezone_name}.'
                 raise ValueError(e, msg)
 
-        self.resource = ResourceManager().lookup_resource(resource_id=site_name,
-                                                          resource_type=ResourceType.SITE)
+        self.resource = ResourceManager().lookup_resource(rid=site_name,
+                                                          rtype=ResourceType.SITE)
 
 
 # A variable to work with all the sites in scheduler components as a frozenset.
