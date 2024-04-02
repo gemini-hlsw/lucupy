@@ -14,7 +14,7 @@ from lucupy.minimodel import Priority
 
 from .group import ROOT_GROUP_ID, AndGroup, Group
 from .ids import ObservationID, ProgramID, UniqueGroupID
-from .observation import Observation
+from .observation import Observation, ObservationClass, ObservationStatus, Priority
 from .semester import Semester
 from .timeallocation import TimeAllocation
 from .too import TooType
@@ -193,13 +193,22 @@ class Program:
                     return None
         return aux(self.root_group)
 
-    def effective_priority(self):
+    def mean_priority(self) -> float:
+        """
+        Return the mean user priority from the active SCIENCE and PROGCAL observations
+        :return: float
+        """
+        mean_priority = 1.0
         priorities = []
         for obs in self.observations():
-            priorities.append(obs.priority.value)
-        mean_priority = np.mean(priorities)
-        eff_priority = int(mean_priority + 0.5)
-        return Priority(eff_priority)
+            if obs.obs_class in [ObservationClass.SCIENCE, ObservationClass.PROGCAL] and \
+                    obs.status != ObservationStatus.INACTIVE:
+                priorities.append(obs.priority.value)
+
+        if len(priorities) > 0:
+            mean_priority = np.mean(priorities)
+
+        return mean_priority
 
     def show(self):
         """Print content of the Program.

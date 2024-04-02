@@ -13,7 +13,7 @@ from lucupy.helpers import flatten
 from lucupy.minimodel.constraints import Constraints
 from lucupy.minimodel.ids import (GroupID, ObservationID, ProgramID,
                                   UniqueGroupID)
-from lucupy.minimodel.observation import Observation, ObservationClass
+from lucupy.minimodel.observation import Observation, ObservationClass, ObservationStatus, Priority
 from lucupy.minimodel.resource import Resources
 from lucupy.minimodel.site import Site
 from lucupy.minimodel.wavelength import Wavelengths
@@ -308,6 +308,21 @@ class Group(ABC):
             else:
                 obs_mode = max([child.obs_mode() for child in self.children])
         return obs_mode
+
+    def priority(self) -> Priority:
+        """
+        Return user priority based on those of the children if SCIENCE or PROGCAL
+        :return: priority
+        """
+        priority = Priority.LOW
+        if self.is_and_group():
+            if isinstance(self.children, Observation):
+                if self.children.obs_class in [ObservationClass.SCIENCE, ObservationClass.PROGCAL] and \
+                        self.children.status != ObservationStatus.INACTIVE:
+                    priority = self.children.priority
+            else:
+                priority = max([child.priority() for child in self.children])
+        return priority
 
     def show(self, depth: int = 1) -> None:
         """Print content of the Group.
