@@ -132,15 +132,15 @@ class Group(ABC):
         else:
             return frozenset(w for c in self.children for w in c.wavelengths())
 
-    def constraints(self) -> FrozenSet[Constraints]:
+    def constraints(self) -> List[Constraints]:
         """
         Returns:
-            FrozenSet[Constraints]: All set of Constraints of children in the group.
+            List[Constraints]: All set of Constraints of children in the group.
         """
         if isinstance(self.children, Observation):
-            return frozenset([self.children.constraints])
+            return [self.children.constraints]
         else:
-            return frozenset(cs for c in self.children for cs in c.constraints())
+            return [cs for c in self.children for cs in c.constraints()]
 
     def observations(self) -> List[Observation]:
         """
