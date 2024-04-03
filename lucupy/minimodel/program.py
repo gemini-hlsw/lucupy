@@ -10,11 +10,11 @@ import numpy as np
 
 from lucupy.decorators import immutable
 from lucupy.types import ZeroTime
-from lucupy.minimodel import Priority
+from lucupy.minimodel.obs_filter import obs_is_not_inactive, obs_is_science_or_progcal
 
 from .group import ROOT_GROUP_ID, AndGroup, Group
 from .ids import ObservationID, ProgramID, UniqueGroupID
-from .observation import Observation, ObservationClass, ObservationStatus, Priority
+from .observation import Observation, Priority
 from .semester import Semester
 from .timeallocation import TimeAllocation
 from .too import TooType
@@ -195,20 +195,15 @@ class Program:
 
     def mean_priority(self) -> float:
         """
-        Return the mean user priority from the active SCIENCE and PROGCAL observations
+        Return the mean user priority from the active SCIENCE and PROGCAL observations.
+        This will be a value in the interval [Priority.LOW.value, Priority.HIGH.value] indicating
+        the mean over Observations.
+
         :return: float
         """
-        mean_priority = 1.0
-        priorities = []
-        for obs in self.observations():
-            if obs.obs_class in [ObservationClass.SCIENCE, ObservationClass.PROGCAL] and \
-                    obs.status != ObservationStatus.INACTIVE:
-                priorities.append(obs.priority.value)
-
-        if len(priorities) > 0:
-            mean_priority = np.mean(priorities)
-
-        return mean_priority
+        priorities = [obs.priority.value for obs in self.observations()
+                      if obs_is_science_or_progcal(obs) and obs_is_not_inactive(obs)]
+        return np.mean(priorities) if len(priorities) else Priority.LOW.value
 
     def show(self):
         """Print content of the Program.

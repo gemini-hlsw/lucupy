@@ -10,6 +10,7 @@ from .constraints import *
 from .group import *
 from .ids import *
 from .magnitude import *
+from .obs_filter import *
 from .observation import *
 from .observationmode import *
 from .program import *

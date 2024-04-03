@@ -7,13 +7,14 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import timedelta
 from enum import Enum, auto
-from typing import Final, FrozenSet, List, Optional
+from typing import Final, FrozenSet, List, Optional, Callable
 
 from lucupy.helpers import flatten
 from lucupy.minimodel.constraints import Constraints
 from lucupy.minimodel.ids import (GroupID, ObservationID, ProgramID,
                                   UniqueGroupID)
-from lucupy.minimodel.observation import Observation, ObservationClass, ObservationStatus, Priority
+from lucupy.minimodel.obs_filter import obs_is_not_inactive, obs_is_science_or_progcal
+from lucupy.minimodel.observation import Observation, ObservationClass, Priority
 from lucupy.minimodel.resource import Resources
 from lucupy.minimodel.site import Site
 from lucupy.minimodel.wavelength import Wavelengths
@@ -259,29 +260,20 @@ class Group(ABC):
         else:
             return sum((child.not_charged() for child in self.children), timedelta())
 
+    def _filtered_obs_list(self, obs_filter: Callable[[Observation], bool]) -> List[Observation]:
+        return [obs for obs in self.observations() if obs_filter(obs)]
+
     def program_observations(self) -> List[Observation]:
         """Return the list of program (science + program calibration) observations in the group"""
-        observations = []
-        for obs in self.observations():
-            if obs.obs_class in [ObservationClass.SCIENCE, ObservationClass.PROGCAL]:
-                observations.append(obs)
-        return observations
+        return self._filtered_obs_list(obs_is_science_or_progcal)
 
     def partner_observations(self) -> List[Observation]:
         """Return the list of partner calibration observations in the group"""
-        observations = []
-        for obs in self.observations():
-            if obs.obs_class == ObservationClass.PARTNERCAL:
-                observations.append(obs)
-        return observations
+        return self._filtered_obs_list(lambda obs: obs.obs_class == ObservationClass.PARTNERCAL)
 
     def daycal_observations(self) -> List[Observation]:
         """Return the list of daytime calibration observations in the group"""
-        observations = []
-        for obs in self.observations():
-            if obs.obs_class == ObservationClass.DAYCAL:
-                observations.append(obs)
-        return observations
+        return self._filtered_obs_list(lambda obs: obs.obs_class == ObservationClass.DAYCAL)
 
     def obs_class(self) -> ObservationClass:
         """
@@ -292,7 +284,7 @@ class Group(ABC):
             if isinstance(self.children, Observation):
                 obs_class = self.children.obs_class
             else:
-                obs_class = min([child.obs_class() for child in self.children])
+                obs_class = min(child.obs_class() for child in self.children)
         return obs_class
 
     def obs_mode(self) -> ObservationMode:
@@ -306,22 +298,25 @@ class Group(ABC):
             if isinstance(self.children, Observation):
                 obs_mode = self.children.obs_mode()
             else:
-                obs_mode = max([child.obs_mode() for child in self.children])
+                obs_mode = max(child.obs_mode() for child in self.children)
         return obs_mode
 
     def priority(self) -> Priority:
         """
-        Return user priority based on those of the children if SCIENCE or PROGCAL
+        Return the maximum user priority based on those of the children Observations
+        for active Observations where the ObservationClass is SCIENCE or PROGCAL.
+        If there is no such Observation, Priority.LOW is returned.
+
         :return: priority
         """
         priority = Priority.LOW
         if self.is_and_group():
             if isinstance(self.children, Observation):
-                if self.children.obs_class in [ObservationClass.SCIENCE, ObservationClass.PROGCAL] and \
-                        self.children.status != ObservationStatus.INACTIVE:
-                    priority = self.children.priority
+                obs = self.children
+                priority = obs.priority if obs_is_science_or_progcal(obs) and obs_is_not_inactive(obs) else Priority.LOW
             else:
-                priority = max([child.priority() for child in self.children])
+                # This should always work because the leaves will always be an Observation.
+                priority = max(child.priority() for child in self.children)
         return priority
 
     def show(self, depth: int = 1) -> None:
