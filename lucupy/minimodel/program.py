@@ -6,12 +6,15 @@ from datetime import datetime, timedelta
 from enum import Enum, IntEnum, auto
 from typing import ClassVar, FrozenSet, List, Optional, final
 
+import numpy as np
+
 from lucupy.decorators import immutable
 from lucupy.types import ZeroTime
+from lucupy.minimodel import Priority
 
 from .group import ROOT_GROUP_ID, AndGroup, Group
 from .ids import ObservationID, ProgramID, UniqueGroupID
-from .observation import Observation
+from .observation import Observation, ObservationClass, ObservationStatus, Priority
 from .semester import Semester
 from .timeallocation import TimeAllocation
 from .too import TooType
@@ -189,6 +192,23 @@ class Program:
                             return check_subgroup
                     return None
         return aux(self.root_group)
+
+    def mean_priority(self) -> float:
+        """
+        Return the mean user priority from the active SCIENCE and PROGCAL observations
+        :return: float
+        """
+        mean_priority = 1.0
+        priorities = []
+        for obs in self.observations():
+            if obs.obs_class in [ObservationClass.SCIENCE, ObservationClass.PROGCAL] and \
+                    obs.status != ObservationStatus.INACTIVE:
+                priorities.append(obs.priority.value)
+
+        if len(priorities) > 0:
+            mean_priority = np.mean(priorities)
+
+        return mean_priority
 
     def show(self):
         """Print content of the Program.
