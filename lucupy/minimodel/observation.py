@@ -71,16 +71,18 @@ class ObservationStatus(IntEnum):
 @final
 class Priority(IntEnum):
     """An observation's priority.
-    Note that these are ordered specifically so that we can compare them.
+    Note that these are ordered specifically so that we can compare them, and assigned
+    specific int values so that we can sum over them to get a Program's mean priority over
+    its Observations and get a value in the interval [LOW.value, HIGH.value].
 
     Members:
         - LOW
         - MEDIUM
         - HIGH
     """
-    LOW = auto()
-    MEDIUM = auto()
-    HIGH = auto()
+    LOW = 0
+    MEDIUM = 1
+    HIGH = 2
 
 
 @final
