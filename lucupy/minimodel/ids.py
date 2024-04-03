@@ -34,7 +34,7 @@ class ID(ABC):
         return self.id >= other.id
 
     def __eq__(self, other) -> bool:
-        return type(self) == type(other) and self.id == other.id
+        return type(self) is type(other) and self.id == other.id
 
 
 @final
