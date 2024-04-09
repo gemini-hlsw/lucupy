@@ -9,8 +9,10 @@ from typing import final
 import astropy.units as u
 from astropy.time import Time
 
-from lucupy.minimodel import (ObservationMode, ObservationModes, Resource,
-                              Resources, ResourceType, Wavelengths)
+from lucupy.minimodel.observationmode import ObservationMode, ObservationModes
+from lucupy.minimodel.resource import Resource, Resources
+from lucupy.minimodel.resource_type import ResourceType
+from lucupy.minimodel.wavelength import Wavelengths
 from lucupy.resource_manager.resource_manager import ResourceManager
 from lucupy.observatory.abstract import ObservatoryProperties
 
