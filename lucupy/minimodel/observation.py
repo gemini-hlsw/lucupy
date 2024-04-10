@@ -148,6 +148,7 @@ class Observation:
         belongs_to (ProgramID): ID for the program the observation belongs to.
         constraints (Constraints, optional): Some observations do not have constraints, e.g. GN-208A-FT-103-6.
         too_type (TooType, optional): Default to None.
+        preimaging: (bool, optional): Pre-imaging observation?
 
     """
     id: ObservationID
@@ -181,6 +182,7 @@ class Observation:
     constraints: Constraints
 
     too_type: Optional[TooType] = None
+    preimaging: bool = False
 
     @property
     def to_unique_group_id(self) -> UniqueGroupID:
