@@ -250,7 +250,7 @@ class Constraints:
     # 1. The Constraints are not present in the Observation at all; or
     # 2. The elevation_type is set to NONE.
     DEFAULT_AIRMASS_ELEVATION_MIN: ClassVar[float] = field(init=False, default=1.0, repr=False, compare=False)
-    DEFAULT_AIRMASS_ELEVATION_MAX: ClassVar[float] = field(init=False, default=2.3, repr=False, compare=False)
+    DEFAULT_AIRMASS_ELEVATION_MAX: ClassVar[float] = field(init=False, default=2.05, repr=False, compare=False)
 
 
 @final
