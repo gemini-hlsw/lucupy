@@ -287,7 +287,7 @@ class Moon:
         self.beta = Angle(np.deg2rad(beta), unit=u.rad)
         self.lambd = Angle(np.deg2rad(lambd), unit=u.rad)
 
-    def low_precision_location(self, obs: EarthLocation) -> SkyCoord:
+    def low_precision_location(self, obs: EarthLocation) -> Tuple[SkyCoord, Distance]:
         """This is the same as the high precision method, but with a different set of coefficients.
         The difference is small. Good to about 0.1 deg, from the 1992 Astronomical Almanac, p. D46.
         Note that input time is a float. It also only calculates the sky coordinates.
@@ -329,7 +329,7 @@ class Moon:
 
         fr = current_geocent_frame(self.time)
         # return SkyCoord(alpha, delta, topo_dist * distancemultiplier, frame=fr)
-        return SkyCoord(alpha, delta, topo_dist, frame=fr)
+        return SkyCoord(alpha, delta, topo_dist, frame=fr), Distance(topo_dist * EQUAT_RAD)
 
     def accurate_location(self, obs: EarthLocation) -> Tuple[SkyCoord, Distance]:
         """Compute topocentric location and distance of moon to better accuracy.
@@ -474,7 +474,7 @@ class Moon:
         Returns:
             Tuple[Time, Time]: Moonrise and Moonset values, in that order.
         """
-        moon_at_midnight = self.at(midnight).low_precision_location(location)
+        moon_at_midnight, _ = self.at(midnight).low_precision_location(location)
         lst_midnight = local_sidereal_time(midnight, location)
         ha_moon_at_midnight = lst_midnight - moon_at_midnight.ra
         ha_moon_at_midnight.wrap_at(12. * u.hour, inplace=True)
