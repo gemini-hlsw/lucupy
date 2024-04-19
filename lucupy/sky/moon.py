@@ -325,11 +325,11 @@ class Moon:
 
         alpha = np.arctan2(m, ell)
         delta = np.arcsin(n)
-        # distancemultiplier = Distance(EQUAT_RAD, unit=u.m)
+        distancemultiplier = Distance(EQUAT_RAD, unit=u.m)
 
         fr = current_geocent_frame(self.time)
-        # return SkyCoord(alpha, delta, topo_dist * distancemultiplier, frame=fr)
-        return SkyCoord(alpha, delta, topo_dist, frame=fr), Distance(topo_dist * EQUAT_RAD)
+        final_dist = topo_dist * distancemultiplier
+        return SkyCoord(alpha, delta, final_dist, frame=fr), final_dist
 
     def accurate_location(self, obs: EarthLocation) -> Tuple[SkyCoord, Distance]:
         """Compute topocentric location and distance of moon to better accuracy.
