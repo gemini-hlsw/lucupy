@@ -129,18 +129,13 @@ class SiderealTarget(Target):
 @dataclass(frozen=True)
 class NonsiderealTarget(Target):
     """
-    For a NonsiderealTarget, we have a HORIZONS designation to indicate the lookup
-    information, a tag to determine the type of target, and arrays of ephemerides
-    to specify the position.
+    For a NonsiderealTarget, we have a JPL/Horizons designation to indicate the lookup
+    information and a tag to determine the type of target.
+    Ephemeris data will be looked up as necessary.
 
     Attributes:
         des (str): Horizon designation
         tag (TargetTag): TargetTag
-        ra (npt.NDArray[float]): Right Ascension
-        dec (npt.NDArray[float]): Declination
-
     """
     des: str
     tag: TargetTag
-    ra: npt.NDArray[float]
-    dec: npt.NDArray[float]
