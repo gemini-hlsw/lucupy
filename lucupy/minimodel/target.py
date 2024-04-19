@@ -6,8 +6,6 @@ from dataclasses import dataclass
 from enum import Enum, IntEnum, auto
 from typing import NewType, NoReturn, final
 
-import numpy.typing as npt
-
 from ..decorators import immutable
 from .magnitude import Magnitudes
 
