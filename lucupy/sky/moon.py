@@ -52,7 +52,7 @@ class Moon:
         self.lambd = None
         self.beta = None
 
-    def at(self, time: Time) -> "Moon":
+    def at(self, time: Time) -> 'Moon':
         """Set time values for other calculations.
 
            This method is meant to be called with:
@@ -287,16 +287,16 @@ class Moon:
         self.beta = Angle(np.deg2rad(beta), unit=u.rad)
         self.lambd = Angle(np.deg2rad(lambd), unit=u.rad)
 
-    def low_precision_location(self, obs: EarthLocation) -> Tuple[SkyCoord, Distance]:
+    def low_precision_location(self, obs: EarthLocation) -> SkyCoord:
         """This is the same as the high precision method, but with a different set of coefficients.
         The difference is small. Good to about 0.1 deg, from the 1992 Astronomical Almanac, p. D46.
-        Note that input time is a float.
+        Note that input time is a float. It also only calculates the sky coordinates.
 
         Args:
             obs: Earth location of the observation.
 
         Returns:
-            Tuple[SkyCoord, Distance]: Moon coordinates and topographic distance.
+            SkyCoord: Moon coordinates.
         """
         self._low_precision_calculations()
 
@@ -325,11 +325,11 @@ class Moon:
 
         alpha = np.arctan2(m, ell)
         delta = np.arcsin(n)
-        distancemultiplier = Distance(EQUAT_RAD, unit=u.m)
+        # distancemultiplier = Distance(EQUAT_RAD, unit=u.m)
 
         fr = current_geocent_frame(self.time)
-        return (SkyCoord(alpha, delta, topo_dist * distancemultiplier, frame=fr),
-                Distance(topo_dist * u.m))
+        # return SkyCoord(alpha, delta, topo_dist * distancemultiplier, frame=fr)
+        return SkyCoord(alpha, delta, topo_dist, frame=fr)
 
     def accurate_location(self, obs: EarthLocation) -> Tuple[SkyCoord, Distance]:
         """Compute topocentric location and distance of moon to better accuracy.
@@ -375,7 +375,7 @@ class Moon:
         z -= zobs
 
         # form the toposcentric ra and dec and bundle them into a skycoord of epoch of date.
-        topo_dist = np.sqrt(x ** 2 + y ** 2 + z ** 2)
+        topo_dist = np.sqrt(x * x + y * y + z * z)
         raout = np.arctan2(y, x)
         decout = np.arcsin(z / topo_dist)
 
@@ -384,8 +384,7 @@ class Moon:
             decout = np.squeeze(decout)
             topo_dist = np.squeeze(topo_dist)
 
-        return (SkyCoord(raout, decout, unit=u.rad, frame=current_geocent_frame(self.time)),
-                Distance(topo_dist * u.m))
+        return SkyCoord(raout, decout, unit=u.rad, frame=current_geocent_frame(self.time)), Distance(topo_dist)
 
     @staticmethod
     def time_by_altitude(alt: Angle,
@@ -475,7 +474,7 @@ class Moon:
         Returns:
             Tuple[Time, Time]: Moonrise and Moonset values, in that order.
         """
-        moon_at_midnight, _ = self.at(midnight).low_precision_location(location)
+        moon_at_midnight = self.at(midnight).low_precision_location(location)
         lst_midnight = local_sidereal_time(midnight, location)
         ha_moon_at_midnight = lst_midnight - moon_at_midnight.ra
         ha_moon_at_midnight.wrap_at(12. * u.hour, inplace=True)
