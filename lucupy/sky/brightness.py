@@ -39,7 +39,7 @@ def calculate_sky_brightness(moon_phase_angle: Angle,
     Args:
         moon_phase_angle: Moon phase angles in degrees
         target_moon_angdist: Angular distances between target and moon
-        earth_moon_dist: Distances from the Earth to the Moon
+        earth_moon_dist: Distances from the Earth to the Moon in m
         moon_zenith_distang: Moon zenith distance angles
         target_zenith_distang: Target zenith distance angles
         sun_zenith_distang: Sun zenith distance angles
