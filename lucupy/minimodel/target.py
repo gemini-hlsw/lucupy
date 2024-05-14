@@ -68,7 +68,7 @@ class TargetTag(Enum):
     """
     COMET = auto()
     ASTEROID = auto()
-    MAJOR_BODY = auto()
+    MAJORBODY = auto()
 
 
 @immutable
