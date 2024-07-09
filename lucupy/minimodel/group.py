@@ -26,6 +26,7 @@ __all__ = [
     'AndOption',
     'Group',
     'OrGroup',
+    'GppGroup',
     'ROOT_GROUP_ID',
 ]
 
@@ -369,6 +370,7 @@ class AndOption(Enum):
     NIGHT_ANYORDER = auto()
     ANYORDER = auto()
     CUSTOM = auto()
+    NONE = auto()
 
 
 @dataclass
@@ -436,3 +438,49 @@ class OrGroup(Group):
 
     def is_or_group(self) -> bool:
         return True
+
+@dataclass
+class GppGroup(Group):
+    """The concrete implementation of a group from GPP
+
+    Attributes:
+        group_option (AndOption): Specify how its observations should be handled.
+        previous (int, optional): An index into the group's children to indicate the previously observed child,
+            or None if none of the children have yet been observed. Default to None.
+
+    """
+    group_option: AndOption
+    previous: Optional[int] = None
+    parent_id: Optional[GroupID] = GroupID('')
+    parent_index: Optional[int] = None
+
+    def __post_init__(self):
+        super().__post_init__()
+        # if self.number_to_observe != len(self.children):
+        #     msg = f'AND group {self.group_name} specifies {self.number_to_observe} children to be observed but has ' \
+        #           f'{len(self.children)} children.'
+        #     raise ValueError(msg)
+        if self.previous is not None and (self.previous < 0 or self.previous >= len(self.children)):
+            msg = f'AND group {self.group_name} has {len(self.children)} children and an illegal previous value of ' \
+                  f'{self.previous}'
+            raise ValueError(msg)
+
+    def instruments(self) -> Resources:
+        """
+        Returns:
+            instruments (Resources): A set of all instruments used in this group.
+        """
+        if isinstance(self.children, Observation):
+            instrument = self.children.instrument()
+            if instrument is not None:
+                return frozenset({instrument})
+            else:
+                return frozenset()
+        else:
+            return frozenset(flatten([child.instruments() for child in self.children]))  # type: ignore
+
+    def is_and_group(self) -> bool:
+        return True if self.group_option != AndOption.NONE else False
+
+    def is_or_group(self) -> bool:
+        return True if self.group_option == AndOption.NONE and self.number_to_observe < len(self.children) else False

@@ -23,6 +23,7 @@ from .site import Site
 from .target import Target, TargetType
 from .too import TooType
 from .wavelength import Wavelengths
+from .timeallocation import Band
 
 __all__ = [
     'Observation',
@@ -183,6 +184,8 @@ class Observation:
 
     too_type: Optional[TooType] = None
     preimaging: bool = False
+    band: Optional[Band] = None
+
 
     @property
     def to_unique_group_id(self) -> UniqueGroupID:

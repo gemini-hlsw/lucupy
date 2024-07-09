@@ -16,27 +16,18 @@ from .group import ROOT_GROUP_ID, AndGroup, Group
 from .ids import ObservationID, ProgramID, UniqueGroupID
 from .observation import Observation, Priority
 from .semester import Semester
-from .timeallocation import TimeAllocation
+from .timeallocation import TimeAllocation, GppTimeAllocation, Band
 from .too import TooType
 
 __all__ = [
-    'Band',
+    # 'Band',
     'Program',
     'ProgramMode',
     'ProgramType',
     'ProgramTypes',
+    'TimeUsed',
+    'GppProgram'
 ]
-
-
-@final
-class Band(IntEnum):
-    """
-    Program band.
-    """
-    BAND1 = 1
-    BAND2 = 2
-    BAND3 = 3
-    BAND4 = 4
 
 
 @final
@@ -152,6 +143,163 @@ class Program:
 
     def not_charged(self) -> timedelta:
         return self.root_group.not_charged()
+
+    def observations(self) -> List[Observation]:
+        return self.root_group.observations()
+
+    def get_group(self, group_id: UniqueGroupID) -> Optional[Group]:
+        """
+        Given a UniqueGroupID, find the subgroup with the ID if it exists.
+        Returns None if no such group can be found.
+        """
+        def aux(group: Group) -> Optional[Group]:
+            if group.unique_id == group_id:
+                return group
+            elif not isinstance(group.children, Observation):
+                for subgroup in group.children:
+                    retval = aux(subgroup)
+                    if retval is not None:
+                        return retval
+            return None
+
+        return aux(self.root_group)
+
+    def get_observation(self, observation_id: ObservationID) -> Optional[Observation]:
+        """
+        Given an ObservationID, find the Observation with the ID if it exists.
+        Returns None if no such Observation can be found.
+        """
+        def aux(group: Group) -> Optional[Observation]:
+            match group.children:
+                case Observation():
+                    if group.children.id == observation_id:
+                        return group.children
+                    else:
+                        return None
+                case _:
+                    for subgroup in group.children:
+                        check_subgroup = aux(subgroup)
+                        if check_subgroup is not None:
+                            return check_subgroup
+                    return None
+        return aux(self.root_group)
+
+    def mean_priority(self) -> float:
+        """
+        Return the mean user priority from the active SCIENCE and PROGCAL observations.
+        This will be a value in the interval [Priority.LOW.value, Priority.HIGH.value] indicating
+        the mean over Observations.
+
+        :return: float
+        """
+        priorities = [obs.priority.value for obs in self.observations()
+                      if obs_is_science_or_progcal(obs) and obs_is_not_inactive(obs)]
+        return np.mean(priorities) if len(priorities) else Priority.LOW.value
+
+    def show(self):
+        """Print content of the Program.
+        """
+        print(f'Program: {self.id.id}')
+        # Print the group and atom information.
+        self.root_group.show(1)
+
+
+@final
+@dataclass
+class TimeUsed:
+    """
+    Time charged information for a given category for a program.
+
+    Attribute:
+        program_used (timedelta):
+        partner_used (timedelta):
+        not_charged (timedelta):
+        band (Band)
+    """
+    program_used: timedelta
+    partner_used: timedelta
+    not_charged: timedelta
+    # band: Band
+
+    def total_used(self) -> timedelta:
+        return self.program_used + self.partner_used
+
+    def __hash__(self):
+        return self.category.__hash__()
+
+
+@final
+@dataclass
+class GppProgram:
+    """
+    Representation of a GPP program.
+    ToDo: For experimentation, need to merge with the basic Program class and update the OCS code
+
+    The FUZZY_BOUNDARY is a constant that allows for a fuzzy boundary for a program's
+    start and end times.
+    """
+    id: ProgramID
+    internal_id: str
+    # Some programs do not have a typical name and thus cannot be associated with a semester.
+    semester: Optional[Semester]
+    # band: FrozenSet[Band] = field(hash=False, compare=False)
+    thesis: bool
+    mode: ProgramMode
+    type: Optional[ProgramTypes]
+    start: datetime
+    end: datetime
+    allocated_time: FrozenSet[GppTimeAllocation] = field(hash=False, compare=False)
+    used_time: FrozenSet[TimeUsed] = field(hash=False, compare=False)
+
+    # Root group is immutable and should not be used in hashing or comparisons.
+    root_group: AndGroup
+
+    too_type: Optional[TooType] = None
+
+    FUZZY_BOUNDARY: ClassVar[timedelta] = timedelta(days=14)
+
+    def __post_init__(self):
+        if self.root_group.id != ROOT_GROUP_ID:
+            raise ValueError(f"Program {self.id.id} should have root group should named {ROOT_GROUP_ID.id}, received: "
+                             f'"{self.root_group.id}".')
+
+    def bands(self) -> List[Band]:
+        """Unique list of ranking bands"""
+        seen = set()
+        seen_add = seen.add
+        return [t.band for t in self.allocated_time if not (t.band in seen or seen_add(t.band))]
+
+    # ToDo: have to make by band
+    def program_awarded(self) -> timedelta:
+        return sum((t.program_awarded for t in self.allocated_time), ZeroTime)
+
+    def partner_awarded(self) -> timedelta:
+        return sum((t.partner_awarded for t in self.allocated_time), ZeroTime)
+
+    def total_awarded(self) -> timedelta:
+        return sum((t.total_awarded() for t in self.allocated_time), ZeroTime)
+
+    # def program_charged(self) -> timedelta:
+    #     return self.used_time.program_used
+
+    # def partner_charged(self) -> timedelta:
+    #     return self.used_time.partner_used
+
+    # def total_charged(self) -> timedelta:
+    #     return self.total_used()
+
+    # ToDo: all these have to be by band
+    def program_used(self) -> timedelta:
+        return self.root_group.program_used() + self.used_time.program_used
+
+    def partner_used(self) -> timedelta:
+        return self.root_group.partner_used() + self.used_time.partner_used
+
+    def total_used(self) -> timedelta:
+        return self.root_group.total_used() + self.used_time.total_used()
+
+    def not_charged(self) -> timedelta:
+        return self.root_group.not_charged() + self.used_time.not_charged
 
     def observations(self) -> List[Observation]:
         return self.root_group.observations()
