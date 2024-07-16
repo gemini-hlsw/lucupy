@@ -14,6 +14,7 @@ __all__ = [
     'Band',
     'TimeAccountingCode',
     'TimeAllocation',
+    'TimeUsed'
 ]
 
 @final
@@ -102,15 +103,11 @@ class TimeAllocation:
         category (TimeAccountingCode):
         program_awarded (timedelta):
         partner_awarded (timedelta):
-        program_used (timedelta):
-        partner_used (timedelta):
         band (Band)
     """
     category: TimeAccountingCode
     program_awarded: timedelta
     partner_awarded: timedelta
-    program_used: Optional[timedelta] = ZeroTime  # ToDo: Move to another location
-    partner_used: Optional[timedelta] = ZeroTime  # ToDo: move to another location
     band: Optional[Band] = None
 
     def total_awarded(self) -> timedelta:
@@ -121,4 +118,29 @@ class TimeAllocation:
 
     def __hash__(self):
         return self.category.__hash__()
+
+
+@final
+@dataclass
+class TimeUsed:
+    """
+    Time charged information for a given category for a program.
+
+    Attribute:
+        program_used (timedelta):
+        partner_used (timedelta):
+        not_charged (timedelta):
+        band (Band)
+    """
+    program_used: timedelta
+    partner_used: timedelta
+    not_charged: timedelta
+    # band: Band
+
+    def total_used(self) -> timedelta:
+        return self.program_used + self.partner_used
+
+    # ToDo: hash on the band once available
+    def __hash__(self):
+        return self.program_used.__hash__()
 
