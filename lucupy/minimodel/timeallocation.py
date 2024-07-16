@@ -6,14 +6,14 @@ from enum import Enum, IntEnum, auto
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import Enum
-from typing import final
+from typing import final, Optional
 
+from lucupy.types import ZeroTime
 
 __all__ = [
     'Band',
     'TimeAccountingCode',
     'TimeAllocation',
-    'GppTimeAllocation'
 ]
 
 @final
@@ -104,12 +104,14 @@ class TimeAllocation:
         partner_awarded (timedelta):
         program_used (timedelta):
         partner_used (timedelta):
+        band (Band)
     """
     category: TimeAccountingCode
     program_awarded: timedelta
     partner_awarded: timedelta
-    program_used: timedelta
-    partner_used: timedelta
+    program_used: Optional[timedelta] = ZeroTime  # ToDo: Move to another location
+    partner_used: Optional[timedelta] = ZeroTime  # ToDo: move to another location
+    band: Optional[Band] = None
 
     def total_awarded(self) -> timedelta:
         return self.program_awarded + self.partner_awarded
@@ -120,38 +122,3 @@ class TimeAllocation:
     def __hash__(self):
         return self.category.__hash__()
 
-@final
-@dataclass
-class GppTimeAllocation:
-    """
-    Time allocation information for a given category for a program from GPP.
-    ToDo: For testing, should eventually be merged with TimeAllocation
-    Programs may be sponsored by multiple categories with different amounts
-    of time awarded. This class maintains information about the time awarded
-    and the time that has been used, divided between program time and partner
-    calibration time. The time used is calculated as a ratio of the awarded time
-    for this category to the total time awarded to the program.
-
-    Attribute:
-        category (TimeAccountingCode):
-        program_awarded (timedelta):
-        partner_awarded (timedelta):
-        # program_used (timedelta):
-        # partner_used (timedelta):
-        band (Band)
-    """
-    category: TimeAccountingCode
-    program_awarded: timedelta
-    partner_awarded: timedelta
-    # program_used: timedelta
-    # partner_used: timedelta
-    band: Band
-
-    def total_awarded(self) -> timedelta:
-        return self.program_awarded + self.partner_awarded
-
-    # def total_used(self) -> timedelta:
-    #     return self.program_used + self.partner_used
-
-    def __hash__(self):
-        return self.category.__hash__()

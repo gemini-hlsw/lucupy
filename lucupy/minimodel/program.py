@@ -16,7 +16,7 @@ from .group import ROOT_GROUP_ID, Group, Group
 from .ids import ObservationID, ProgramID, UniqueGroupID
 from .observation import Observation, Priority
 from .semester import Semester
-from .timeallocation import TimeAllocation, GppTimeAllocation, Band
+from .timeallocation import TimeAllocation, Band
 from .too import TooType
 
 __all__ = [
@@ -248,7 +248,7 @@ class GppProgram:
     type: Optional[ProgramTypes]
     start: datetime
     end: datetime
-    allocated_time: FrozenSet[GppTimeAllocation] = field(hash=False, compare=False)
+    allocated_time: FrozenSet[TimeAllocation] = field(hash=False, compare=False)
     used_time: FrozenSet[TimeUsed] = field(hash=False, compare=False)
 
     # Root group is immutable and should not be used in hashing or comparisons.
