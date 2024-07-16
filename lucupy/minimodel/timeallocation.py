@@ -61,6 +61,7 @@ class GppTimeAccountingCode(str, Enum):
     """
     The time accounting codes for the possible partner submissions or internal program
     types used at Gemini, also known as categories.
+    This is for if the GPP codes differ substantially from OCS.
 
     This will have to be customized for a given observatory if used independently
     of Gemini.

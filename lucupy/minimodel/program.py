@@ -12,7 +12,7 @@ from lucupy.decorators import immutable
 from lucupy.types import ZeroTime
 from lucupy.minimodel.obs_filter import obs_is_not_inactive, obs_is_science_or_progcal
 
-from .group import ROOT_GROUP_ID, AndGroup, Group
+from .group import ROOT_GROUP_ID, Group, Group
 from .ids import ObservationID, ProgramID, UniqueGroupID
 from .observation import Observation, Priority
 from .semester import Semester
@@ -103,7 +103,7 @@ class Program:
     allocated_time: FrozenSet[TimeAllocation] = field(hash=False, compare=False)
 
     # Root group is immutable and should not be used in hashing or comparisons.
-    root_group: AndGroup
+    root_group: Group
 
     too_type: Optional[TooType] = None
 
@@ -252,7 +252,7 @@ class GppProgram:
     used_time: FrozenSet[TimeUsed] = field(hash=False, compare=False)
 
     # Root group is immutable and should not be used in hashing or comparisons.
-    root_group: AndGroup
+    root_group: Group
 
     too_type: Optional[TooType] = None
 
