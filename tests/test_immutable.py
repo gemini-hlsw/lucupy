@@ -4,7 +4,7 @@
 from copy import deepcopy
 from datetime import datetime, timedelta
 
-from lucupy.minimodel import (ROOT_GROUP_ID, AndGroup, AndOption, Band,
+from lucupy.minimodel import (ROOT_GROUP_ID, Group, AndOption, Band,
                               CloudCover, Conditions, Constraints,
                               ElevationType, GroupID, ImageQuality, Magnitude,
                               MagnitudeBands, Observation, ObservationClass,
@@ -66,7 +66,7 @@ def test_immutable_deepcopy():
                     constraints=c,
                     belongs_to=program_id)
 
-    gp = AndGroup(id=GroupID('g1'),
+    gp = Group(id=GroupID('g1'),
                   program_id=program_id,
                   group_name='Group 1',
                   number_to_observe=1,
@@ -75,7 +75,7 @@ def test_immutable_deepcopy():
                   children=o,
                   group_option=AndOption.ANYORDER)
 
-    root = AndGroup(id=ROOT_GROUP_ID,
+    root = Group(id=ROOT_GROUP_ID,
                     program_id=program_id,
                     group_name=ROOT_GROUP_ID.id,
                     number_to_observe=1,

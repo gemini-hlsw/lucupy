@@ -5,7 +5,7 @@ import io
 import unittest.mock
 from datetime import datetime
 
-from lucupy.minimodel import (ROOT_GROUP_ID, AndGroup, GroupID, Observation,
+from lucupy.minimodel import (ROOT_GROUP_ID, Group, GroupID, Observation,
                               ObservationID, ObservationStatus, Program,
                               ProgramID)
 
@@ -43,7 +43,7 @@ def test_print_program():
     )
 
     # Create the trivial AND group containing the gnirs1 observation.
-    g1 = AndGroup(
+    g1 = Group(
         id=GroupID('test_group'),
         program_id=program_id,
         group_name='test',
@@ -54,7 +54,7 @@ def test_print_program():
         group_option=None
     )
 
-    g = AndGroup(id=ROOT_GROUP_ID,
+    g = Group(id=ROOT_GROUP_ID,
                  program_id=program_id,
                  group_name=ROOT_GROUP_ID.id,
                  number_to_observe=1,

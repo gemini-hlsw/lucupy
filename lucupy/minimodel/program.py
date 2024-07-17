@@ -12,31 +12,20 @@ from lucupy.decorators import immutable
 from lucupy.types import ZeroTime
 from lucupy.minimodel.obs_filter import obs_is_not_inactive, obs_is_science_or_progcal
 
-from .group import ROOT_GROUP_ID, AndGroup, Group
+from .group import ROOT_GROUP_ID, Group, Group
 from .ids import ObservationID, ProgramID, UniqueGroupID
 from .observation import Observation, Priority
 from .semester import Semester
-from .timeallocation import TimeAllocation
+from .timeallocation import TimeAllocation, TimeUsed, Band
 from .too import TooType
 
 __all__ = [
-    'Band',
+    # 'Band',
     'Program',
     'ProgramMode',
     'ProgramType',
     'ProgramTypes',
 ]
-
-
-@final
-class Band(IntEnum):
-    """
-    Program band.
-    """
-    BAND1 = 1
-    BAND2 = 2
-    BAND3 = 3
-    BAND4 = 4
 
 
 @final
@@ -103,17 +92,18 @@ class Program:
     internal_id: str
     # Some programs do not have a typical name and thus cannot be associated with a semester.
     semester: Optional[Semester]
-    band: Band
     thesis: bool
     mode: ProgramMode
     type: Optional[ProgramTypes]
     start: datetime
     end: datetime
     allocated_time: FrozenSet[TimeAllocation] = field(hash=False, compare=False)
+    used_time: FrozenSet[TimeUsed] = field(hash=False, compare=False)
 
     # Root group is immutable and should not be used in hashing or comparisons.
-    root_group: AndGroup
+    root_group: Group
 
+    band: Optional[Band] = None
     too_type: Optional[TooType] = None
 
     FUZZY_BOUNDARY: ClassVar[timedelta] = timedelta(days=14)
@@ -123,35 +113,43 @@ class Program:
             raise ValueError(f"Program {self.id.id} should have root group should named {ROOT_GROUP_ID.id}, received: "
                              f'"{self.root_group.id}".')
 
+    def bands(self) -> List[Band]:
+        """Unique list of ranking bands, the bands must be included in the allocated_time"""
+        seen = set()
+        seen_add = seen.add
+        return [t.band for t in self.allocated_time if not (t.band in seen or seen_add(t.band))]
+
     def program_awarded(self) -> timedelta:
         return sum((t.program_awarded for t in self.allocated_time), ZeroTime)
 
+    # ToDo: rename all awarded_used, this is an odd name for previously used time
+    # ToDo: used times by band
     def program_awarded_used(self) -> timedelta:
-        return sum((t.program_used for t in self.allocated_time), ZeroTime)
+        return sum((t.program_used for t in self.used_time), ZeroTime)
 
     def partner_awarded(self) -> timedelta:
         return sum((t.partner_awarded for t in self.allocated_time), ZeroTime)
 
     def partner_awarded_used(self) -> timedelta:
-        return sum((t.partner_used for t in self.allocated_time), ZeroTime)
+        return sum((t.partner_used for t in self.used_time), ZeroTime)
 
     def total_awarded(self) -> timedelta:
         return sum((t.total_awarded() for t in self.allocated_time), ZeroTime)
 
     def total_awarded_used(self) -> timedelta:
-        return sum((t.total_used() for t in self.allocated_time), ZeroTime)
+        return sum((t.total_used() for t in self.used_time), ZeroTime)
 
     def program_used(self) -> timedelta:
-        return self.root_group.program_used()
+        return self.root_group.program_used() + self.program_awarded_used()
 
     def partner_used(self) -> timedelta:
-        return self.root_group.partner_used()
+        return self.root_group.partner_used() + self.partner_awarded_used()
 
     def total_used(self) -> timedelta:
-        return self.root_group.total_used()
+        return self.root_group.total_used() + self.total_awarded_used()
 
     def not_charged(self) -> timedelta:
-        return self.root_group.not_charged()
+        return self.root_group.not_charged() + sum((t.not_charged for t in self.used_time), ZeroTime)
 
     def observations(self) -> List[Observation]:
         return self.root_group.observations()

@@ -1,15 +1,31 @@
 # Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
+from enum import Enum, IntEnum, auto
+
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import Enum
-from typing import final
+from typing import final, Optional
+
+from lucupy.types import ZeroTime
 
 __all__ = [
+    'Band',
     'TimeAccountingCode',
     'TimeAllocation',
+    'TimeUsed'
 ]
+
+@final
+class Band(IntEnum):
+    """
+    Program band.
+    """
+    BAND1 = 1
+    BAND2 = 2
+    BAND3 = 3
+    BAND4 = 4
 
 
 @final
@@ -41,6 +57,36 @@ class TimeAccountingCode(str, Enum):
     US = 'United States'
     XCHK = 'Keck Exchange'
 
+@final
+class GppTimeAccountingCode(str, Enum):
+    """
+    The time accounting codes for the possible partner submissions or internal program
+    types used at Gemini, also known as categories.
+    This is for if the GPP codes differ substantially from OCS.
+
+    This will have to be customized for a given observatory if used independently
+    of Gemini.
+    """
+    AR = 'Argentina'
+    AU = 'Australia'
+    BR = 'Brazil'
+    CA = 'Canada'
+    CFH = 'CFHT Exchange'
+    CL = 'CL'
+    KR = 'Republic of Korea'
+    DD = "Director's Time"
+    DS = 'Demo Science'
+    GS = 'Gemini Staff'
+    GT = 'Guaranteed Time'
+    JP = 'Subaru'
+    LP = 'Large Program'
+    LTP = 'Limited-term Participant'
+    SV = 'System Verification'
+    UH = 'University of Hawaii'
+    UK = 'United Kingdom'
+    US = 'United States'
+    XCHK = 'Keck Exchange'
+
 
 @final
 @dataclass
@@ -57,14 +103,12 @@ class TimeAllocation:
         category (TimeAccountingCode):
         program_awarded (timedelta):
         partner_awarded (timedelta):
-        program_used (timedelta):
-        partner_used (timedelta):
+        band (Band)
     """
     category: TimeAccountingCode
     program_awarded: timedelta
     partner_awarded: timedelta
-    program_used: timedelta
-    partner_used: timedelta
+    band: Optional[Band] = None
 
     def total_awarded(self) -> timedelta:
         return self.program_awarded + self.partner_awarded
@@ -74,3 +118,29 @@ class TimeAllocation:
 
     def __hash__(self):
         return self.category.__hash__()
+
+
+@final
+@dataclass
+class TimeUsed:
+    """
+    Time charged information for a given category for a program.
+
+    Attribute:
+        program_used (timedelta):
+        partner_used (timedelta):
+        not_charged (timedelta):
+        band (Band)
+    """
+    program_used: timedelta
+    partner_used: timedelta
+    not_charged: timedelta
+    # band: Band
+
+    def total_used(self) -> timedelta:
+        return self.program_used + self.partner_used
+
+    # ToDo: hash on the band once available
+    def __hash__(self):
+        return self.program_used.__hash__()
+
