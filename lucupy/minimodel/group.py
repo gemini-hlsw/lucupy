@@ -22,10 +22,10 @@ from lucupy.minimodel.wavelength import Wavelengths
 from .observationmode import ObservationMode
 
 __all__ = [
-    'AndGroup',
+    # 'AndGroup',
     'AndOption',
     'BaseGroup',
-    'OrGroup',
+    # 'OrGroup',
     'Group',
     'ROOT_GROUP_ID',
 ]
@@ -373,71 +373,72 @@ class AndOption(Enum):
     NONE = auto()
 
 
-@dataclass
-class AndGroup(BaseGroup):
-    """The concrete implementation of an AND group.
+# @dataclass
+# class AndGroup(BaseGroup):
+#     """The concrete implementation of an AND group.
+#
+#     Attributes:
+#         group_option (AndOption): Specify how its observations should be handled.
+#         previous (int, optional): An index into the group's children to indicate the previously observed child,
+#             or None if none of the children have yet been observed. Default to None.
+#
+#     """
+#     group_option: AndOption
+#     previous: Optional[int] = None
+#
+#     def __post_init__(self):
+#         super().__post_init__()
+#         if self.number_to_observe != len(self.children):
+#             msg = f'AND group {self.group_name} specifies {self.number_to_observe} children to be observed but has ' \
+#                   f'{len(self.children)} children.'
+#             raise ValueError(msg)
+#         if self.previous is not None and (self.previous < 0 or self.previous >= len(self.children)):
+#             msg = f'AND group {self.group_name} has {len(self.children)} children and an illegal previous value of ' \
+#                   f'{self.previous}'
+#             raise ValueError(msg)
+#
+#     def is_and_group(self) -> bool:
+#         return True
+#
+#     def is_or_group(self) -> bool:
+#         return False
+#
+#     def instruments(self) -> Resources:
+#         """
+#         Returns:
+#             instruments (Resources): A set of all instruments used in this group.
+#         """
+#         if isinstance(self.children, Observation):
+#             instrument = self.children.instrument()
+#             if instrument is not None:
+#                 return frozenset({instrument})
+#             else:
+#                 return frozenset()
+#         else:
+#             return frozenset(flatten([child.instruments() for child in self.children]))  # type: ignore
+#
+#
+# @dataclass
+# class OrGroup(BaseGroup):
+#     """
+#     The concrete implementation of an OR group.
+#     The restrictions on an OR group is that it must explicitly require not all
+#     of its children to be observed.
+#     """
+#
+#     def __post_init__(self):
+#         super().__post_init__()
+#         if self.number_to_observe >= len(self.children):
+#             msg = f'OR group {self.group_name} specifies {self.number_to_observe} children to be observed but has ' \
+#                   f'{len(self.children)} children.'
+#             raise ValueError(msg)
+#
+#     def is_and_group(self) -> bool:
+#         return False
+#
+#     def is_or_group(self) -> bool:
+#         return True
 
-    Attributes:
-        group_option (AndOption): Specify how its observations should be handled.
-        previous (int, optional): An index into the group's children to indicate the previously observed child,
-            or None if none of the children have yet been observed. Default to None.
-
-    """
-    group_option: AndOption
-    previous: Optional[int] = None
-
-    def __post_init__(self):
-        super().__post_init__()
-        if self.number_to_observe != len(self.children):
-            msg = f'AND group {self.group_name} specifies {self.number_to_observe} children to be observed but has ' \
-                  f'{len(self.children)} children.'
-            raise ValueError(msg)
-        if self.previous is not None and (self.previous < 0 or self.previous >= len(self.children)):
-            msg = f'AND group {self.group_name} has {len(self.children)} children and an illegal previous value of ' \
-                  f'{self.previous}'
-            raise ValueError(msg)
-
-    def is_and_group(self) -> bool:
-        return True
-
-    def is_or_group(self) -> bool:
-        return False
-
-    def instruments(self) -> Resources:
-        """
-        Returns:
-            instruments (Resources): A set of all instruments used in this group.
-        """
-        if isinstance(self.children, Observation):
-            instrument = self.children.instrument()
-            if instrument is not None:
-                return frozenset({instrument})
-            else:
-                return frozenset()
-        else:
-            return frozenset(flatten([child.instruments() for child in self.children]))  # type: ignore
-
-
-@dataclass
-class OrGroup(BaseGroup):
-    """
-    The concrete implementation of an OR group.
-    The restrictions on an OR group is that it must explicitly require not all
-    of its children to be observed.
-    """
-
-    def __post_init__(self):
-        super().__post_init__()
-        if self.number_to_observe >= len(self.children):
-            msg = f'OR group {self.group_name} specifies {self.number_to_observe} children to be observed but has ' \
-                  f'{len(self.children)} children.'
-            raise ValueError(msg)
-
-    def is_and_group(self) -> bool:
-        return False
-
-    def is_or_group(self) -> bool:
-        return True
 
 @dataclass
 class Group(BaseGroup):
