@@ -13,6 +13,7 @@ import numpy.typing as npt
 from astropy.time import Time, TimeDelta
 
 __all__ = [
+    'unique_list',
     'angular_distance',
     'dms2deg',
     'dms2rad',
@@ -33,6 +34,14 @@ __all__ = [
     'time_delta_astropy_to_minutes',
     'timedelta_astropy_to_python',
 ]
+
+
+def unique_list(seq: List) -> List:
+    # Make a list of unique values (remove duplicates)
+    # http://stackoverflow.com/questions/480214/how-do-you-remove-duplicates-from-a-list-in-python-whilst-preserving-order
+    seen = set()
+    seen_add = seen.add
+    return [x for x in seq if not (x in seen or seen_add(x))]
 
 
 def is_contiguous(iterable: Iterable) -> bool:
