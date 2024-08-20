@@ -50,7 +50,9 @@ class GeminiProperties(ObservatoryProperties):
     _STANDARD_INSTRUMENTS = frozenset({Instruments.FLAMINGOS2,
                                        Instruments.GNIRS,
                                        Instruments.NIFS,
-                                       Instruments.IGRINS})
+                                       Instruments.IGRINS,
+                                       Instruments.GMOS_N,
+                                       Instruments.GMOS_S})
 
     _NIR_INSTRUMENTS: Resources = frozenset({Instruments.FLAMINGOS2,
                                              Instruments.GNIRS,
@@ -118,4 +120,5 @@ class GeminiProperties(ObservatoryProperties):
         Returns:
             bool: True if resource is a Gemini instrument.
         """
-        return resource in GeminiProperties._STANDARD_INSTRUMENTS | GeminiProperties._NIR_INSTRUMENTS
+        instruments_list = [inst.value for inst in GeminiProperties.instruments()]
+        return resource in instruments_list
