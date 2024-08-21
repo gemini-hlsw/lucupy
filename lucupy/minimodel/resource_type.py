@@ -17,6 +17,7 @@ class ResourceType(Enum):
         - INSTRUMENT
         - FPU
         - DISPERSER
+        - FILTER
     """
     NONE = auto()
     SITE = auto()
@@ -24,3 +25,4 @@ class ResourceType(Enum):
     INSTRUMENT = auto()
     FPU = auto()
     DISPERSER = auto()
+    FILTER = auto()

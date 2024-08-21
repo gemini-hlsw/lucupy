@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import timedelta
 from enum import IntEnum, auto
-from typing import List, Mapping, Optional, final
+from typing import List, Mapping, Optional, final, FrozenSet
 
 import numpy as np
 import numpy.typing as npt
@@ -244,12 +244,55 @@ class Observation:
         """
         def check_instrument(r: Optional[Resource]):
             if r is not None:
-                # To avoid a circular import.
-                from lucupy.observatory.abstract import ObservatoryProperties
-                return ObservatoryProperties.is_instrument(r)
+                # # TODO: Why comparing to ObservatoryProperties instead of checking resource.type??
+                # # To avoid a circular import.
+                # from lucupy.observatory.abstract import ObservatoryProperties
+                # return ObservatoryProperties.is_instrument(r)
+                from lucupy.minimodel import ResourceType
+                return r.type == ResourceType.INSTRUMENT
 
         return next(filter(lambda r: check_instrument(r),
                            self.required_resources()), None)
+
+    def fpu(self) -> Optional[Resource]:
+        """
+        Returns:
+            A resource that is a FPU, if one exists. There should be only one.
+        """
+        def check_fpu(r: Optional[Resource]):
+            if r is not None:
+                from lucupy.minimodel import ResourceType
+                return r.type == ResourceType.FPU
+
+        return next(filter(lambda r: check_fpu(r),
+                           self.required_resources()), None)
+
+    def disperser(self) -> Optional[Resource]:
+        """
+        Returns:
+            A resource that is a disperser, if one exists. There should be only one.
+        """
+        def check_disperser(r: Optional[Resource]):
+            if r is not None:
+                from lucupy.minimodel import ResourceType
+                return r.type == ResourceType.DISPERSER
+
+        return next(filter(lambda r: check_disperser(r),
+                           self.required_resources()), None)
+
+    def filters(self) -> Optional[FrozenSet[Resource]]:
+        """
+        Returns:
+            The set of filters included in the sequence.
+        """
+        def check_filter(r: Optional[Resource]):
+            if r is not None:
+                from lucupy.minimodel import ResourceType
+                return r.type == ResourceType.FILTER
+
+        print(f"Resources: {self.required_resources()}, set of filters: {frozenset(filter(lambda r: check_filter(r), self.required_resources()))}")
+        return frozenset(filter(lambda r: check_filter(r),
+                                self.required_resources()))
 
     def is_nir(self) -> bool:
         """Define if the observation is a NIR observation or not."""
