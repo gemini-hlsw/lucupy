@@ -1,12 +1,10 @@
 # Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from enum import Enum, IntEnum, auto
-
 from dataclasses import dataclass
 from datetime import timedelta
-from enum import Enum
-from typing import final, Optional
+from enum import Enum, IntEnum
+from typing import Optional, final
 
 from lucupy.types import ZeroTime
 
@@ -113,9 +111,6 @@ class TimeAllocation:
     def total_awarded(self) -> timedelta:
         return self.program_awarded + self.partner_awarded
 
-    def total_used(self) -> timedelta:
-        return self.program_used + self.partner_used
-
     def __hash__(self):
         return self.category.__hash__()
 
@@ -143,4 +138,3 @@ class TimeUsed:
     # ToDo: hash on the band once available
     def __hash__(self):
         return self.program_used.__hash__()
-
