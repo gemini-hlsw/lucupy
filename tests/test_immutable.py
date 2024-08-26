@@ -4,16 +4,16 @@
 from copy import deepcopy
 from datetime import datetime, timedelta
 
-from lucupy.minimodel import (ROOT_GROUP_ID, Group, AndOption, Band,
-                              CloudCover, Conditions, Constraints,
-                              ElevationType, GroupID, ImageQuality, Magnitude,
-                              MagnitudeBands, Observation, ObservationClass,
-                              ObservationID, ObservationStatus, Priority,
-                              Program, ProgramID, ProgramMode, ProgramTypes,
-                              Semester, SemesterHalf, SetupTimeType,
-                              SiderealTarget, Site, SkyBackground, TargetName,
-                              TargetType, TimeAccountingCode, TimeAllocation,
-                              TimingWindow, WaterVapor)
+from lucupy.minimodel import (ROOT_GROUP_ID, AndOption, Band, CloudCover,
+                              Conditions, Constraints, ElevationType, Group,
+                              GroupID, ImageQuality, Magnitude, MagnitudeBands,
+                              Observation, ObservationClass, ObservationID,
+                              ObservationStatus, Priority, Program, ProgramID,
+                              ProgramMode, ProgramTypes, Semester,
+                              SemesterHalf, SetupTimeType, SiderealTarget,
+                              Site, SkyBackground, TargetName, TargetType,
+                              TimeAccountingCode, TimeAllocation, TimingWindow,
+                              WaterVapor)
 
 
 def test_immutable_deepcopy():
@@ -89,9 +89,7 @@ def test_immutable_deepcopy():
 
     ta = TimeAllocation(category=TimeAccountingCode.KR,
                         program_awarded=timedelta(hours=2),
-                        partner_awarded=timedelta(minutes=30),
-                        program_used=timedelta(minutes=30),
-                        partner_used=timedelta())
+                        partner_awarded=timedelta(minutes=30))
 
     p = Program(id=program_id,
                 internal_id=TargetName('223e2332'),
@@ -103,6 +101,7 @@ def test_immutable_deepcopy():
                 start=datetime.now(),
                 end=datetime.now(),
                 allocated_time=frozenset({ta}),
+                used_time=None,
                 root_group=root)
 
     p2 = deepcopy(p)

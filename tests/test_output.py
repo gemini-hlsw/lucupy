@@ -75,6 +75,7 @@ def test_print_program():
         start=datetime(2022, 8, 1, 0, 0) - Program.FUZZY_BOUNDARY,
         end=datetime(2023, 1, 31, 0, 0) + Program.FUZZY_BOUNDARY,
         allocated_time=None,
+        used_time=None,
         root_group=g,
         too_type=None,
     )
