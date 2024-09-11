@@ -47,19 +47,19 @@ class GeminiProperties(ObservatoryProperties):
         GSAOI = rm.lookup_resource(rid='GSAOI', rtype=ResourceType.INSTRUMENT)
         PHOENIX = rm.lookup_resource(rid='Phoenix', rtype=ResourceType.INSTRUMENT)
 
-    _STANDARD_INSTRUMENTS = frozenset({Instruments.FLAMINGOS2,
-                                       Instruments.GNIRS,
-                                       Instruments.NIFS,
-                                       Instruments.IGRINS,
-                                       Instruments.GMOS_N,
-                                       Instruments.GMOS_S})
+    _STANDARD_INSTRUMENTS = frozenset({Instruments.FLAMINGOS2.value,
+                                       Instruments.GNIRS.value,
+                                       Instruments.NIFS.value,
+                                       Instruments.IGRINS.value,
+                                       Instruments.GMOS_N.value,
+                                       Instruments.GMOS_S.value})
 
-    _NIR_INSTRUMENTS: Resources = frozenset({Instruments.FLAMINGOS2,
-                                             Instruments.GNIRS,
-                                             Instruments.NIRI,
-                                             Instruments.NIFS,
-                                             Instruments.PHOENIX,
-                                             Instruments.IGRINS})
+    _NIR_INSTRUMENTS: Resources = frozenset({Instruments.FLAMINGOS2.value,
+                                             Instruments.GNIRS.value,
+                                             Instruments.NIRI.value,
+                                             Instruments.NIFS.value,
+                                             Instruments.PHOENIX.value,
+                                             Instruments.IGRINS.value})
 
     """ List: Instruments for which there are set standards.
     """
