@@ -70,6 +70,8 @@ class Site(Enum):
         else:
             timezone_name = self.location.info.meta['timezone']
             try:
+                if timezone_name == 'US/Aleutian':
+                    timezone_name = 'US/Hawaii'
                 self.timezone = ZoneInfo(timezone_name)
             except ZoneInfoNotFoundError as e:
                 msg = f'zoneinfo cannot resolve time zone lookup: {timezone_name}.'
