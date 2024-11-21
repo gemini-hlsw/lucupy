@@ -37,7 +37,7 @@ __all__ = [
 ]
 
 
-def search_list(val, alist) -> bool:
+def search_list(val: str, alist: List) -> bool:
     """
     Search for existence of val in any element of alist.
     """
