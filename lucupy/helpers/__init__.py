@@ -13,6 +13,7 @@ import numpy.typing as npt
 from astropy.time import Time, TimeDelta
 
 __all__ = [
+    'search_list',
     'unique_list',
     'angular_distance',
     'dms2deg',
@@ -34,6 +35,13 @@ __all__ = [
     'time_delta_astropy_to_minutes',
     'timedelta_astropy_to_python',
 ]
+
+
+def search_list(val: str, alist: List) -> bool:
+    """
+    Search for existence of val in any element of alist.
+    """
+    return any(val in elem for elem in alist)
 
 
 def unique_list(seq: List) -> List:

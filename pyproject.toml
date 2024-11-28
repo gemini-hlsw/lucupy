@@ -1,10 +1,11 @@
 [tool.poetry]
 name = "lucupy"
-version = "0.1.97"
+version = "0.1.98"
 description = "Lucuma core package for the Gemini Automated Scheduler at: https://github.com/gemini-hlsw/scheduler"
 authors = [
-    "Sebastian Raaphorst <sebastian.raaphorst@noirlab.edu>",
     "Sergio Troncoso <sergio.troncoso@noirlab.edu>",
+    "Diego Gomez <diego.gomez@noirlab.edu>",
+    "Sebastian Raaphorst <sebastian.raaphorst@noirlab.edu>",
     "Bryan Miller <bryan.miller@noirlab.edu>"
 ]
 readme = "README.rst"
