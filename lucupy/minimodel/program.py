@@ -146,7 +146,9 @@ class Program:
         return self.root_group.partner_used() + self.partner_awarded_used()
 
     def total_used(self) -> timedelta:
-        return self.root_group.total_used() + self.total_awarded_used()
+        return sum((o.program_used() + o.partner_used() for o in self.observations()),
+                   start=ZeroTime)
+        # return self.root_group.total_used() + self.total_awarded_used()
 
     def not_charged(self) -> timedelta:
         return self.root_group.not_charged() + sum((t.not_charged for t in self.used_time), ZeroTime)
