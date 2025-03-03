@@ -10,7 +10,14 @@ from gql.transport.websockets import WebsocketsTransport
 from gql.transport.aiohttp import AIOHTTPTransport
 
 
-from lucupy.minimodel import ProgramID, Program, Semester, Observation, ObservationID
+from lucupy.minimodel import ProgramID, Program, Semester, Observation, ObservationID, ALL_SITES, Site
+from lucupy.odb.blueprint import QueryBlueprint
+
+
+__all__ = [
+    'LucumaClient',
+]
+
 
 
 @dataclass(frozen=True)
@@ -29,22 +36,30 @@ class Fragments:
     atom_south: DSLFragment
 
 
-def with_session(obs_with_sequence:bool=False):
+def with_session():
     def decorator(func):
         @wraps(func)
-        async def wrapper(self, *args, **kwargs):
+        async def wrapper(self,
+                          *args,
+                          blueprint: QueryBlueprint=QueryBlueprint(),
+                          **kwargs):
             # Check if the function is a coroutine
             if not inspect.iscoroutinefunction(func):
                 raise TypeError(f"{func.__name__} must be an async function")
             async with self._client as session:
                 # Inject the session into the method call
                 self._ds = DSLSchema(self._client.schema)
-                self._fragments = self._load_fragments(obs_with_sequence)
-                return await func(self, *args, session=session, **kwargs)
+                self._fragments = self._load_fragments(blueprint)
+                return await func(self, *args, session=session, blueprint=blueprint, **kwargs)
         return wrapper
     return decorator
 
-class Lucuma:
+class LucumaClient:
+    """
+    GQL client to connect to the GPP odb database.
+    TODO: Transport now is AIOHTTP but it should be websocket so it can be
+    TODO: reuse for subscriptions.
+    """
 
     def __init__(self, gpp_env_url: str, gpp_api_key: str):
         self._transport = AIOHTTPTransport(
@@ -64,14 +79,25 @@ class Lucuma:
         self._fragments = None
 
 
-    def _load_fragments(self, with_sequence: bool):
-
+    def _load_fragments(self, blueprint: QueryBlueprint):
+        """
+        Load all fragments to the session.
+        TODO: This is getting way to big, probably needs his own separate file.
+        """
         atom_north_fragment = DSLFragment('lucupyAtomNorth')
         atom_north_fragment.on(self._ds.GmosNorthAtom)
         atom_north_fragment.select(
             self._ds.GmosNorthAtom.id,
             self._ds.GmosNorthAtom.description,
             self._ds.GmosNorthAtom.observeClass,
+            self._ds.GmosNorthAtom.steps.select(
+                self._ds.GmosNorthStep.id,
+                self._ds.GmosNorthStep.estimate.select(
+                    self._ds.StepEstimate.total.select(
+                        self._ds.TimeSpan.seconds
+                    )
+                )
+            )
         )
 
         atom_south_fragment = DSLFragment('lucupyAtomSouth')
@@ -80,66 +106,136 @@ class Lucuma:
             self._ds.GmosSouthAtom.id,
             self._ds.GmosSouthAtom.description,
             self._ds.GmosSouthAtom.observeClass,
-        )
-
-
-        seq_fragment = DSLFragment('lucupySequence')
-        seq_fragment.on(self._ds.Execution)
-        seq_fragment.select(
-            self._ds.Execution.config.select(
-                self._ds.ExecutionConfig.gmosNorth.select(
-                    self._ds.GmosNorthExecutionConfig.acquisition.select(
-                        self._ds.GmosNorthExecutionSequence.possibleFuture.select(
-                            atom_north_fragment
-                        )
-                    ),
-                    self._ds.GmosNorthExecutionConfig.science.select(
-                        self._ds.GmosNorthExecutionSequence.possibleFuture.select(
-                            atom_north_fragment
-                        )
-                    ),
-
-                ),
-                self._ds.ExecutionConfig.gmosSouth.select(
-                    self._ds.GmosSouthExecutionConfig.acquisition.select(
-                        self._ds.GmosSouthExecutionSequence.possibleFuture.select(
-                            atom_south_fragment
-                        )
-                    ),
-                    self._ds.GmosSouthExecutionConfig.science.select(
-                        self._ds.GmosSouthExecutionSequence.possibleFuture.select(
-                            atom_south_fragment
-                        )
+            self._ds.GmosSouthAtom.steps.select(
+                self._ds.GmosSouthStep.id,
+                self._ds.GmosSouthStep.estimate.select(
+                    self._ds.StepEstimate.total.select(
+                        self._ds.TimeSpan.seconds
                     )
                 )
             )
         )
 
+
+        seq_fragment = DSLFragment('lucupySequence')
+        seq_fragment.on(self._ds.Execution)
+
+        base_seq_fragment = []
+        north_seq_fragment = self._ds.ExecutionConfig.gmosNorth.select(
+            self._ds.GmosNorthExecutionConfig.acquisition.select(
+                self._ds.GmosNorthExecutionSequence.possibleFuture.select(
+                    atom_north_fragment
+                )
+            ),
+            self._ds.GmosNorthExecutionConfig.science.select(
+                self._ds.GmosNorthExecutionSequence.possibleFuture.select(
+                    atom_north_fragment
+                )
+            ),
+        )
+        south_seq_fragment = self._ds.ExecutionConfig.gmosSouth.select(
+            self._ds.GmosSouthExecutionConfig.acquisition.select(
+                self._ds.GmosSouthExecutionSequence.possibleFuture.select(
+                    atom_south_fragment
+                )
+            ),
+            self._ds.GmosSouthExecutionConfig.science.select(
+                self._ds.GmosSouthExecutionSequence.possibleFuture.select(
+                    atom_south_fragment
+                )
+            )
+        )
+
+        if Site.GN in blueprint.site:
+            base_seq_fragment.append(north_seq_fragment)
+        if Site.GS in blueprint.site:
+            base_seq_fragment.append(south_seq_fragment)
+        if not base_seq_fragment:
+            raise ValueError('Empty site selection on QueryBlueprint')
+
+        seq_fragment.select(
+            self._ds.Execution.config.select(*base_seq_fragment),
+            self._ds.Execution.digest.select(
+                self._ds.ExecutionDigest.setup.select(
+                    self._ds.SetupTime.full.select(self._ds.TimeSpan.seconds)
+                )
+            )
+        )
+
+        target_fragment = DSLFragment('lucupyTarget')
+        target_fragment.on(self._ds.Target)
+        target_fragment.select(
+            self._ds.Target.id,
+            self._ds.Target.existence,
+            self._ds.Target.name
+        )
+
+        target_env_fragment = DSLFragment('lucupyTargetEnv')
+        target_env_fragment.on(self._ds.TargetEnvironment)
+        target_env_fragment.select(
+            self._ds.TargetEnvironment.asterism.select(target_fragment),
+            # self._ds.TargetEnvironment.explicitBase.select(target_fragment),
+            # self._ds.TargetEnvironment.guideEnvironment.select(target_fragment),
+            self._ds.TargetEnvironment.firstScienceTarget.select(target_fragment),
+        )
+
+        constraints_fragment = DSLFragment('lucupyConstraints')
+        constraints_fragment.on(self._ds.ConstraintSet)
+        constraints_fragment.select(
+            self._ds.ConstraintSet.imageQuality,
+            self._ds.ConstraintSet.cloudExtinction,
+            self._ds.ConstraintSet.skyBackground,
+            self._ds.ConstraintSet.waterVapor,
+            self._ds.ConstraintSet.elevationRange
+        )
+
+
+        # timing_windows_fragment = DSLFragment('lucupyTimingWindows')
+        # timing_windows_fragment.on(self._ds.TimingWindow)
+        # timing_windows_fragment.select(
+        #    self._ds.TimingWindow.inclusion,
+        #    self._ds.TimingWindow.startUtc,
+        #    self._ds.TimingWindow.end.select(
+        #        self._ds.TimingWindowEndAt.atUtc,
+        #        self._ds.TimingWindowEndAfter.after.select(self._ds.TimeSpan.seconds),
+        #        self._ds.TimingWindowEndAfter.repeat.select(
+        #            self._ds.TimingWindowRepeat.period.select(self._ds.TimeSpan.seconds),
+        #            self._ds.TimingWindowRepeat.times
+        #        )
+        #    )
+        # )
+
+
         obs_fragment = DSLFragment('lucupyObservation')
         obs_fragment.on(self._ds.Observation)
         obs_base_fragment = [
             self._ds.Observation.id,
+            self._ds.Observation.reference.select(self._ds.ObservationReference.label),
+            self._ds.Observation.title,
             self._ds.Observation.instrument,
             self._ds.Observation.scienceBand,
+            self._ds.Observation.workflow.select(
+              self._ds.ObservationWorkflow.state
+            ),
+            self._ds.Observation.program.select(
+                self._ds.Program.id,
+            ),
             self._ds.Observation.observationDuration.select(
                 self._ds.TimeSpan.seconds
             ),
             self._ds.Observation.observationTime,
+            # self._ds.Observation.targetEnvironment.select(target_fragment),
             self._ds.Observation.observingMode.select(
                 self._ds.ObservingMode.instrument,
                 self._ds.ObservingMode.mode
             ),
             self._ds.Observation.groupId,
             self._ds.Observation.groupIndex,
-            self._ds.Observation.configuration.select(
-                self._ds.Configuration.conditions.select(
-                    self._ds.ConfigurationConditions.imageQuality
-                )
-            ),
+            # self._ds.Observation.configuration.select(constraints_fragment),
 
         ]
         obs_with_sequence = self._ds.Observation.execution.select(seq_fragment)
-        if with_sequence:
+        if blueprint.obs_with_sequence:
             obs_base_fragment.append(obs_with_sequence)
 
         obs_fragment.select(*obs_base_fragment)
@@ -195,7 +291,12 @@ class Lucuma:
     async def get_programs(self,
                            semester: Semester,
                            status: str,
-                           session) -> Program:
+                           session,
+                           blueprint) -> Program:
+        """
+        List of programs based on a Semester and a set of status.
+        This can't be done with whole observations but with groups.
+        """
         # Argument WhereProgram let you filter programs in Graphql
         where_program = {
             "AND": [{
@@ -229,7 +330,10 @@ class Lucuma:
         return res
 
     @with_session()
-    async def get_program(self, p_id: ProgramID, session) -> Program:
+    async def get_program(self, p_id: ProgramID, session, blueprint) -> Program:
+        """
+        Retrieve a program by ID. Can't be used with observation fragment.
+        """
 
         query = dsl_gql(
             DSLQuery(
@@ -242,8 +346,11 @@ class Lucuma:
         return res
 
     @with_session()
-    async def get_observations(self, p_id: ProgramID, states: List[str], session) -> Observation:
-
+    async def get_observations(self, p_id: ProgramID, states: List[str], session, blueprint) -> dict:
+        """
+        Deliver a list of observations based on program and a series of states.
+        This can only be performed for obs_with_sequence = False
+        """
         where = {
             "AND":[
                 { "program" : {
@@ -266,8 +373,19 @@ class Lucuma:
         res = await session.execute(query)
         return res
 
-    @with_session(obs_with_sequence=True)
-    async def get_sequence(self, obs_id: ObservationID, session) -> Observation:
+    @with_session()
+    async def get_observation(self, obs_id: str, session, blueprint) -> dict:
+        """
+        Retrieve an observation by ID.
+        """
+
+        atom_fragments = []
+
+        if Site.GS in blueprint.site:
+            atom_fragments.append(self._fragments.atom_south)
+        if Site.GN in blueprint.site:
+            atom_fragments.append(self._fragments.atom_north)
+
         query = dsl_gql(
             DSLQuery(
                 self._ds.Query.observation.args(
@@ -275,10 +393,10 @@ class Lucuma:
                 ).select(
                     self._fragments.observation
                 )
-            ), self._fragments.observation,
+            ),
+            self._fragments.observation,
             self._fragments.sequence,
-            self._fragments.atom_north,
-            self._fragments.atom_south
+            *atom_fragments
         )
         res = await session.execute(query)
         return res
