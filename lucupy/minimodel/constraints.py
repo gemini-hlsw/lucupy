@@ -130,7 +130,7 @@ class Strehl(float, Enum):
 
 
 @final
-class ElevationType(IntEnum):
+class ElevationType(Enum):
     """
     The type of elevation constraints in the observing conditions.
 
@@ -139,9 +139,9 @@ class ElevationType(IntEnum):
        - HOUR_ANGLE
        - AIRMASS
     """
-    NONE = auto()
-    HOUR_ANGLE = auto()
-    AIRMASS = auto()
+    NONE = None
+    HOUR_ANGLE = "HOUR_ANGLE"
+    AIRMASS = "AIRMASS"
 
 
 @final
