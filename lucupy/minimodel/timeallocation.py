@@ -130,7 +130,7 @@ class TimeUsed:
     program_used: timedelta
     partner_used: timedelta
     not_charged: timedelta
-    # band: Band
+    band: Optional[Band] = None
 
     def total_used(self) -> timedelta:
         return self.program_used + self.partner_used

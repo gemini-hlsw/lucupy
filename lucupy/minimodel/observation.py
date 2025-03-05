@@ -45,12 +45,15 @@ class ObservationStatus(IntEnum):
         - INCLUDED
         - PROPOSED
         - APPROVED
+        - UNDEFINED
+        - DEFINED
         - FOR_REVIEW: Not in original mini-model description, but returned by OCS.
         - IN_REVIEW
         - ON_HOLD
         - READY
         - ONGOING
         - OBSERVED
+        - COMPLETED
         - INACTIVE
         - PHASE2
     """
@@ -58,14 +61,17 @@ class ObservationStatus(IntEnum):
     INCLUDED = auto()
     PROPOSED = auto()
     APPROVED = auto()
+    UNDEFINED = auto()
+    DEFINED = auto()
+    PHASE2 = auto()
     FOR_REVIEW = auto()
     IN_REVIEW = auto()
     ON_HOLD = auto()
     READY = auto()
     ONGOING = auto()
     OBSERVED = auto()
+    COMPLETED = auto()
     INACTIVE = auto()
-    PHASE2 = auto()
 
 
 @final

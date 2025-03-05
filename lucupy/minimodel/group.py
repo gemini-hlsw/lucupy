@@ -14,7 +14,7 @@ from lucupy.minimodel.constraints import Constraints
 from lucupy.minimodel.ids import (GroupID, ObservationID, ProgramID,
                                   UniqueGroupID)
 from lucupy.minimodel.obs_filter import obs_is_not_inactive, obs_is_science_or_progcal
-from lucupy.minimodel.observation import Observation, ObservationClass, Priority
+from lucupy.minimodel.observation import Observation, ObservationClass, Priority, Band
 from lucupy.minimodel.resource import Resources
 from lucupy.minimodel.site import Site
 from lucupy.minimodel.wavelength import Wavelengths
@@ -29,6 +29,8 @@ __all__ = [
     'Group',
     'ROOT_GROUP_ID',
 ]
+
+from ..types import ZeroTime
 
 ROOT_GROUP_ID: Final[GroupID] = GroupID('root')
 
@@ -217,38 +219,38 @@ class BaseGroup(ABC):
         else:
             return sum((child.part_time() for child in self.children), timedelta())
 
-    def program_used(self) -> timedelta:
-        """Program time used across the group.
+    def program_used(self, band: Band=None) -> timedelta:
+        """Program time used across the group by science band.
 
         Returns:
             program_used (timedelta): Sum of all program_used times across children of this group.
         """
         if isinstance(self.children, Observation):
-            return self.children.program_used()
+            return self.children.program_used() if band is None or self.children.band == band else ZeroTime
         else:
-            return sum((child.program_used() for child in self.children), timedelta())
+            return sum((child.program_used(band) for child in self.children), timedelta())
 
-    def partner_used(self) -> timedelta:
-        """Partner time used across the group.
+    def partner_used(self, band: Band=None) -> timedelta:
+        """Partner time used across the group by science band.
 
         Returns:
-            partner_used (timedelta): Sum of all `partner_used` across the children of this group.
+            partner_used (timedelta): Sum of all partner_used times across children of this group.
         """
         if isinstance(self.children, Observation):
-            return self.children.partner_used()
+            return self.children.partner_used() if band is None or self.children.band == band else ZeroTime
         else:
-            return sum((child.partner_used() for child in self.children), timedelta())
+            return sum((child.partner_used(band) for child in self.children), timedelta())
 
-    def total_used(self) -> timedelta:
-        """Total time used across the group: includes program time and partner time.
+    def total_used(self, band: Band=None) -> timedelta:
+        """Total time used across the group in a science band: includes program time and partner time.
 
         Returns:
             total_used (timedelta): Sum of total_used times across all children.
         """
         if isinstance(self.children, Observation):
-            return self.children.total_used()
+            return self.children.total_used() if band is None or self.children.band == band else ZeroTime
         else:
-            return sum((child.total_used() for child in self.children), timedelta())
+            return sum((child.total_used(band) for child in self.children), timedelta())
 
     def not_charged(self) -> timedelta:
         """not_charged time across the group.
