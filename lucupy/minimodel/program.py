@@ -119,34 +119,32 @@ class Program:
         seen_add = seen.add
         return [t.band for t in self.allocated_time if not (t.band in seen or seen_add(t.band))]
 
-    def program_awarded(self) -> timedelta:
-        return sum((t.program_awarded for t in self.allocated_time), ZeroTime)
+    def program_awarded(self, band: Band=None) -> timedelta:
+        return sum((t.program_awarded for t in self.allocated_time if band is None or t.band == band), ZeroTime)
 
-    # ToDo: rename all awarded_used, this is an odd name for previously used time
-    # ToDo: used times by band
-    def program_awarded_used(self) -> timedelta:
-        return sum((t.program_used for t in self.used_time), ZeroTime)
+    def program_previously_used(self, band: Band=None) -> timedelta:
+        return sum((t.program_used for t in self.used_time if band is None or t.band == band), ZeroTime)
 
-    def partner_awarded(self) -> timedelta:
-        return sum((t.partner_awarded for t in self.allocated_time), ZeroTime)
+    def partner_awarded(self, band: Band=None) -> timedelta:
+        return sum((t.partner_awarded for t in self.allocated_time if band is None or t.band == band), ZeroTime)
 
-    def partner_awarded_used(self) -> timedelta:
-        return sum((t.partner_used for t in self.used_time), ZeroTime)
+    def partner_previously_used(self, band: Band=None) -> timedelta:
+        return sum((t.partner_used for t in self.used_time if band is None or t.band == band), ZeroTime)
 
-    def total_awarded(self) -> timedelta:
-        return sum((t.total_awarded() for t in self.allocated_time), ZeroTime)
+    def total_awarded(self, band: Band=None) -> timedelta:
+        return sum((t.total_awarded() for t in self.allocated_time if band is None or t.band == band), ZeroTime)
 
-    def total_awarded_used(self) -> timedelta:
-        return sum((t.total_used() for t in self.used_time), ZeroTime)
+    def total_previously_used(self, band: Band=None) -> timedelta:
+        return sum((t.total_used() for t in self.used_time if band is None or t.band == band), ZeroTime)
 
-    def program_used(self) -> timedelta:
-        return self.root_group.program_used() + self.program_awarded_used()
+    def program_used(self, band: Band=None) -> timedelta:
+        return self.root_group.program_used(band) + self.program_previously_used(band)
 
-    def partner_used(self) -> timedelta:
-        return self.root_group.partner_used() + self.partner_awarded_used()
+    def partner_used(self, band: Band=None) -> timedelta:
+        return self.root_group.partner_used(band) + self.partner_previously_used(band)
 
-    def total_used(self) -> timedelta:
-        return self.root_group.total_used() + self.total_awarded_used()
+    def total_used(self, band: Band=None) -> timedelta:
+        return self.root_group.total_used(band) + self.total_previously_used(band)
 
     def not_charged(self) -> timedelta:
         return self.root_group.not_charged() + sum((t.not_charged for t in self.used_time), ZeroTime)
