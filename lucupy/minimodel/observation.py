@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import timedelta
-from enum import IntEnum, auto
+from enum import IntEnum, auto, Enum
 from typing import List, Mapping, Optional, final, FrozenSet
 
 import numpy as np
@@ -36,7 +36,7 @@ __all__ = [
 
 
 @final
-class ObservationStatus(IntEnum):
+class ObservationStatus(Enum):
     """
     The status of an observation as indicated in the Observing Tool / ODB.
 
@@ -56,22 +56,24 @@ class ObservationStatus(IntEnum):
         - COMPLETED
         - INACTIVE
         - PHASE2
+        - UNAPPROVED
     """
-    NEW = auto()
-    INCLUDED = auto()
-    PROPOSED = auto()
-    APPROVED = auto()
-    UNDEFINED = auto()
-    DEFINED = auto()
-    PHASE2 = auto()
-    FOR_REVIEW = auto()
-    IN_REVIEW = auto()
-    ON_HOLD = auto()
-    READY = auto()
-    ONGOING = auto()
-    OBSERVED = auto()
+    NEW = 'NEW'
+    INCLUDED = 'INCLUDED'
+    PROPOSED = 'PROPOSED'
+    APPROVED = 'APPROVED'
+    UNDEFINED = 'UNDEFINED'
+    DEFINED = 'DEFINED'
+    PHASE2 = 'PHASE2'
+    FOR_REVIEW = 'FOR_REVIEW'
+    IN_REVIEW = 'IN_REVIEW'
+    ON_HOLD = 'ON_HOLD'
+    READY = 'READY'
+    ONGOING = 'ONGOING'
+    OBSERVED = 'OBSERVED'
+    INACTIVE = 'INACTIVE'
     COMPLETED = auto()
-    INACTIVE = auto()
+    UNAPPROVED = 'UNAPPROVED'
 
 
 @final
@@ -106,7 +108,7 @@ class SetupTimeType(IntEnum):
 
 
 @final
-class ObservationClass(IntEnum):
+class ObservationClass(Enum):
     """The class of an observation.
 
     Note that the order of these is specific and deliberate: they are listed in
@@ -122,13 +124,13 @@ class ObservationClass(IntEnum):
         - DAYCAL
 
     """
-    SCIENCE = auto()
-    PROGCAL = auto()
-    PARTNERCAL = auto()
-    ACQ = auto()
-    ACQCAL = auto()
-    DAYCAL = auto()
-    NONE = auto()
+    SCIENCE = "SCIENCE"
+    PROGCAL = "PROGCAL"
+    PARTNERCAL = "PARTNERCAL"
+    ACQ = "ACQUISITION"
+    ACQCAL = "ACQCAL"
+    DAYCAL = "DAYCAL"
+    NONE = "None"
 
 
 @dataclass
