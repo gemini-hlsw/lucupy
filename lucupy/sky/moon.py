@@ -18,7 +18,7 @@ from astropy.time import Time, TimeDelta
 from .altitude import Altitude
 from .constants import EQUAT_RAD, J2000, JYEAR, JYEAR_100
 from .utils import (current_geocent_frame, geocentric_coors,
-                    hour_angle_to_angle, local_sidereal_time)
+                    alt_to_hour_angle, local_sidereal_time)
 
 __all__ = [
     'Moon',
@@ -479,7 +479,7 @@ class Moon:
         ha_moon_at_midnight = lst_midnight - moon_at_midnight.ra
         ha_moon_at_midnight.wrap_at(12. * u.hour, inplace=True)
 
-        ha_moon_set = hour_angle_to_angle(moon_at_midnight.dec, location.lat, set_alt)  # corresponding hr angles
+        ha_moon_set = alt_to_hour_angle(moon_at_midnight.dec, location.lat, set_alt)  # corresponding hr angles
         diff_moon_set = ha_moon_set - ha_moon_at_midnight  # how far from setting point at midnight
 
         # find nearest setting point
@@ -495,7 +495,7 @@ class Moon:
         times_moon_set = midnight + timedelta_moon_set
         times_moon_set = Moon.time_by_altitude(set_alt, times_moon_set, location)
 
-        ha_moonrise = -1. * hour_angle_to_angle(moon_at_midnight.dec, location.lat, rise_alt)
+        ha_moonrise = -1. * alt_to_hour_angle(moon_at_midnight.dec, location.lat, rise_alt)
         diff_moonrise = ha_moonrise - ha_moon_at_midnight  # how far from riseting point at midnight
 
         # find nearest riseting point

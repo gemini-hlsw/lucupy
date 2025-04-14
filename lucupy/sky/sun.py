@@ -16,7 +16,7 @@ from astropy.time import Time, TimeDelta
 
 from .altitude import Altitude
 from .constants import J2000
-from .utils import (current_geocent_frame, hour_angle_to_angle,
+from .utils import (current_geocent_frame, alt_to_hour_angle,
                     local_sidereal_time)
 
 __all__ = [
@@ -186,9 +186,9 @@ class Sun:
         twelve_twilight_alt = Angle(-12. * np.ones(nt), unit=u.deg)  # 12 degree nautical twilight
 
         # corresponding hr angles
-        sunset_ha = hour_angle_to_angle(sun_at_midnight.dec, location.lat, set_alt)
-        sunrise_ha = Angle(2. * np.pi, unit=u.rad) - hour_angle_to_angle(sun_at_midnight.dec, location.lat, rise_alt)
-        twelve_twilight_ha = hour_angle_to_angle(sun_at_midnight.dec, location.lat, twelve_twilight_alt)
+        sunset_ha = alt_to_hour_angle(sun_at_midnight.dec, location.lat, set_alt)
+        sunrise_ha = Angle(2. * np.pi, unit=u.rad) - alt_to_hour_angle(sun_at_midnight.dec, location.lat, rise_alt)
+        twelve_twilight_ha = alt_to_hour_angle(sun_at_midnight.dec, location.lat, twelve_twilight_alt)
         sun_at_midnight_ha = (lst_midnight - sun_at_midnight.ra).wrap_at(24. * u.hour)
 
         sunset_guess = sun_at_midnight_ha - sunset_ha  # angles away from midnight
