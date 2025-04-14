@@ -25,7 +25,7 @@ from .constants import EQUAT_RAD, FLATTEN, J2000, JYEAR, JYEAR_100
 __all__ = [
     'current_geocent_frame',
     'geocentric_coors',
-    'hour_angle_to_angle',
+    'alt_to_hour_angle',
     'local_midnight_time',
     'local_sidereal_time',
     'min_max_alt',
@@ -277,12 +277,12 @@ def true_airmass(altit: Angle) -> npt.NDArray[float]:
     return ret
 
 
-def hour_angle_to_angle(dec: AngleParam,
-                        lat: AngleParam,
-                        alt: AngleParam) -> Angle:
-    """Transform the Hour Angle in to an Angle.
+def alt_to_hour_angle(dec: AngleParam,
+                      lat: AngleParam,
+                      alt: AngleParam) -> Angle:
+    """Transform the altitude to the corresponding hour angle from a given latitude and declination.
 
-    The hour angle from spherical astronomy, eastor west of meridian,
+    The hour angle from spherical astronomy, east or west of meridian,
     not the u.hourangle from astropy.
 
     dec and alt must have the same dimensions.

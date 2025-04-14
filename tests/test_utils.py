@@ -7,7 +7,7 @@ import pytest
 from astropy.coordinates import Angle, EarthLocation, PrecessedGeocentric
 from astropy.time import Time
 
-from lucupy.sky.utils import (current_geocent_frame, hour_angle_to_angle,
+from lucupy.sky.utils import (current_geocent_frame, alt_to_hour_angle,
                               local_sidereal_time, min_max_alt, true_airmass,
                               xair, ztwilight)
 
@@ -52,7 +52,7 @@ def test_min_max_alt(coord, location: EarthLocation):
 
 @pytest.mark.usefixtures("coord", "location")
 def test_hour_angle_to_angle(coord, location):
-    assert hour_angle_to_angle(coord[0].dec, location.lat, 30. * u.deg).deg == pytest.approx(66.23270582380651)
+    assert alt_to_hour_angle(coord[0].dec, location.lat, 30. * u.deg).deg == pytest.approx(66.23270582380651)
 
 
 @pytest.mark.parametrize("alt, expected", [(30, 1.9927834307900005),

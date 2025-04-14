@@ -110,13 +110,13 @@ def dec2sex(
     if input_is_hours and abs(degrees) > 24.0:
         raise ValueError(f'Input in hours must be less than or equal to 24: {abs(degrees)}')
 
-    max_degrees = 360.0 if not input_is_hours else 24.0
+    max_degrees = 360 if not input_is_hours else 24
 
     # Determine the number of decimal places for seconds
     seconds_format = f'{{:0.{precision}f}}'
 
     # Convert the degrees to degrees, minutes, and seconds
-    degrees, minutes, seconds = days2dms(degrees if not input_is_hours else degrees * 15)
+    degrees, minutes, seconds = days2dms(degrees)
 
     # Handle negative values
     sign = '-' if degrees < 0 else ''
@@ -139,7 +139,7 @@ def dec2sex(
         degrees -= max_degrees
 
     # Format the result string
-    degrees_format = f'{{:0{leading_zeros}d}}'
+    degrees_format = f'{degrees:0{leading_zeros}d}'
     result_format = f'{sign}{degrees_format}{separator}{minutes:02d}'
 
     if not cut_seconds or seconds != 0.0:
