@@ -297,8 +297,6 @@ class Observation:
             if r is not None:
                 from lucupy.minimodel import ResourceType
                 return r.type == ResourceType.FILTER
-
-        print(f"Resources: {self.required_resources()}, set of filters: {frozenset(filter(lambda r: check_filter(r), self.required_resources()))}")
         return frozenset(filter(lambda r: check_filter(r),
                                 self.required_resources()))
 
