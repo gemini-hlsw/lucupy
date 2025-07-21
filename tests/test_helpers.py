@@ -59,7 +59,7 @@ def test_lerp_degrees(first_value, last_value, n, expected):
 
 @pytest.mark.parametrize('time_delta',
                          [TimeDelta([1.0, 2.0] * u.minute),
-                          TimeDelta([])])
+                          TimeDelta([] * u.minute)])
 def test_time_delta_astropy_to_python_exception(time_delta):
     with pytest.raises(ValueError):
         timedelta_astropy_to_python(time_delta)
