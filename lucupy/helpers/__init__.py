@@ -2,6 +2,7 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 import bisect
+import re
 from collections.abc import Iterable
 from datetime import timedelta
 from enum import Enum
@@ -34,6 +35,7 @@ __all__ = [
     'standards_for_nir',
     'time_delta_astropy_to_minutes',
     'timedelta_astropy_to_python',
+    'remove_symbols',
 ]
 
 
@@ -476,3 +478,14 @@ def standards_for_nir(exec_sci: timedelta,
             raise ValueError("Wrong mode: spectroscopy expects a non-empty wavelengths list.")
 
     return max(1, int(exec_sci // time_per_standard))  # TODO: confirm this
+
+
+def remove_symbols(s):
+    """
+    Remove symbols from a string except for spaces, hyphens and underscores
+    Args:
+        s (str): string to remove symbols from
+    Returns:
+        str: string with symbols removed
+    """
+    return re.sub(r'[^\w\s-]', '', s)
