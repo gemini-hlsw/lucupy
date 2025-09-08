@@ -332,9 +332,10 @@ class BaseGroup(ABC):
             return '-----' * indent
 
         # Is this a subgroup or an observation?
-        group_type = 'Scheduling Group' if self.is_scheduling_group() else 'Observation Group'
+        # group_type = 'Scheduling Group' if self.is_scheduling_group() else 'Observation Group'
+        group_type = 'Observation Group' if self.is_observation_group() else self.group_option
         print(f'{sep(depth)} Group: {self.id.id}, unique_id={self.unique_id.id} '
-              f'({group_type}, num_children={len(self.children)})')
+              f'({group_type}, num_children={len(self.children)}, num_observe={self.number_to_observe})')
         if isinstance(self.children, Observation):
             self.children.show(depth + 1)
         else:
@@ -492,4 +493,4 @@ class Group(BaseGroup):
         return True if self.group_option != AndOption.NONE else False
 
     def is_or_group(self) -> bool:
-        return True if self.group_option == AndOption.NONE and self.number_to_observe <= len(self.children) else False
+        return not self.is_and_group()
