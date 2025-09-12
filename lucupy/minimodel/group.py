@@ -22,17 +22,27 @@ from lucupy.minimodel.wavelength import Wavelengths
 from .observationmode import ObservationMode
 
 __all__ = [
-    # 'AndGroup',
+    'unique_group_id',
     'AndOption',
     'BaseGroup',
-    # 'OrGroup',
     'Group',
     'ROOT_GROUP_ID',
+    'ROOT_PARENT_ID',
 ]
 
 from ..types import ZeroTime
 
 ROOT_GROUP_ID: Final[GroupID] = GroupID('root')
+ROOT_PARENT_ID: Final[GroupID] = GroupID('none')
+
+
+def unique_group_id(program_id: ProgramID, group_id: GroupID) -> UniqueGroupID:
+    """Rules for creating a unique group id"""
+    if group_id.id.startswith(program_id.id):
+        unique_id = group_id.id
+    else:
+        unique_id = f'{program_id.id}:{group_id.id}'
+    return UniqueGroupID(unique_id)
 
 
 @dataclass
@@ -56,7 +66,10 @@ class BaseGroup(ABC):
     id: GroupID
     program_id: ProgramID
     group_name: str
+    parent_id: GroupID
+    # parent_id: Optional[UniqueGroupID] = UniqueGroupID('')
     number_to_observe: int
+    number_observed: int
     delay_min: timedelta
     delay_max: timedelta
     children: List[Group] | Observation
@@ -69,11 +82,12 @@ class BaseGroup(ABC):
             msg = f'Group {self.group_name} specifies non-positive {self.number_to_observe} children to be observed.'
             raise ValueError(msg)
 
-        if self.id.id.startswith(self.program_id.id):
-            unique_id = self.id.id
-        else:
-            unique_id = f'{self.program_id.id}:{self.id.id}'
-        object.__setattr__(self, 'unique_id', UniqueGroupID(unique_id))
+        if self.number_observed < 0:
+            msg = f'Group {self.group_name} specifies that negative {self.number_observed} children have been observed.'
+            raise ValueError(msg)
+
+        unique_id = unique_group_id(self.program_id, self.id)
+        object.__setattr__(self, 'unique_id', unique_id)
 
     def subgroup_ids(self) -> FrozenSet[GroupID]:
         """Get the ids for all the subgroups inside. This should probably not be used.
@@ -334,7 +348,7 @@ class BaseGroup(ABC):
         # Is this a subgroup or an observation?
         # group_type = 'Scheduling Group' if self.is_scheduling_group() else 'Observation Group'
         group_type = 'Observation Group' if self.is_observation_group() else self.group_option
-        print(f'{sep(depth)} Group: {self.id.id}, unique_id={self.unique_id.id} '
+        print(f'{sep(depth)} Group: {self.id.id}, unique_id={self.unique_id.id}, parent={self.parent_id.id}, '
               f'({group_type}, num_children={len(self.children)}, num_observe={self.number_to_observe})')
         if isinstance(self.children, Observation):
             self.children.show(depth + 1)
@@ -376,73 +390,6 @@ class AndOption(Enum):
     NONE = auto()
 
 
-# @dataclass
-# class AndGroup(BaseGroup):
-#     """The concrete implementation of an AND group.
-#
-#     Attributes:
-#         group_option (AndOption): Specify how its observations should be handled.
-#         previous (int, optional): An index into the group's children to indicate the previously observed child,
-#             or None if none of the children have yet been observed. Default to None.
-#
-#     """
-#     group_option: AndOption
-#     previous: Optional[int] = None
-#
-#     def __post_init__(self):
-#         super().__post_init__()
-#         if self.number_to_observe != len(self.children):
-#             msg = f'AND group {self.group_name} specifies {self.number_to_observe} children to be observed but has ' \
-#                   f'{len(self.children)} children.'
-#             raise ValueError(msg)
-#         if self.previous is not None and (self.previous < 0 or self.previous >= len(self.children)):
-#             msg = f'AND group {self.group_name} has {len(self.children)} children and an illegal previous value of ' \
-#                   f'{self.previous}'
-#             raise ValueError(msg)
-#
-#     def is_and_group(self) -> bool:
-#         return True
-#
-#     def is_or_group(self) -> bool:
-#         return False
-#
-#     def instruments(self) -> Resources:
-#         """
-#         Returns:
-#             instruments (Resources): A set of all instruments used in this group.
-#         """
-#         if isinstance(self.children, Observation):
-#             instrument = self.children.instrument()
-#             if instrument is not None:
-#                 return frozenset({instrument})
-#             else:
-#                 return frozenset()
-#         else:
-#             return frozenset(flatten([child.instruments() for child in self.children]))  # type: ignore
-#
-#
-# @dataclass
-# class OrGroup(BaseGroup):
-#     """
-#     The concrete implementation of an OR group.
-#     The restrictions on an OR group is that it must explicitly require not all
-#     of its children to be observed.
-#     """
-#
-#     def __post_init__(self):
-#         super().__post_init__()
-#         if self.number_to_observe >= len(self.children):
-#             msg = f'OR group {self.group_name} specifies {self.number_to_observe} children to be observed but has ' \
-#                   f'{len(self.children)} children.'
-#             raise ValueError(msg)
-#
-#     def is_and_group(self) -> bool:
-#         return False
-#
-#     def is_or_group(self) -> bool:
-#         return True
-
-
 @dataclass
 class Group(BaseGroup):
     """The concrete implementation of a group, combines AND/OR properties and supports GPP
@@ -457,7 +404,6 @@ class Group(BaseGroup):
     """
     group_option: AndOption
     previous: Optional[int] = None
-    parent_id: Optional[GroupID] = GroupID('')
     parent_index: Optional[int] = None
 
     def __post_init__(self):
