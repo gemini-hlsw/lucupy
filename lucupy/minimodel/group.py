@@ -27,13 +27,13 @@ __all__ = [
     'BaseGroup',
     'Group',
     'ROOT_GROUP_ID',
-    'ROOT_PARENT_ID',
+    'GROUP_NONE_ID',
 ]
 
 from ..types import ZeroTime
 
 ROOT_GROUP_ID: Final[GroupID] = GroupID('root')
-ROOT_PARENT_ID: Final[GroupID] = GroupID('none')
+GROUP_NONE_ID: Final[GroupID] = GroupID('none')
 
 
 def unique_group_id(program_id: ProgramID, group_id: GroupID) -> UniqueGroupID:
@@ -68,10 +68,13 @@ class BaseGroup(ABC):
     group_name: str
     parent_id: GroupID
     # parent_id: Optional[UniqueGroupID] = UniqueGroupID('')
+    previous_id: GroupID
+    next_id: GroupID
     number_to_observe: int
     number_observed: int
     delay_min: timedelta
     delay_max: timedelta
+    active: bool
     children: List[Group] | Observation
 
     # Calculated afterward.
@@ -349,6 +352,8 @@ class BaseGroup(ABC):
         # group_type = 'Scheduling Group' if self.is_scheduling_group() else 'Observation Group'
         group_type = 'Observation Group' if self.is_observation_group() else self.group_option
         print(f'{sep(depth)} Group: {self.id.id}, unique_id={self.unique_id.id}, parent={self.parent_id.id}, '
+              f'parent_index={self.parent_index}, '
+              f'previous={self.previous_id.id}, next={self.next_id.id}, active={self.active}, '              
               f'({group_type}, num_children={len(self.children)}, num_observe={self.number_to_observe})')
         if isinstance(self.children, Observation):
             self.children.show(depth + 1)
