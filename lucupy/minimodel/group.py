@@ -352,7 +352,7 @@ class BaseGroup(ABC):
         # group_type = 'Scheduling Group' if self.is_scheduling_group() else 'Observation Group'
         group_type = 'Observation Group' if self.is_observation_group() else self.group_option
         print(f'{sep(depth)} Group: {self.id.id}, unique_id={self.unique_id.id}, parent={self.parent_id.id}, '
-              f'parent_index={self.parent_index}, '
+              # f'parent_index={self.parent_index}, '
               f'previous={self.previous_id.id}, next={self.next_id.id}, active={self.active}, '              
               f'({group_type}, num_children={len(self.children)}, num_observe={self.number_to_observe})')
         if isinstance(self.children, Observation):
