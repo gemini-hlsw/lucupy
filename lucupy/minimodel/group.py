@@ -354,7 +354,8 @@ class BaseGroup(ABC):
         print(f'{sep(depth)} Group: {self.id.id}, unique_id={self.unique_id.id}, parent={self.parent_id.id}, '
               # f'parent_index={self.parent_index}, '
               f'previous={self.previous_id.id}, next={self.next_id.id}, active={self.active}, '              
-              f'({group_type}, num_children={len(self.children)}, num_observe={self.number_to_observe})')
+              f'({group_type}, num_children={len(self.children)}, num_observe={self.number_to_observe}, '
+              f'num_observed={self.number_observed})')
         if isinstance(self.children, Observation):
             self.children.show(depth + 1)
         else:

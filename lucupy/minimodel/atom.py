@@ -52,3 +52,5 @@ class Atom:
     resources: Resources
     wavelengths: Wavelengths
     obs_mode: ObservationMode
+    step_start: int = None
+    step_count: int = None

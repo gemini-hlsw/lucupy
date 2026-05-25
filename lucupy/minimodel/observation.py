@@ -427,7 +427,8 @@ class Observation:
         def sep(indent: int) -> str:
             return '-----' * indent
 
-        print(f'{sep(depth)} Observation: {self.id.id} {self.status.name}')
+        band = self.band.name if self.band else 'None'
+        print(f'{sep(depth)} Observation: {self.id.id} {self.status.name} {band} {self.obs_class.name}')
         for atom in self.sequence:
             print(f'{sep(depth + 1)} {atom}')
 
