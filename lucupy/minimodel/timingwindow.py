@@ -2,7 +2,8 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from astropy.time import Time
+from datetime import timedelta
 from typing import ClassVar, Optional, final
 
 from ..decorators import immutable
@@ -19,12 +20,12 @@ class TimingWindow:
     """Representation of timing windows in the mini-model.
 
     Attributes:
-        start (datetime): When a timing window begins.
+        start (Time): When a timing window begins. Time objects used by calculator.py and the program providers
         duration (timedelta): For infinite duration, set duration to timedelta.max.
         repeat (int):  -1 means forever repeating, 0 means non-repeating.
         period (timedelta, optional): None should be used if repeat < 1.
     """
-    start: datetime
+    start: Time
     duration: timedelta
     repeat: int
     period: Optional[timedelta]
