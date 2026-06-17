@@ -40,26 +40,31 @@ class GeminiProperties(ObservatoryProperties):
         NIFS = rm.lookup_resource(rid='NIFS', rtype=ResourceType.INSTRUMENT)
         NIRI = rm.lookup_resource(rid='NIRI', rtype=ResourceType.INSTRUMENT)
         IGRINS = rm.lookup_resource(rid='IGRINS', rtype=ResourceType.INSTRUMENT)
+        IGRINS2 = rm.lookup_resource(rid='IGRINS-2', rtype=ResourceType.INSTRUMENT)
         GMOS_N = rm.lookup_resource(rid='GMOS-N', rtype=ResourceType.INSTRUMENT)
         GMOS_S = rm.lookup_resource(rid='GMOS-S', rtype=ResourceType.INSTRUMENT)
         GNIRS = rm.lookup_resource(rid='GNIRS', rtype=ResourceType.INSTRUMENT)
         GPI = rm.lookup_resource(rid='GPI', rtype=ResourceType.INSTRUMENT)
         GSAOI = rm.lookup_resource(rid='GSAOI', rtype=ResourceType.INSTRUMENT)
         PHOENIX = rm.lookup_resource(rid='Phoenix', rtype=ResourceType.INSTRUMENT)
+        GHOST = rm.lookup_resource(rid='GHOST', rtype=ResourceType.INSTRUMENT)
 
     _STANDARD_INSTRUMENTS = frozenset({Instruments.FLAMINGOS2.value,
                                        Instruments.GNIRS.value,
                                        Instruments.NIFS.value,
                                        Instruments.IGRINS.value,
+                                       Instruments.IGRINS2.value,
                                        Instruments.GMOS_N.value,
-                                       Instruments.GMOS_S.value})
+                                       Instruments.GMOS_S.value,
+                                       Instruments.GHOST.value})
 
     _NIR_INSTRUMENTS: Resources = frozenset({Instruments.FLAMINGOS2.value,
                                              Instruments.GNIRS.value,
                                              Instruments.NIRI.value,
                                              Instruments.NIFS.value,
                                              Instruments.PHOENIX.value,
-                                             Instruments.IGRINS.value})
+                                             Instruments.IGRINS.value,
+                                             Instruments.IGRINS2.value})
 
     """ List: Instruments for which there are set standards.
     """
