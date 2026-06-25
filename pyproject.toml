@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lucupy"
-version = "0.2.10"
+version = "0.2.11"
 description = "Lucuma core package for the Gemini Automated Scheduler at: https://github.com/gemini-hlsw/scheduler"
 authors = [
     "Sergio Troncoso <sergio.troncoso@noirlab.edu>",
@@ -11,7 +11,7 @@ authors = [
 readme = "README.rst"
 homepage = "https://github.com/gemini-hlsw/lucupy"
 repository = "https://github.com/gemini-hlsw/lucupy"
-keywords = ["lucuma", "scheudule", "gpp"]
+keywords = ["lucuma", "schedule", "gpp"]
 classifiers = [
    "Environment :: Web Environment",
    "Framework :: Hypothesis",
