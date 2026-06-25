@@ -23,11 +23,13 @@ class TooType(IntEnum):
     The values and ordering on them should NOT be changed as this will break functionality.
 
     Members:
+        - NONE
         - STANDARD
         - RAPID
         - INTERRUPT
 
     """
+    NONE = auto()
     STANDARD = auto()
     RAPID = auto()
     INTERRUPT = auto()

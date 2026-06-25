@@ -11,6 +11,7 @@ from typing import Final, FrozenSet, List, Optional, Callable, Set
 
 from lucupy.helpers import flatten
 from lucupy.minimodel.constraints import Constraints
+from lucupy.minimodel.too import TooType
 from lucupy.minimodel.ids import (GroupID, ObservationID, ProgramID,
                                   UniqueGroupID)
 from lucupy.minimodel.obs_filter import obs_is_not_inactive, obs_is_science_or_progcal
@@ -339,6 +340,24 @@ class BaseGroup(ABC):
                 priority = max(child.priority() for child in self.children)
         return priority
 
+    def too_type(self) -> TooType:
+        """
+        Return the maximum ToOType based on those of the children Observations
+        for active Observations where the ObservationClass is SCIENCE or PROGCAL.
+        If there is no such Observation, TooType.NONE is returned.
+
+        :return: TooType
+        """
+        too_type = TooType.NONE
+        if self.is_and_group():
+            if isinstance(self.children, Observation):
+                obs = self.children
+                too_type = obs.too_type if obs_is_science_or_progcal(obs) and obs_is_not_inactive(obs) else TooType.NONE
+            else:
+                # This should always work because the leaves will always be an Observation.
+                too_type = max(child.too_type() for child in self.children)
+        return too_type
+
     def show(self, depth: int = 1) -> None:
         """Print content of the Group.
 
@@ -351,9 +370,11 @@ class BaseGroup(ABC):
         # Is this a subgroup or an observation?
         # group_type = 'Scheduling Group' if self.is_scheduling_group() else 'Observation Group'
         group_type = 'Observation Group' if self.is_observation_group() else self.group_option
+        too_type = self.too_type()
+        too_type_str = too_type.name if too_type else 'None'
         print(f'{sep(depth)} Group: {self.id.id}, unique_id={self.unique_id.id}, parent={self.parent_id.id}, '
               # f'parent_index={self.parent_index}, '
-              f'previous={self.previous_id.id}, next={self.next_id.id}, active={self.active}, '              
+              f'previous={self.previous_id.id}, next={self.next_id.id}, active={self.active}, ToO={too_type_str} '              
               f'({group_type}, num_children={len(self.children)}, num_observe={self.number_to_observe}, '
               f'num_observed={self.number_observed})')
         if isinstance(self.children, Observation):
