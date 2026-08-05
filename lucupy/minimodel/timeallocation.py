@@ -24,6 +24,7 @@ class Band(IntEnum):
     BAND2 = 2
     BAND3 = 3
     BAND4 = 4
+    BAND5 = 5 # Used when no band
 
 
 @final
@@ -54,6 +55,9 @@ class TimeAccountingCode(str, Enum):
     UK = 'United Kingdom'
     US = 'United States'
     XCHK = 'Keck Exchange'
+    CAL = 'Calibration'
+    ENG = 'Engineering'
+
 
 @final
 class GppTimeAccountingCode(str, Enum):
@@ -84,7 +88,8 @@ class GppTimeAccountingCode(str, Enum):
     UK = 'United Kingdom'
     US = 'United States'
     XCHK = 'Keck Exchange'
-
+    CAL = 'Calibration'
+    ENG = 'Engineering'
 
 @final
 @dataclass

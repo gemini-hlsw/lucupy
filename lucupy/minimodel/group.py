@@ -9,7 +9,7 @@ from datetime import timedelta
 from enum import Enum, auto
 from typing import Final, FrozenSet, List, Optional, Callable, Set
 
-from lucupy.helpers import flatten
+from lucupy.helpers import flatten, unique_list
 from lucupy.minimodel.constraints import Constraints
 from lucupy.minimodel.too import TooType
 from lucupy.minimodel.ids import (GroupID, ObservationID, ProgramID,
@@ -215,27 +215,27 @@ class BaseGroup(ABC):
         else:
             return sum((child.exec_time() for child in self.children), timedelta())
 
-    def prog_time(self) -> timedelta:
+    def prog_time(self, band: Band=None) -> timedelta:
         """Program time planned across the group.
 
         Returns:
             prog_time (timedelta): Sum of all prog_time planned times across children of this group.
         """
         if isinstance(self.children, Observation):
-            return self.children.prog_time()
+            return self.children.prog_time() if band is None or self.children.band == band else ZeroTime
         else:
-            return sum((child.prog_time() for child in self.children), timedelta())
+            return sum((child.prog_time(band) for child in self.children), timedelta())
 
-    def part_time(self) -> timedelta:
+    def part_time(self, band: Band=None) -> timedelta:
         """Partner time planned across the group.
 
         Returns:
             part_time (timedelta): Sum of all `part_time` (planned times) across the children of this group.
         """
         if isinstance(self.children, Observation):
-            return self.children.part_time()
+            return self.children.part_time() if band is None or self.children.band == band else ZeroTime
         else:
-            return sum((child.part_time() for child in self.children), timedelta())
+            return sum((child.part_time(band) for child in self.children), timedelta())
 
     def program_used(self, band: Band=None) -> timedelta:
         """Program time used across the group by science band.
@@ -307,6 +307,18 @@ class BaseGroup(ABC):
             else:
                 obs_class = min(child.obs_class() for child in self.children)
         return obs_class
+
+    def bands(self) -> List[Band]:
+        """
+        Return a list of bands for a group
+        """
+        bands = []
+        # if self.is_and_group():
+        if isinstance(self.children, Observation):
+            bands.append(self.children.band)
+        else:
+            [bands.extend(child.bands()) for child in self.children]
+        return unique_list(bands)
 
     def obs_mode(self) -> ObservationMode:
         """
