@@ -48,6 +48,11 @@ class GeminiProperties(ObservatoryProperties):
         GSAOI = rm.lookup_resource(rid='GSAOI', rtype=ResourceType.INSTRUMENT)
         PHOENIX = rm.lookup_resource(rid='Phoenix', rtype=ResourceType.INSTRUMENT)
         GHOST = rm.lookup_resource(rid='GHOST', rtype=ResourceType.INSTRUMENT)
+        MAROONX = rm.lookup_resource(rid='MAROON-X', rtype=ResourceType.INSTRUMENT)
+        ALOPEKE = rm.lookup_resource(rid='Alopeke', rtype=ResourceType.INSTRUMENT)
+        ZORRO = rm.lookup_resource(rid='Zorro', rtype=ResourceType.INSTRUMENT)
+        GRACES = rm.lookup_resource(rid='GRACES', rtype=ResourceType.INSTRUMENT)
+        VISITOR = rm.lookup_resource(rid='VISITOR', rtype=ResourceType.INSTRUMENT)
 
     _STANDARD_INSTRUMENTS = frozenset({Instruments.FLAMINGOS2.value,
                                        Instruments.GNIRS.value,
@@ -65,6 +70,18 @@ class GeminiProperties(ObservatoryProperties):
                                              Instruments.PHOENIX.value,
                                              Instruments.IGRINS.value,
                                              Instruments.IGRINS2.value})
+
+    _VISITOR_INSTRUMENTS: Resources = frozenset(
+        {
+            Instruments.PHOENIX.value,
+            Instruments.IGRINS.value,
+            Instruments.MAROONX.value,
+            Instruments.ALOPEKE.value,
+            Instruments.ZORRO.value,
+            Instruments.VISITOR.value,
+            Instruments.GRACES.value
+        }
+    )
 
     """ List: Instruments for which there are set standards.
     """
@@ -109,11 +126,22 @@ class GeminiProperties(ObservatoryProperties):
         return GeminiProperties._NIR_INSTRUMENTS
 
     @staticmethod
+    def visitor_instruments() -> Resources:
+        return GeminiProperties._VISITOR_INSTRUMENTS
+    
+    @staticmethod
     def is_nir_instrument(resource: Resource) -> bool:
         """
         Checks in the specified Resource is a NIR Gemini Instrument.
         """
         return resource in GeminiProperties._NIR_INSTRUMENTS
+
+    @staticmethod
+    def is_visitor_instrument(resource: Resource) -> bool:
+        """
+        Checks in the specified Resource is a VISITOR Gemini Instrument.
+        """
+        return resource in GeminiProperties._VISITOR_INSTRUMENTS
 
     @staticmethod
     def is_instrument(resource: Resource) -> bool:
