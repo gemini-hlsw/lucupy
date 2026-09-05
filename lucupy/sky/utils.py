@@ -32,6 +32,7 @@ __all__ = [
     'true_airmass',
     'xair',
     'ztwilight',
+    'airmass_to_alt',
 ]
 
 
@@ -447,3 +448,29 @@ def ztwilight(alt: Angle) -> npt.NDArray[float]:
     if scalar_input:
         twisb = np.squeeze(twisb)
     return twisb
+
+
+def airmass_to_alt(airmass: float, plot=False) -> Angle:
+    """Return the altitude(s) corresponding to a true airmass
+
+    Parameters
+    ----------
+    airmass : float, can be array
+        True airmasses for which altitudes are needed.
+    """
+    airmass = np.asarray(airmass)
+    scalar_input = False
+    if airmass.ndim == 0:
+        airmass = airmass[None]
+        scalar_input = True
+
+    # Calculate true airmasses for different altitudes
+    a = Angle(np.arange(90, -90, -0.1), unit=u.deg)
+    x_true = true_airmass(a)
+
+    # Interpolate the altitudes for the given airmasses
+    alt = np.interp(airmass, x_true, a)
+
+    if scalar_input:
+        return np.squeeze(alt)
+    return alt

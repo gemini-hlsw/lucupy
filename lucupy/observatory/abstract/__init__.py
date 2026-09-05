@@ -77,12 +77,20 @@ class ObservatoryProperties(ABC):
         return ObservatoryProperties._check().nir_instruments()
 
     @staticmethod
+    def visitor_instruments() -> Resources:
+        return ObservatoryProperties._check().visitor_instruments()
+
+    @staticmethod
     def instruments() -> Resources:
         return ObservatoryProperties._check().instruments()
 
     @staticmethod
     def is_nir_instrument(resource: Resource) -> bool:
         return ObservatoryProperties._check().is_nir_instrument(resource)
+
+    @staticmethod
+    def is_visitor_instrument(resource: Resource) -> bool:
+        return ObservatoryProperties._check().is_visitor_instrument(resource)
 
     @staticmethod
     def is_instrument(resource: Resource) -> bool:
