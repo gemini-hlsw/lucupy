@@ -12,6 +12,7 @@ import numpy.typing as npt
 from astropy.coordinates import Angle
 from astropy.units import Quantity
 from astropy import units as u
+from scipy.special import erf
 
 from lucupy.helpers import flatten
 from lucupy.types import ScalarOrNDArray
@@ -207,6 +208,34 @@ class Conditions:
         min_sb = min(flatten(c.sb for c in conditions), default=SkyBackground.SBANY)
         min_wv = min(flatten(c.wv for c in conditions), default=WaterVapor.WVANY)
         return Conditions(cc=min_cc, iq=min_iq, sb=min_sb, wv=min_wv)
+
+
+    @staticmethod
+    def percentile_iq(fwhm: float, wavelength: float, airmass: float, model: str = "web"):
+        """
+        Calculate the percentile of on-source image quality.
+        * `fwhm` in arcsec (on-source)
+        * `wavelength` in microns
+        * `model` is either `WEB` or `QAP`
+        """
+        zenith_fwhm = fwhm / airmass ** 0.6
+
+        if model.lower() == 'web':
+            # model fit to the IQ constraints listed on the web page
+            p = 226.439637 \
+                -93.6673981 * wavelength ** -0.162045293 \
+                -47.4550797 * zenith_fwhm ** -0.973500276
+            pct = max(0, min(100, p))  # ensure in the range 0 - 100
+
+        elif model.lower() == 'qap':
+            # model fit to QAP from 2004-2024:  (the extra +0.5 is to force 100% in the worst IQ)
+            c = [50.10221383, 0.87712202, 0.78467697, 16.10928544, 0.13778389, -15.8255612, 49.37405633 + 0.5]
+            pct = c[0] * erf(c[1] * wavelength**c[2] + c[3] * zenith_fwhm**c[4] + c[5]) + c[6]
+
+        else:
+            raise SyntaxError(f'Unknown model: {model}')
+
+        return pct
 
     def __len__(self):
         """
