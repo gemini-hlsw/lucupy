@@ -78,6 +78,14 @@ class ImageQuality(float):
     def __str__(self):
         return f"IQ{self * 100:.2f}".rstrip("0").rstrip(".")
 
+    @property
+    def name(self):
+        """
+        The name of the image quality bin.
+        To keep the ImageQuality retro-compatible
+        """
+        return str(self)
+
 
 @final
 class WaterVapor(float, Enum):
