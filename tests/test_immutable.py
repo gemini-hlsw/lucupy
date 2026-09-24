@@ -34,7 +34,7 @@ def test_immutable_deepcopy():
                        epoch=2000.)
 
     conditions = Conditions(cc=CloudCover.CC50,
-                            iq=ImageQuality.IQ20,
+                            iq=ImageQuality(0.2),
                             sb=SkyBackground.SB50,
                             wv=WaterVapor.WVANY)
 

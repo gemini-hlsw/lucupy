@@ -70,21 +70,21 @@ class CloudCover(float, Enum):
 
 
 @final
-class ImageQuality(float, Enum):
+class ImageQuality(float):
     """
-    Bins for observation image quality requirements or current conditions.
-
-    Members:
-        - IQ20 = 0.2
-        - IQ70 = 0.7
-        - IQ85 = 0.85
-        - IQANY = 1.0
-
+    Continuous value for image quality can be anything between 0.0 and 1.0,
+    where 0.0 is the best image quality and 1.0 is the worst image quality.
     """
-    IQ20 = 0.2
-    IQ70 = 0.7
-    IQ85 = 0.85
-    IQANY = 1.0
+    def __str__(self):
+        return f"IQ{self * 100:.2f}".rstrip("0").rstrip(".")
+
+    @property
+    def name(self):
+        """
+        The name of the image quality bin.
+        To keep the ImageQuality retro-compatible
+        """
+        return str(self)
 
 
 @final
@@ -177,7 +177,7 @@ class Conditions:
         Return the least possible restrictive conditions.
         """
         return cls(cc=CloudCover.CCANY,
-                   iq=ImageQuality.IQANY,
+                   iq=ImageQuality(1.0),
                    sb=SkyBackground.SBANY,
                    wv=WaterVapor.WVANY)
 
@@ -204,7 +204,7 @@ class Conditions:
         if len(conditions) == 0:
             return Conditions.least_restrictive()
         min_cc = min(flatten(c.cc for c in conditions), default=CloudCover.CCANY)
-        min_iq = min(flatten(c.iq for c in conditions), default=ImageQuality.IQANY)
+        min_iq = min(flatten(c.iq for c in conditions), default=ImageQuality(1.0))
         min_sb = min(flatten(c.sb for c in conditions), default=SkyBackground.SBANY)
         min_wv = min(flatten(c.wv for c in conditions), default=WaterVapor.WVANY)
         return Conditions(cc=min_cc, iq=min_iq, sb=min_sb, wv=min_wv)
