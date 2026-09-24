@@ -5,8 +5,8 @@ import io
 import unittest.mock
 from datetime import datetime
 
-from lucupy.minimodel import (ROOT_GROUP_ID, Group, GroupID, Observation,
-                              ObservationID, ObservationStatus, Program,
+from lucupy.minimodel import (GROUP_NONE_ID, ROOT_GROUP_ID, AndOption, Group, GroupID, Observation,
+                              ObservationClass, ObservationID, ObservationStatus, Program,
                               ProgramID)
 
 
@@ -33,7 +33,7 @@ def test_print_program():
         priority=None,
         setuptime_type=None,
         acq_overhead=None,
-        obs_class=None,
+        obs_class=ObservationClass.SCIENCE,
         targets=None,
         guiding=None,
         sequence=[],
@@ -47,21 +47,31 @@ def test_print_program():
         id=GroupID('test_group'),
         program_id=program_id,
         group_name='test',
+        parent_id=ROOT_GROUP_ID,
+        previous_id=GROUP_NONE_ID,
+        next_id=GROUP_NONE_ID,
         number_to_observe=1,
+        number_observed=0,
         delay_min=None,
         delay_max=None,
+        active=True,
         children=o,
-        group_option=None
+        group_option=AndOption.ANYORDER
     )
 
     g = Group(id=ROOT_GROUP_ID,
                  program_id=program_id,
                  group_name=ROOT_GROUP_ID.id,
+                 parent_id=GROUP_NONE_ID,
+                 previous_id=GROUP_NONE_ID,
+                 next_id=GROUP_NONE_ID,
                  number_to_observe=1,
+                 number_observed=0,
                  delay_min=None,
                  delay_max=None,
+                 active=True,
                  children=[g1],
-                 group_option=None,
+                 group_option=AndOption.ANYORDER,
                  )
 
     p = Program(
@@ -82,8 +92,12 @@ def test_print_program():
 
     expected_output = (
         'Program: test_program\n'
-        f'----- Group: {ROOT_GROUP_ID.id}, unique_id=test_program:{ROOT_GROUP_ID.id} (Scheduling Group, num_children=1)\n'
-        '---------- Group: test_group, unique_id=test_program:test_group (Observation Group, num_children=1)\n'
-        f'--------------- Observation: test_observation {o.status.name}\n'
+        f'----- Group: {ROOT_GROUP_ID.id}, unique_id=test_program:{ROOT_GROUP_ID.id}, parent={GROUP_NONE_ID.id}, '
+        f'previous={GROUP_NONE_ID.id}, next={GROUP_NONE_ID.id}, active=True, ToO=None '
+        f'({AndOption.ANYORDER}, num_children=1, num_observe=1, num_observed=0)\n'
+        f'---------- Group: test_group, unique_id=test_program:test_group, parent={ROOT_GROUP_ID.id}, '
+        f'previous={GROUP_NONE_ID.id}, next={GROUP_NONE_ID.id}, active=True, ToO=None '
+        '(Observation Group, num_children=1, num_observe=1, num_observed=0)\n'
+        f'--------------- Observation: test_observation {o.status.name} None {o.obs_class.name} None\n'
     )
     assert_stdout(p, expected_output)
