@@ -93,7 +93,7 @@ class ObservationStatus(Enum):
     ONGOING = 'ONGOING'
     OBSERVED = 'OBSERVED'
     INACTIVE = 'INACTIVE'
-    COMPLETED = auto()
+    COMPLETED = 'COMPLETED'
     UNAPPROVED = 'UNAPPROVED'
 
 
