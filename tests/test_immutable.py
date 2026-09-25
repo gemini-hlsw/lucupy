@@ -5,7 +5,7 @@ from copy import deepcopy
 from datetime import datetime, timedelta
 
 from lucupy.minimodel import (GROUP_NONE_ID, ROOT_GROUP_ID, AndOption, Band, CloudCover,
-                              Conditions, Constraints, ElevationType, Group,
+                              Conditions, Constraints, ElevationLimits, ElevationType, Group,
                               GroupID, ImageQuality, Magnitude, MagnitudeBands,
                               Observation, ObservationClass, ObservationID,
                               ObservationStatus, Priority, Program, ProgramID,
@@ -44,9 +44,11 @@ def test_immutable_deepcopy():
                       period=TimingWindow.NO_PERIOD)
 
     c = Constraints(conditions=conditions,
-                    elevation_type=ElevationType.AIRMASS,
-                    elevation_min=Constraints.DEFAULT_AIRMASS_ELEVATION_MIN,
-                    elevation_max=Constraints.DEFAULT_AIRMASS_ELEVATION_MAX,
+                    elevation=ElevationLimits(elevation_type=ElevationType.AIRMASS,
+                                              ha_min=None,
+                                              ha_max=None,
+                                              airmass_min=Constraints.DEFAULT_AIRMASS_ELEVATION_MIN,
+                                              airmass_max=Constraints.DEFAULT_AIRMASS_ELEVATION_MAX),
                     timing_windows=[tw])
 
     o = Observation(id=ObservationID('o1'),

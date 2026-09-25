@@ -24,6 +24,7 @@ __all__ = [
     'CloudCover',
     'Conditions',
     'Constraints',
+    'ElevationLimits',
     'ElevationType',
     'ImageQuality',
     'SkyBackground',
@@ -248,6 +249,41 @@ class Conditions:
 @final
 @immutable
 @dataclass(frozen=True)
+class ElevationLimits:
+    """Equivalent hour angle and airmass limits of the elevation constraints of an observation.
+
+    The elevation_type tells which pair of limits was given: the other pair is derived from it using the
+    declination of the target and the latitude of the site (see lucupy.sky.elevation_limits).
+    If the declination is not known when the limits are created (e.g. nonsidereal targets), the derived
+    pair is None and can be calculated per night with lucupy.sky.complete_elevation_limits.
+    If elevation_type is NONE, the given pair are the default airmass limits of the Constraints.
+
+    Attributes:
+        elevation_type (ElevationType): Type of the elevation constraints that were given.
+        ha_min (float, optional): Minimum hour angle in hours.
+        ha_max (float, optional): Maximum hour angle in hours.
+        airmass_min (float, optional): Minimum airmass.
+        airmass_max (float, optional): Maximum airmass.
+
+        AIRMASS_LIMIT (ClassVar[float]): Largest airmass_max derived from hour angle limits.
+    """
+    elevation_type: ElevationType
+    ha_min: Optional[float]
+    ha_max: Optional[float]
+    airmass_min: Optional[float]
+    airmass_max: Optional[float]
+
+    AIRMASS_LIMIT: ClassVar[float] = field(init=False, default=2.3, repr=False, compare=False)
+
+    @property
+    def is_complete(self) -> bool:
+        """True if both the hour angle and the airmass limits are known."""
+        return None not in (self.ha_min, self.ha_max, self.airmass_min, self.airmass_max)
+
+
+@final
+@immutable
+@dataclass(frozen=True)
 class Constraints:
     """The constraints required for an observation to be performed.
 
@@ -257,9 +293,7 @@ class Constraints:
 
     Attributes:
         conditions (Conditions): Collection of conditions.
-        elevation_type (ElevationType): Elevation type.
-        elevation_min (float): Max value of elevation.
-        elevation_max (float): Min value of elevation.
+        elevation (ElevationLimits): Hour angle and airmass limits of the elevation constraints.
         timing_windows (List[TimingWindow]): Time windows in the constraints are in effect.
         strehl (Strehl:optional): None
 
@@ -268,9 +302,7 @@ class Constraints:
 
     """
     conditions: Conditions
-    elevation_type: ElevationType
-    elevation_min: float
-    elevation_max: float
+    elevation: ElevationLimits
     timing_windows: List[TimingWindow]
     # clearance_windows: Optional[List[ClearanceWindow]] = None
     strehl: Optional[Strehl] = None
