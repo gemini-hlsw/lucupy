@@ -288,8 +288,8 @@ def alt_to_hour_angle(dec: AngleParam,
 
     dec and alt must have the same dimensions.
 
-    If the object is always above alt, an Angle of +1000 radians is returned.
-    If always below, -1000 radians.
+    If the object is always above alt, an Angle of -1000 radians is returned.
+    If always below, +1000 radians.
 
     Args:
         dec: Declination of source.
