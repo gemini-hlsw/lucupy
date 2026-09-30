@@ -1,7 +1,6 @@
 # Copyright (c) 2016-2024 Association of Universities for Research in Astronomy, Inc. (AURA)
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
-from dataclasses import replace
 from typing import Optional, Tuple
 
 import astropy.units as u
@@ -142,9 +141,16 @@ def complete_elevation_limits(limits: ElevationLimits,
     if limits.is_complete:
         return limits
 
-    if limits.elevation_type == ElevationType.HOUR_ANGLE:
-        airmass_min, airmass_max = hour_angle_to_airmass_limits(limits.ha_min, limits.ha_max, dec, lat)
-        return replace(limits, airmass_min=airmass_min, airmass_max=airmass_max)
+    ha_min, ha_max = limits.ha_min, limits.ha_max
+    airmass_min, airmass_max = limits.airmass_min, limits.airmass_max
 
-    ha_min, ha_max = airmass_to_hour_angle_limits(limits.airmass_max, dec, lat)
-    return replace(limits, ha_min=ha_min, ha_max=ha_max)
+    if limits.elevation_type == ElevationType.HOUR_ANGLE:
+        airmass_min, airmass_max = hour_angle_to_airmass_limits(ha_min, ha_max, dec, lat)
+    else:
+        ha_min, ha_max = airmass_to_hour_angle_limits(airmass_max, dec, lat)
+
+    return ElevationLimits(elevation_type=limits.elevation_type,
+                           ha_min=ha_min,
+                           ha_max=ha_max,
+                           airmass_min=airmass_min,
+                           airmass_max=airmass_max)
