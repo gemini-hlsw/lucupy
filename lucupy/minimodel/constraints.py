@@ -34,77 +34,230 @@ __all__ = [
     'WaterVapor',
 ]
 
-
 @final
-class SkyBackground(float, Enum):
+class ConstraintUnit(Enum):
+    PERCENTILE = 'PERCENTILE'
+    ARCSEC = 'ARCSEC'
+    MAG = 'MAG'
+    MM = 'MM'
+
+@dataclass
+class BaseConstraint:
     """
-    Bins for observation sky background requirements or current conditions.
-
-    Members:
-        - SB20 = 0.2
-        - SB50 = 0.5
-        - SB80 = 0.8
-        - SBANY = 1.0
-
+    Continuous real value for a constraint
     """
-    SB20 = 0.2
-    SB50 = 0.5
-    SB80 = 0.8
-    SBANY = 1.0
+    # For numpy support, must be higher than NumPy's default priority (which is 0.0)
+    __array_priority__ = 1000.0
 
+    def __init__(self, value: float, constraint_type: str=ConstraintUnit.PERCENTILE):
+        self.value = value
+        self.type = constraint_type
 
-@final
-class CloudCover(float, Enum):
-    """
-    Bins for observation cloud cover requirements or current conditions.
-
-    Members:
-        - CC50 = 0.5
-        - CC70 = 0.7
-        - CC80 = 0.8
-        - CCANY = 1.0
-    """
-    CC50 = 0.5
-    CC70 = 0.7
-    CC80 = 0.8
-    CCANY = 1.0
-
-
-@final
-class ImageQuality(float):
-    """
-    Continuous value for image quality can be anything between 0.0 and 1.0,
-    where 0.0 is the best image quality and 1.0 is the worst image quality.
-    """
     def __str__(self):
-        return f"IQ{self * 100:.2f}".rstrip("0").rstrip(".")
+        return f"{self.value * 100:.2f}".rstrip("0").rstrip(".")
+
+    def __float__(self):
+        return self.value
+
+    def __eq__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value == other
+        return self.value == float(other)
+
+    def __le__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value <= other
+        return self.value <= float(other)
+
+    def __ge__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value >= other
+        return self.value >= float(other)
+
+    def __lt__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value < other
+        return self.value < float(other)
+
+    def __gt__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value > other
+        return self.value > float(other)
+
+    def __ne__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value != other
+        return self.value != float(other)
+
+    def __add__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value + other
+        return self.value + float(other)
+
+    def __radd__(self, other):
+        return self.__add__(other)
+
+    def __sub__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value - other
+        return self.value - float(other)
+
+    def __rsub__(self, other):
+        return self.__sub__(other)
+
+    def __mul__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value * other
+        return self.value * float(other)
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
+    def __div__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value / other
+        return self.value / float(other)
 
     @property
     def name(self):
         """
         The name of the image quality bin.
-        To keep the ImageQuality retro-compatible
+        To keep retro-compatible
         """
         return str(self)
 
 
+# @final
+# class SkyBackground(float):
+#     """
+#     Sky background requirements or current conditions as a continuous property
+#     """
+#     def __str__(self):
+#         return f"SB{self * 100:.2f}".rstrip("0").rstrip(".")
+# 
+#     @property
+#     def name(self):
+#         """
+#         The name of the sky background "bin".
+#         To keep retro-compatible
+#         """
+#         return str(self)
+# 
+#     @property
+#     def value(self):
+#         """
+#         The value of the sky background.
+#         """
+#         return float(self)
+
 @final
-class WaterVapor(float, Enum):
+class SkyBackground(BaseConstraint):
     """
-    Bins for observation water vapor requirements or current conditions.
-
-    Members:
-        - WV20 = 0.2
-        - WV50 = 0.5
-        - WV80 = 0.8
-        - WVANY = 1.0
-
+    Sky background requirements or current conditions as a continuous property
     """
-    WV20 = 0.2
-    WV50 = 0.5
-    WV80 = 0.8
-    WVANY = 1.0
+    def __str__(self):
+        return f"SB{self.value * 100:.2f}".rstrip("0").rstrip(".")
 
+# @final
+# class CloudCover(float):
+#     """
+#     Cloud cover requirements or current conditions as a continuous property
+#     """
+#     def __str__(self):
+#         return f"CC{self * 100:.2f}".rstrip("0").rstrip(".")
+# 
+#     @property
+#     def name(self):
+#         """
+#         The name of the cloud cover "bin".
+#         To keep retro-compatible
+#         """
+#         return str(self)
+# 
+#     @property
+#     def value(self):
+#         """
+#         The value of the cloud cover.
+#         """
+#         return float(self)
+
+@final
+class CloudCover(BaseConstraint):
+    """
+    Cloud cover requirements or current conditions as a continuous property
+    """
+    def __str__(self):
+        return f"CC{self.value * 100:.2f}".rstrip("0").rstrip(".")
+
+# @final
+# class ImageQuality(float):
+#     """
+#     Continuous value for image quality can be anything between 0.0 and 1.0,
+#     where 0.0 is the best image quality and 1.0 is the worst image quality.
+#     """
+#     # def __init__(self, value: float, constraint_type: str='percentile'):
+#     #     self.value = value
+#     #     self.type = constraint_type
+#
+#     def __str__(self):
+#         return f"IQ{self.value * 100:.2f}".rstrip("0").rstrip(".")
+#         # return f"IQ{self.value * 100:.2f}".rstrip("0").rstrip(".")
+#
+#     @property
+#     def name(self):
+#         """
+#         The name of the image quality bin.
+#         To keep the ImageQuality retro-compatible
+#         """
+#         return str(self)
+#
+#     @property
+#     def value(self):
+#         """
+#         The value of the image quality bin.
+#         """
+#         return float(self)
+
+@final
+class ImageQuality(BaseConstraint):
+    """
+    Continuous value for image quality can be anything between 0.0 and 1.0,
+    where 0.0 is the best image quality and 1.0 is the worst image quality.
+    """
+    def __str__(self):
+        return f"IQ{self.value * 100:.2f}".rstrip("0").rstrip(".")
+
+# @final
+# class WaterVapor(float):
+#     """
+#     Water vapor requirements or current conditions as a continuous property
+#     """
+#     def __str__(self):
+#         return f"WV{self * 100:.2f}".rstrip("0").rstrip(".")
+#
+#     @property
+#     def name(self):
+#         """
+#         The name of the water vapor "bin".
+#         To keep retro-compatible
+#         """
+#         return str(self)
+#
+#     @property
+#     def value(self):
+#         """
+#         The value of the water vapor.
+#         """
+#         return float(self)
+
+@final
+class WaterVapor(BaseConstraint):
+    """
+    Continuous value for water vapor can be anything between 0.0 and 1.0,
+    where 0.0 is the best image quality and 1.0 is the worst image quality.
+    """
+    def __str__(self):
+        return f"WV{self.value * 100:.2f}".rstrip("0").rstrip(".")
 
 @final
 class Strehl(float, Enum):
@@ -177,10 +330,10 @@ class Conditions:
         """
         Return the least possible restrictive conditions.
         """
-        return cls(cc=CloudCover.CCANY,
+        return cls(cc=CloudCover(1.0),
                    iq=ImageQuality(1.0),
-                   sb=SkyBackground.SBANY,
-                   wv=WaterVapor.WVANY)
+                   sb=SkyBackground(1.0),
+                   wv=WaterVapor(1.0))
 
     def __post_init__(self):
         """
@@ -204,10 +357,10 @@ class Conditions:
         """
         if len(conditions) == 0:
             return Conditions.least_restrictive()
-        min_cc = min(flatten(c.cc for c in conditions), default=CloudCover.CCANY)
+        min_cc = min(flatten(c.cc for c in conditions), default=CloudCover(1.0))
         min_iq = min(flatten(c.iq for c in conditions), default=ImageQuality(1.0))
-        min_sb = min(flatten(c.sb for c in conditions), default=SkyBackground.SBANY)
-        min_wv = min(flatten(c.wv for c in conditions), default=WaterVapor.WVANY)
+        min_sb = min(flatten(c.sb for c in conditions), default=SkyBackground(1.0))
+        min_wv = min(flatten(c.wv for c in conditions), default=WaterVapor(1.0))
         return Conditions(cc=min_cc, iq=min_iq, sb=min_sb, wv=min_wv)
 
 

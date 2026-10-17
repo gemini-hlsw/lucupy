@@ -252,15 +252,15 @@ def convert_to_sky_background(sb: npt.NDArray[float]) -> npt.NDArray[SkyBackgrou
 
     """
 
-    cond = np.full([len(sb)], SkyBackground.SBANY)
+    cond = np.full([len(sb)], SkyBackground(1.0))
 
     ii = np.where(np.logical_and(sb > 19.61, sb <= 20.78))[0][:]
-    cond[ii] = SkyBackground.SB80
+    cond[ii] = SkyBackground(0.8)
 
     ii = np.where(np.logical_and(sb > 20.78, sb <= 21.37))[0][:]
-    cond[ii] = SkyBackground.SB50
+    cond[ii] = SkyBackground(0.5)
 
     ii = np.where(sb > 21.37)[0][:]
-    cond[ii] = SkyBackground.SB20
+    cond[ii] = SkyBackground(0.2)
 
     return cond

@@ -431,7 +431,8 @@ class Observation:
 
         band = self.band.name if self.band else 'None'
         print(f'{sep(depth)} Observation: {self.id.id} {self.status.name} {band} {self.obs_class.name} '
-              f'{self.too_type.name if self.too_type else "None"}')
+              f'{self.too_type.name if self.too_type else "None"} IQ{self.constraints.conditions.iq.value:.2f} '
+              f'CC{self.constraints.conditions.cc.value:.2f} WV{self.constraints.conditions.wv.value:.2f}')
         for atom in self.sequence:
             print(f'{sep(depth + 1)} {atom}')
 
