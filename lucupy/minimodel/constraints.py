@@ -12,7 +12,7 @@ import numpy.typing as npt
 from astropy.coordinates import Angle
 from astropy.units import Quantity
 from astropy import units as u
-from scipy.special import erf
+from scipy.special import erf, erfinv
 
 from lucupy.helpers import flatten
 from lucupy.types import ScalarOrNDArray
@@ -21,9 +21,11 @@ from ..decorators import immutable
 from .timingwindow import TimingWindow
 
 __all__ = [
+    'BaseConstraint',
     'CloudCover',
     'Conditions',
     'Constraints',
+    'ConstraintUnit',
     'ElevationLimits',
     'ElevationType',
     'ImageQuality',
@@ -34,77 +36,151 @@ __all__ = [
     'WaterVapor',
 ]
 
-
 @final
-class SkyBackground(float, Enum):
+class ConstraintUnit(Enum):
+    PERCENTILE = 'PERCENTILE'
+    ARCSEC = 'ARCSEC'
+    MAG = 'MAG'
+    MM = 'MM'
+
+@dataclass
+class BaseConstraint:
     """
-    Bins for observation sky background requirements or current conditions.
-
-    Members:
-        - SB20 = 0.2
-        - SB50 = 0.5
-        - SB80 = 0.8
-        - SBANY = 1.0
-
+    Continuous real value for a constraint
     """
-    SB20 = 0.2
-    SB50 = 0.5
-    SB80 = 0.8
-    SBANY = 1.0
+    # For numpy support, must be higher than NumPy's default priority (which is 0.0)
+    __array_priority__ = 1000.0
 
+    def __init__(self, value: float, constraint_unit: ConstraintUnit=ConstraintUnit.PERCENTILE):
+        self.value = value
+        self.unit = constraint_unit
 
-@final
-class CloudCover(float, Enum):
-    """
-    Bins for observation cloud cover requirements or current conditions.
-
-    Members:
-        - CC50 = 0.5
-        - CC70 = 0.7
-        - CC80 = 0.8
-        - CCANY = 1.0
-    """
-    CC50 = 0.5
-    CC70 = 0.7
-    CC80 = 0.8
-    CCANY = 1.0
-
-
-@final
-class ImageQuality(float):
-    """
-    Continuous value for image quality can be anything between 0.0 and 1.0,
-    where 0.0 is the best image quality and 1.0 is the worst image quality.
-    """
     def __str__(self):
-        return f"IQ{self * 100:.2f}".rstrip("0").rstrip(".")
+        if self.unit is ConstraintUnit.PERCENTILE:
+            return f"{self.value * 100:.2f}".rstrip("0").rstrip(".")
+        else:
+            return f"{self.value:.2f}".rstrip("0").rstrip(".")
+
+    def __float__(self):
+        return self.value
+
+    def __eq__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value == other
+        return self.value == float(other)
+
+    def __le__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value <= other
+        return self.value <= float(other)
+
+    def __ge__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value >= other
+        return self.value >= float(other)
+
+    def __lt__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value < other
+        return self.value < float(other)
+
+    def __gt__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value > other
+        return self.value > float(other)
+
+    def __ne__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value != other
+        return self.value != float(other)
+
+    def __add__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value + other
+        return self.value + float(other)
+
+    def __radd__(self, other):
+        return self.__add__(other)
+
+    def __sub__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value - other
+        return self.value - float(other)
+
+    def __rsub__(self, other):
+        if isinstance(other, np.ndarray):
+            return other - self.value
+        return float(other) - self.value
+
+    def __mul__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value * other
+        return self.value * float(other)
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
+    def __truediv__(self, other):
+        if isinstance(other, np.ndarray):
+            return self.value / other
+        return self.value / float(other)
+
+    def __rtruediv__(self, other):
+        if isinstance(other, np.ndarray):
+            return other / self.value
+        return float(other) / self.value
 
     @property
     def name(self):
         """
-        The name of the image quality bin.
-        To keep the ImageQuality retro-compatible
+        The name of the bin.
+        To keep retro-compatible
         """
         return str(self)
 
+@final
+class SkyBackground(BaseConstraint):
+    """
+    Sky background requirements or current conditions as a continuous property
+    """
+    def __str__(self):
+        if self.unit is ConstraintUnit.PERCENTILE:
+            return f"SB{self.value * 100:.2f}".rstrip("0").rstrip(".")
+        else:
+            return f"SB{self.value:.2f}"
 
 @final
-class WaterVapor(float, Enum):
+class CloudCover(BaseConstraint):
     """
-    Bins for observation water vapor requirements or current conditions.
-
-    Members:
-        - WV20 = 0.2
-        - WV50 = 0.5
-        - WV80 = 0.8
-        - WVANY = 1.0
-
+    Cloud cover requirements or current conditions as a continuous property
     """
-    WV20 = 0.2
-    WV50 = 0.5
-    WV80 = 0.8
-    WVANY = 1.0
+    def __str__(self):
+        if self.unit is ConstraintUnit.PERCENTILE:
+            return f"CC{self.value * 100:.2f}".rstrip("0").rstrip(".")
+        else:
+            return f"CC{self.value:.2f}"
 
+@final
+class ImageQuality(BaseConstraint):
+    """
+    Continuous value for image quality
+    """
+    def __str__(self):
+        if self.unit is ConstraintUnit.PERCENTILE:
+            return f"IQ{self.value * 100:.2f}".rstrip("0").rstrip(".")
+        else:
+            return f"IQ{self.value:.2f}"
+
+@final
+class WaterVapor(BaseConstraint):
+    """
+    Continuous value for water vapor
+    """
+    def __str__(self):
+        if self.unit is ConstraintUnit.PERCENTILE:
+            return f"WV{self.value * 100:.2f}".rstrip("0").rstrip(".")
+        else:
+            return f"WV{self.value:.2f}"
 
 @final
 class Strehl(float, Enum):
@@ -177,10 +253,10 @@ class Conditions:
         """
         Return the least possible restrictive conditions.
         """
-        return cls(cc=CloudCover.CCANY,
+        return cls(cc=CloudCover(1.0),
                    iq=ImageQuality(1.0),
-                   sb=SkyBackground.SBANY,
-                   wv=WaterVapor.WVANY)
+                   sb=SkyBackground(1.0),
+                   wv=WaterVapor(1.0))
 
     def __post_init__(self):
         """
@@ -204,15 +280,15 @@ class Conditions:
         """
         if len(conditions) == 0:
             return Conditions.least_restrictive()
-        min_cc = min(flatten(c.cc for c in conditions), default=CloudCover.CCANY)
+        min_cc = min(flatten(c.cc for c in conditions), default=CloudCover(1.0))
         min_iq = min(flatten(c.iq for c in conditions), default=ImageQuality(1.0))
-        min_sb = min(flatten(c.sb for c in conditions), default=SkyBackground.SBANY)
-        min_wv = min(flatten(c.wv for c in conditions), default=WaterVapor.WVANY)
+        min_sb = min(flatten(c.sb for c in conditions), default=SkyBackground(1.0))
+        min_wv = min(flatten(c.wv for c in conditions), default=WaterVapor(1.0))
         return Conditions(cc=min_cc, iq=min_iq, sb=min_sb, wv=min_wv)
 
 
     @staticmethod
-    def percentile_iq(fwhm: float, wavelength: float, airmass: float, model: str = "web"):
+    def iq_to_percentile(fwhm: float, wavelength: float, airmass: float, model: str = "web"):
         """
         Calculate the percentile of on-source image quality.
         * `fwhm` in arcsec (on-source)
@@ -237,6 +313,46 @@ class Conditions:
             raise SyntaxError(f'Unknown model: {model}')
 
         return pct
+
+    @staticmethod
+    def percentile_to_iq(pct: float, wavelength: float, airmass: float, model: str):
+        """
+        Calculate the fwhm for a given IQ percentile, this is the inverse of iq_to_percentile
+        * `pct`: percentile
+        * `wavelength` in microns
+        * `model` is either `WEB` or `QAP`
+        """
+        # logger = logging.getLogger('percentile_iq')
+
+        if model.lower() == "web":
+            # model fit to the IQ constraints listed on the web page
+            # p = -93.6673981 * wavelength**-0.162045293 - 47.4550797 * zenith_fwhm**-0.973500276 + 226.439637
+            zenith_fwhm = (
+                (pct + 93.6673981 * wavelength**-0.162045293 - 226.439637) / -47.4550797
+            ) ** (1 / -0.973500276)
+        elif model.lower() == "qap":
+            # model fit to QAP from 2004-2024:  (the extra +0.5 is to force 100% in the worst IQ)
+            c = [
+                50.10221383,
+                0.87712202,
+                0.78467697,
+                16.10928544,
+                0.13778389,
+                -15.8255612,
+                49.37405633 + 0.5,
+            ]
+            # pct = c[0] * erf(c[1] * wavelength**c[2] + c[3] * zenith_fwhm**c[4] + c[5]) + c[6]
+            zenith_fwhm = (
+                (erfinv((pct - c[6]) / c[0]) - c[1] * wavelength ** c[2] - c[5]) / c[3]
+            ) ** (1.0 / c[4])
+
+        else:
+            raise SyntaxError(f"Unknown model: {model}")
+
+        fwhm = zenith_fwhm * airmass**0.6
+
+        # logger.debug('IQ: %.2f%%', pct)
+        return fwhm
 
     def __len__(self):
         """
