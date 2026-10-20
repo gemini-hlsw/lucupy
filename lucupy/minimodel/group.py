@@ -364,7 +364,9 @@ class BaseGroup(ABC):
         if self.is_and_group():
             if isinstance(self.children, Observation):
                 obs = self.children
-                too_type = obs.too_type if obs_is_science_or_progcal(obs) and obs_is_not_inactive(obs) else TooType.NONE
+                too_type = obs.too_type if ((obs_is_science_or_progcal(obs) or
+                                            obs.calibration_role == CalibrationRole.TELLURIC) and
+                                            obs_is_not_inactive(obs)) else TooType.NONE
             else:
                 # This should always work because the leaves will always be an Observation.
                 too_type = max(child.too_type() for child in self.children)

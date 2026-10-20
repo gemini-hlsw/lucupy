@@ -31,6 +31,7 @@ __all__ = [
     'ObservationMode',
     'ObservationStatus',
     'Priority',
+    'SchedulingMode',
     'SetupTimeType',
     'CalibrationRole',
 ]
@@ -113,6 +114,19 @@ class Priority(IntEnum):
     MEDIUM = 1
     HIGH = 2
 
+@final
+class SchedulingMode(Enum):
+    """An observation's scheduling mode.
+    Note that these are ordered specifically so that we can compare them
+
+    Members:
+        - UNCONSTRAINED
+        - NO_SPLITTING
+        - UNINTERRUPTIBLE
+    """
+    UNCONSTRAINED = auto()
+    NO_SPLITTING = auto()
+    UNINTERRUPTIBLE = auto()
 
 @final
 class SetupTimeType(IntEnum):
@@ -212,6 +226,7 @@ class Observation:
     constraints: Constraints
 
     too_type: Optional[TooType] = None
+    scheduling_mode: Optional[SchedulingMode] = None
     preimaging: bool = False
     band: Optional[Band] = None
     calibration_role: CalibrationRole = None
@@ -431,7 +446,8 @@ class Observation:
 
         band = self.band.name if self.band else 'None'
         print(f'{sep(depth)} Observation: {self.id.id} {self.status.name} {band} {self.obs_class.name} '
-              f'{self.too_type.name if self.too_type else "None"} IQ{self.constraints.conditions.iq.value:.2f} '
+              f'{self.too_type.name if self.too_type else "None"} {self.priority.name} '
+              f'IQ{self.constraints.conditions.iq.value:.2f} '
               f'CC{self.constraints.conditions.cc.value:.2f} WV{self.constraints.conditions.wv.value:.2f}')
         for atom in self.sequence:
             print(f'{sep(depth + 1)} {atom}')
