@@ -33,10 +33,10 @@ def test_immutable_deepcopy():
                        pm_dec=-1.,
                        epoch=2000.)
 
-    conditions = Conditions(cc=CloudCover.CC50,
+    conditions = Conditions(cc=CloudCover(0.5),
                             iq=ImageQuality(0.2),
-                            sb=SkyBackground.SB50,
-                            wv=WaterVapor.WVANY)
+                            sb=SkyBackground(0.5),
+                            wv=WaterVapor(1.0))
 
     tw = TimingWindow(start=datetime(year=2022, month=12, day=21, hour=0, minute=5, second=30),
                       duration=TimingWindow.INFINITE_DURATION,

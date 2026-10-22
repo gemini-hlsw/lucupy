@@ -5,9 +5,11 @@ import io
 import unittest.mock
 from datetime import datetime
 
-from lucupy.minimodel import (GROUP_NONE_ID, ROOT_GROUP_ID, AndOption, Group, GroupID, Observation,
-                              ObservationClass, ObservationID, ObservationStatus, Program,
-                              ProgramID)
+from lucupy.minimodel import (GROUP_NONE_ID, ROOT_GROUP_ID, AndOption, CloudCover, Conditions,
+                              Constraints, ElevationLimits, ElevationType, Group, GroupID,
+                              ImageQuality, Observation, ObservationClass, ObservationID,
+                              ObservationStatus, Priority, Program, ProgramID, SkyBackground,
+                              WaterVapor)
 
 
 @unittest.mock.patch('sys.stdout', new_callable=io.StringIO)
@@ -22,6 +24,16 @@ def test_print_program():
     """
     program_id = ProgramID('test_program')
 
+    constraints = Constraints(
+        conditions=Conditions(cc=CloudCover(0.7), iq=ImageQuality(0.85), sb=SkyBackground(1.0), wv=WaterVapor(0.8)),
+        elevation=ElevationLimits(elevation_type=ElevationType.NONE,
+                                  ha_min=None,
+                                  ha_max=None,
+                                  airmass_min=Constraints.DEFAULT_AIRMASS_ELEVATION_MIN,
+                                  airmass_max=Constraints.DEFAULT_AIRMASS_ELEVATION_MAX),
+        timing_windows=[]
+    )
+
     o = Observation(
         id=ObservationID('test_observation'),
         internal_id='acc39a30-97a8-42de-98a6-5e77cc95d3ec',
@@ -30,14 +42,14 @@ def test_print_program():
         site=None,
         status=ObservationStatus.READY,
         active=True,
-        priority=None,
+        priority=Priority.MEDIUM,
         setuptime_type=None,
         acq_overhead=None,
         obs_class=ObservationClass.SCIENCE,
         targets=None,
         guiding=None,
         sequence=[],
-        constraints=None,
+        constraints=constraints,
         belongs_to=program_id,
         too_type=None
     )
@@ -98,6 +110,7 @@ def test_print_program():
         f'---------- Group: test_group, unique_id=test_program:test_group, parent={ROOT_GROUP_ID.id}, '
         f'previous={GROUP_NONE_ID.id}, next={GROUP_NONE_ID.id}, active=True, ToO=None '
         '(Observation Group, num_children=1, num_observe=1, num_observed=0)\n'
-        f'--------------- Observation: test_observation {o.status.name} None {o.obs_class.name} None\n'
+        f'--------------- Observation: test_observation {o.status.name} None {o.obs_class.name} None {o.priority.name} '
+        'IQ0.85 CC0.70 WV0.80\n'
     )
     assert_stdout(p, expected_output)
