@@ -439,11 +439,13 @@ class Variant:
     Attributes:
         iq (Union[npt.NDArray[ImageQuality], ImageQuality]): Image quality.
         cc (Union[npt.NDArray[CloudCover], CloudCover]): Cloud Cover.
+        wv (Union[npt.NDArray[WaterVapor], WaterVapor]): Water vapor.
         wind_dir (Angle): Wind direction (degrees).
         wind_spd (Quantity): Wind speed (m/s).
     """
     iq: npt.NDArray[ImageQuality] | ImageQuality
     cc: npt.NDArray[CloudCover] | CloudCover
+    wv: npt.NDArray[WaterVapor] | WaterVapor
     wind_dir: Angle
     wind_spd: Quantity
 
@@ -451,7 +453,7 @@ class Variant:
         """
         Ensure that if any arrays are specified, all values are specified arrays of the same size.
         """
-        is_uniform = len({np.isscalar(self.cc), np.isscalar(self.iq)}) == 1
+        is_uniform = len({np.isscalar(self.cc), np.isscalar(self.iq), np.isscalar(self.wv)}) == 1
         if not is_uniform:
             raise ValueError(f'Variant has a mixture of array and scalar types: {self}')
 
@@ -459,7 +461,7 @@ class Variant:
         array_lengths = {np.asarray(self.wind_dir).size,
                          np.asarray(self.wind_spd).size}
         if are_arrays:
-            uniform_lengths = len({len(self.cc), len(self.iq)}.union(array_lengths)) == 1
+            uniform_lengths = len({len(self.cc), len(self.iq), len(self.wv)}.union(array_lengths)) == 1
         else:
             uniform_lengths = len(array_lengths) == 1
         if not uniform_lengths:
@@ -480,11 +482,13 @@ class VariantSnapshot:
     Attributes:
         iq (ImageQuality): Image quality.
         cc (CloudCover): Cloud cover.
+        wv (WaterVapor): Water vapor.
         wind_dir (Angle): Wind direction (in degrees). Should be scalar.
         wind_spd (Quantity): Wind speed (in m/s). Should be scalar.
     """
     iq: ImageQuality
     cc: CloudCover
+    wv: WaterVapor
     wind_dir: Angle
     wind_spd: Quantity
 
@@ -505,9 +509,11 @@ class VariantSnapshot:
 
         cc_array = np.array([self.cc] * num_timeslots)
         iq_array = np.array([self.iq] * num_timeslots)
+        wv_array = np.array([self.wv] * num_timeslots)
         wind_dir_array = Angle(np.full(num_timeslots, self.wind_dir.value), unit=self.wind_dir.unit)
         wind_spd_array = np.full(num_timeslots, self.wind_spd.value) * self.wind_spd.unit
         return Variant(iq=iq_array,
                        cc=cc_array,
+                       wv=wv_array,
                        wind_dir=wind_dir_array,
                        wind_spd=wind_spd_array)
