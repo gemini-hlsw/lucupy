@@ -2,6 +2,7 @@
 # For license information see LICENSE or https://opensource.org/licenses/BSD-3-Clause
 
 from datetime import timedelta
+from enum import Enum
 
 import astropy.units as u
 import numpy as np
@@ -11,7 +12,14 @@ from astropy.time import TimeDelta
 from lucupy.helpers import (is_contiguous, lerp, lerp_degrees, lerp_enum,
                             lerp_radians, time_delta_astropy_to_minutes,
                             timedelta_astropy_to_python)
-from lucupy.minimodel import CloudCover
+
+
+class _CloudCoverBins(float, Enum):
+    """Discrete float Enum (the former CloudCover bins) to exercise lerp_enum."""
+    CC50 = 0.5
+    CC70 = 0.7
+    CC80 = 0.8
+    CCANY = 1.0
 
 
 @pytest.mark.parametrize('first_value, last_value, n, expected',
@@ -30,7 +38,7 @@ def test_lerp(first_value, last_value, n, expected):
                           (1.0, 0.5, 1, np.array([0.8])),
                           (0.7, 0.7, 3, np.array([0.7, 0.7, 0.7]))])
 def test_lerp_enum(first_value, last_value, n, expected):
-    assert np.allclose(lerp_enum(CloudCover, first_value, last_value, n), expected)
+    assert np.allclose(lerp_enum(_CloudCoverBins, first_value, last_value, n), expected)
 
 
 @pytest.mark.parametrize('first_value, last_value, n, expected',

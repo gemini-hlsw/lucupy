@@ -15,7 +15,7 @@ def test_most_restrictive_conditions1():
     restrictive conditions.
     """
     mrc = Conditions.most_restrictive_conditions(())
-    c = Conditions(cc=CloudCover.CCANY, iq=ImageQuality(1.0), sb=SkyBackground.SBANY, wv=WaterVapor.WVANY)
+    c = Conditions(cc=CloudCover(1.0), iq=ImageQuality(1.0), sb=SkyBackground(1.0), wv=WaterVapor(1.0))
     assert mrc == c
 
 
@@ -23,17 +23,17 @@ def test_most_restrictive_conditions2():
     """
     Test a mixture of various conditions.
     """
-    cc1 = Conditions(cc=np.array([CloudCover.CC70, CloudCover.CC80]),
+    cc1 = Conditions(cc=np.array([CloudCover(0.7), CloudCover(0.8)]),
                      iq=np.array([ImageQuality(0.85), ImageQuality(1.0)]),
-                     sb=np.array([SkyBackground.SB50, SkyBackground.SBANY]),
-                     wv=np.array([WaterVapor.WV80, WaterVapor.WV80]))
-    cc2 = Conditions(cc=CloudCover.CCANY,
+                     sb=np.array([SkyBackground(0.5), SkyBackground(1.0)]),
+                     wv=np.array([WaterVapor(0.8), WaterVapor(0.8)]))
+    cc2 = Conditions(cc=CloudCover(1.0),
                      iq=ImageQuality(1.0),
-                     sb=SkyBackground.SB80,
-                     wv=WaterVapor.WV20)
+                     sb=SkyBackground(0.8),
+                     wv=WaterVapor(0.2))
 
     mrc = Conditions.most_restrictive_conditions((cc1, cc2))
-    exp = Conditions(cc=CloudCover.CC70, iq=ImageQuality(0.85), sb=SkyBackground.SB50, wv=WaterVapor.WV20)
+    exp = Conditions(cc=CloudCover(0.7), iq=ImageQuality(0.85), sb=SkyBackground(0.5), wv=WaterVapor(0.2))
     assert mrc == exp
 
 
@@ -41,22 +41,22 @@ def test_most_restrictive_conditions2():
 #     """
 #     np.asarray causes problems due to 0-dim array.
 #     """
-#     cc1 = Conditions(cc=np.asarray(CloudCover.CCANY),
+#     cc1 = Conditions(cc=np.asarray(CloudCover(1.0)),
 #                      iq=np.asarray(ImageQuality(1.0)),
-#                      sb=np.asarray(SkyBackground.SB80),
-#                      wv=np.asarray(WaterVapor.WV20))
-#     cc2 = Conditions(cc=np.array([CloudCover.CC70, CloudCover.CC80]),
+#                      sb=np.asarray(SkyBackground(0.8)),
+#                      wv=np.asarray(WaterVapor(0.2)))
+#     cc2 = Conditions(cc=np.array([CloudCover(0.7), CloudCover(0.8)]),
 #                      iq=np.array([ImageQuality(0.85), ImageQuality(1.0)]),
-#                      sb=np.array([SkyBackground.SB50, SkyBackground.SBANY]),
-#                      wv=np.array([WaterVapor.WV80, WaterVapor.WV80]))
+#                      sb=np.array([SkyBackground(0.5), SkyBackground(1.0)]),
+#                      wv=np.array([WaterVapor(0.8), WaterVapor(0.8)]))
 #
 #     mrc = Conditions.most_restrictive_conditions((cc1, cc2))
-#     exp = Conditions(cc=CloudCover.CC70, iq=ImageQuality(0.85), sb=SkyBackground.SB50, wv=WaterVapor.WV20)
+#     exp = Conditions(cc=CloudCover(0.7), iq=ImageQuality(0.85), sb=SkyBackground(0.5), wv=WaterVapor(0.2))
 #     assert mrc == exp
 
 
 def test_most_restrictive_conditions4():
-    cc1 = Conditions(cc=CloudCover.CC70, iq=ImageQuality(0.7), sb=SkyBackground.SBANY, wv=WaterVapor.WV80)
+    cc1 = Conditions(cc=CloudCover(0.7), iq=ImageQuality(0.7), sb=SkyBackground(1.0), wv=WaterVapor(0.8))
     mrc = Conditions.most_restrictive_conditions((cc1,))
     assert mrc == cc1
 
