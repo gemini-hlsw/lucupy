@@ -55,6 +55,7 @@ class CalibrationRole(Enum):
     SPECTROPHOTOMETRIC = auto()
     TELLURIC = auto()
     DAYTIME_PINHOLE = auto()
+    DAYTIME_CALIBRATION = auto()
 
 
 @final
