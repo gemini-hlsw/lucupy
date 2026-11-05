@@ -52,7 +52,7 @@ class BaseConstraint:
     __array_priority__ = 1000.0
 
     def __init__(self, value: float, constraint_unit: ConstraintUnit=ConstraintUnit.PERCENTILE):
-        self.value = value
+        self.value = float(value)
         self.unit = constraint_unit
 
     def __str__(self):
@@ -341,7 +341,8 @@ class Conditions:
                 -15.8255612,
                 49.37405633 + 0.5,
             ]
-            # pct = c[0] * erf(c[1] * wavelength**c[2] + c[3] * zenith_fwhm**c[4] + c[5]) + c[6]
+            # pct = 100 causes a nan, set to 99.9
+            pct = 99.9 if pct == 100.0 else pct
             zenith_fwhm = (
                 (erfinv((pct - c[6]) / c[0]) - c[1] * wavelength ** c[2] - c[5]) / c[3]
             ) ** (1.0 / c[4])
