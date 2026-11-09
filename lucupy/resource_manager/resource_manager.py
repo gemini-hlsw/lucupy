@@ -37,13 +37,23 @@ class ResourceManager(metaclass=Singleton):
         If it does, return it.
         If not, create it, add it to the map of all Resources, and then return it.
 
+        If it exists without a description and one is given now, it is replaced by one with that description,
+        e.g. a MOS mask barcode first read from the availability files, later looked up with its MDF name.
+        Resources are frozen, so it cannot be updated in place. A description already set is never changed.
+
         Note that even if multiple objects do exist with the same ID, they will be considered equal by the
         Resource equality comparator.
         """
         # The Resource constructor raises an exception for id None or containing any capitalization of "none".
         if not rid:
             return None
-        if rid not in self._all_resources:
+        existing = self._all_resources.get(rid)
+        if existing is None:
             self._all_resources[rid] = Resource(id=rid, description=description,
                                                 type=rtype, legal_creation=True)
+        elif existing.description is None and description is not None:
+            # Equality and hashing only use the id, so the copies already held elsewhere still match.
+            self._all_resources[rid] = Resource(id=rid, description=description,
+                                                type=existing.type if existing.type != ResourceType.NONE else rtype,
+                                                legal_creation=True)
         return self._all_resources[rid]
