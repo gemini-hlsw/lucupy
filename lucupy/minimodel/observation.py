@@ -78,6 +78,7 @@ class ObservationStatus(Enum):
         - ON_HOLD
         - READY
         - ONGOING
+        - SUSPENDED
         - OBSERVED
         - COMPLETED
         - INACTIVE
@@ -87,6 +88,7 @@ class ObservationStatus(Enum):
     NEW = 'NEW'
     INCLUDED = 'INCLUDED'
     PROPOSED = 'PROPOSED'
+    UNAPPROVED = 'UNAPPROVED'
     APPROVED = 'APPROVED'
     UNDEFINED = 'UNDEFINED'
     DEFINED = 'DEFINED'
@@ -94,12 +96,12 @@ class ObservationStatus(Enum):
     FOR_REVIEW = 'FOR_REVIEW'
     IN_REVIEW = 'IN_REVIEW'
     ON_HOLD = 'ON_HOLD'
+    INACTIVE = 'INACTIVE'
     READY = 'READY'
     ONGOING = 'ONGOING'
+    SUSPENDED = 'SUSPENDED'
     OBSERVED = 'OBSERVED'
-    INACTIVE = 'INACTIVE'
     COMPLETED = 'COMPLETED'
-    UNAPPROVED = 'UNAPPROVED'
 
 
 @final
