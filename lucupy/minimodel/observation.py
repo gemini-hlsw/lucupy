@@ -59,6 +59,7 @@ class CalibrationRole(Enum):
     DAYTIME_PINHOLE = auto()
     DAYTIME_FLAT = auto()
     DAYTIME_CALIBRATION = auto()
+    DAYTIME_ARC = auto()
 
 
 @final
