@@ -51,6 +51,8 @@ class CalibrationRole(Enum):
         - DAYTIME_PINHOLE
         - DAYTIME_FLAT
         - DAYTIME_CALIBRATION
+        - DAYTIME_ARC
+        - MOS_MASK_FLAT
     """
     TWILIGHT = auto()
     PHOTOMETRIC = auto()
@@ -59,6 +61,8 @@ class CalibrationRole(Enum):
     DAYTIME_PINHOLE = auto()
     DAYTIME_FLAT = auto()
     DAYTIME_CALIBRATION = auto()
+    DAYTIME_ARC = auto()
+    MOS_MASK_FLAT = auto()
 
 
 @final
